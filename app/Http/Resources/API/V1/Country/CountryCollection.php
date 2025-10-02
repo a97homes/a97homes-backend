@@ -12,9 +12,4 @@ class CountryCollection extends BasePaginationResource
      * @var string
      */
     public $collects = CountryResource::class;
-
-    public function toArray($request): array
-    {
-        return parent::toArray($request);
-    }
 }

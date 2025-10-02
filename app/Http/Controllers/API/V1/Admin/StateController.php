@@ -34,9 +34,7 @@ class StateController extends Controller
             ])
             ->macroPaginate();
 
-        $data = new StateCollection($states);
-
-        return $this->ok(data: $data);
+        return $this->ok(data: new StateCollection($states));
     }
 
     public function store(StoreStateRequest $request, StoreStateAction $action): JsonResponse

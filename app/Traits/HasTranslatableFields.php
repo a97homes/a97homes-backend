@@ -9,7 +9,7 @@ trait HasTranslatableFields
     /**
      * Get the translated value for a field
      *
-     * @param  mixed  $model  The model instance
+     * @param  Model  $model  The model instance
      * @param  string  $field  The field name to translate
      * @return mixed
      */

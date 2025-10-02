@@ -3,7 +3,6 @@
 namespace App\Http\Requests\API\V1\Admin\Property;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdatePropertyRequest extends FormRequest
 {
@@ -24,8 +23,8 @@ class UpdatePropertyRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('properties', 'name->ar')->ignore($this->property->id)],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('properties', 'name->en')->ignore($this->property->id)],
+            'name.ar' => ['required', 'string', 'max:255'],
+            'name.en' => ['required', 'string', 'max:255'],
         ];
     }
 }

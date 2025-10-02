@@ -27,9 +27,9 @@ class AttributeController extends Controller
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-            ->defaultSort('id')
+            ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::field('-id'),
+                AllowedSort::field('id'),
                 AllowedSort::field('name'),
                 AllowedSort::field('type'),
             ])
@@ -42,7 +42,9 @@ class AttributeController extends Controller
     {
         $attribute = $action->execute($request->validated());
 
-        return $this->ok(message: __('messages.attribute_created_successfully'), data: AttributeResource::make($attribute)
+        return $this->ok(
+            message: __('messages.attribute_created_successfully'),
+            data: AttributeResource::make($attribute)
         );
     }
 

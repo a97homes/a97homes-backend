@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Attribute;
 
+use App\Http\Resources\API\V1\Unit\UnitResource;
 use App\Models\Attribute;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class AttributeResource extends JsonResource
             'id' => $this->whenHas('id', fn () => $attribute->id),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($attribute, 'name')),
             'type' => $this->whenHas('type', fn () => $attribute->type),
-            'unit' => $this->UnitResource::make($this->whenLoaded('state')),
+            'unit' => UnitResource::make($this->whenLoaded('unit')),
             'created_at' => $this->whenHas('created_at', fn () => $attribute->created_at),
         ];
     }

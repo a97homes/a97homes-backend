@@ -3,7 +3,6 @@
 namespace App\Http\Resources\State;
 
 use App\Http\Resources\BasePaginationResource;
-use Illuminate\Http\Request;
 
 class StateCollection extends BasePaginationResource
 {
@@ -13,9 +12,4 @@ class StateCollection extends BasePaginationResource
      * @return array<int|string, mixed>
      */
     public $collects = StateResource::class;
-
-    public function toArray(Request $request): array
-    {
-        return parent::toArray($request);
-    }
 }

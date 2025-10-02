@@ -3,7 +3,6 @@
 namespace App\Http\Requests\API\V1\Admin\Property;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StorePropertyRequest extends FormRequest
 {
@@ -24,8 +23,8 @@ class StorePropertyRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('properties', 'name->ar')],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('properties', 'name->en')],
+            'name.ar' => ['required', 'string', 'max:255'],
+            'name.en' => ['required', 'string', 'max:255'],
         ];
     }
 }

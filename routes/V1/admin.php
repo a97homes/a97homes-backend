@@ -28,7 +28,9 @@ Route::apiResource('cities', CityController::class);
 
 // ==========================property-type=========================
 Route::get('property-types/dropdown', [PropertyTypeController::class, 'dropdown']);
-Route::apiResource('property-types', PropertyTypeController::class);
+Route::apiResource('property-types', PropertyTypeController::class)->parameters([
+    'property-types' => 'propertyType',
+]);
 // =========================property-type=========================
 
 // =========================attribute=========================

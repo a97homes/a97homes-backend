@@ -10,10 +10,11 @@ use Illuminate\Http\JsonResponse;
 
 class LoginController extends Controller
 {
+    // TODO: adding translations
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::whereEmail($request->email)->first();
-        //  $user->load('roles:id,name', 'permissions:id,name');
+        $user = User::whereEmail($request->input('email'))->first();
+        $user->load('roles:id,name', 'permissions:id,name');
         $data = AuthenticationResource::make($user);
 
         return $this->ok(__('auth.signed'), $data);

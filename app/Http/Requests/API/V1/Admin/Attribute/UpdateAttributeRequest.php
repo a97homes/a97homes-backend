@@ -18,7 +18,7 @@ class UpdateAttributeRequest extends FormRequest
             'name' => ['required', 'array'],
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->ar')->ignore($this->attribute->id)],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->en')->ignore($this->attribute->id)],
-            'type' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', 'max:255'], // TODO: adding Enum
             'unit_id' => ['required', Rule::exists('units', 'id')],
 
         ];

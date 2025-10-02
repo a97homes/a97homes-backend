@@ -27,12 +27,10 @@ class StoreUnitRequest extends FormRequest
             'name' => ['required', 'array'],
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('units', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('units', 'name->en')],
-
             'symbol' => ['required', 'array'],
             'symbol.ar' => ['required', 'string', 'max:50', Rule::unique('units', 'symbol->ar')],
             'symbol.en' => ['required', 'string', 'max:50', Rule::unique('units', 'symbol->en')],
-
-            'type' => ['string', 'required', 'max:255'],
+            'type' => ['string', 'required', 'max:255'], // TODO:: check this please
         ];
     }
 }

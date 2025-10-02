@@ -24,8 +24,8 @@ class UpdatePropertyTypeRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->ar')->ignore($this->route('property_type'))],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->en')->ignore($this->route('property_type'))],
+            'name.ar' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->ar')->ignore($this->propertyType)],
+            'name.en' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->en')->ignore($this->propertyType)],
         ];
     }
 }

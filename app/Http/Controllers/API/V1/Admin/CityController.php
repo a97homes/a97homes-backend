@@ -28,9 +28,9 @@ class CityController extends Controller
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-            ->defaultSort('id')
+            ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::field('-id'),
+                AllowedSort::field('id'),
                 AllowedSort::field('name'),
             ])
             ->macroPaginate();
@@ -42,7 +42,9 @@ class CityController extends Controller
     {
         $city = $action->execute($request->validated());
 
-        return $this->ok(message: __('messages.city_created_successfully'), data: CityResource::make($city)
+        return $this->ok(
+            message: __('messages.city_created_successfully'),
+            data: CityResource::make($city)
         );
     }
 
@@ -68,9 +70,7 @@ class CityController extends Controller
 
     public function dropdown(): JsonResponse
     {
-        $cities = City::select('id', 'name')
-
-            ->get();
+        $cities = City::select('id', 'name')->get();
 
         return $this->ok(data: CityResource::collection($cities));
     }

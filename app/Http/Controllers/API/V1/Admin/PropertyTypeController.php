@@ -26,9 +26,9 @@ class PropertyTypeController extends Controller
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-            ->defaultSort('id')
+            ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::field('-id'),
+                AllowedSort::field('id'),
                 AllowedSort::field('name'),
             ])
             ->macroPaginate();

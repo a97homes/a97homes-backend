@@ -50,9 +50,7 @@ class CountryController extends Controller
             ])
             ->macroPaginate();
 
-        $data = new CountryCollection($countries);
-
-        return $this->ok(data: $data);
+        return $this->ok(data: new CountryCollection($countries));
     }
 
     public function store(StoreCountryRequest $request, StoreCountryAction $action): JsonResponse

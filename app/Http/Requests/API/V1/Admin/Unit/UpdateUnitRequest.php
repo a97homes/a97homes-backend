@@ -29,7 +29,7 @@ class UpdateUnitRequest extends FormRequest
             'symbol' => ['required', 'array'],
             'symbol.ar' => ['required', 'string', 'max:50', Rule::unique('units', 'symbol->ar')->ignore($this->unit->id)],
             'symbol.en' => ['required', 'string', 'max:50', Rule::unique('units', 'symbol->en')->ignore($this->unit->id)],
-            'type' => ['string', 'required', 'max:255'],
+            'type' => ['string', 'required', 'max:255'], // TODO:: check this please
         ];
     }
 }

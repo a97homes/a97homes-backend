@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->string('type');
-            $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
+            $table->foreignId('unit_id')->nullable()->constrained('units')->cascadeOnDelete();
             $table->timestamps();
         });
     }

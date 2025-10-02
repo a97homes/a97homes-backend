@@ -27,9 +27,9 @@ class UnitController extends Controller
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-            ->defaultSort('id')
+            ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::field('-id'),
+                AllowedSort::field('id'),
                 AllowedSort::field('name'),
                 AllowedSort::field('symbol'),
             ])
@@ -42,9 +42,7 @@ class UnitController extends Controller
     {
         $unit = $action->execute($request->validated());
 
-        return $this->ok(
-            message: __('messages.unit_created_successfully'),
-            data: UnitResource::make($unit)
+        return $this->ok(message: __('messages.unit_created_successfully'), data: UnitResource::make($unit)
         );
     }
 

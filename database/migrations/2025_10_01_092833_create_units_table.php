@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('name');
             $table->json('symbol');
-            $table->string('type');
+            $table->string('type'); // TODO: check it
             $table->timestamps();
         });
     }

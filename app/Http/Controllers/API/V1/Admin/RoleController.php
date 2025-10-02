@@ -15,6 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+    // TODO:: handle this class
     public function index() {}
 
     public function store(StoreRoleRequest $request, StoreRoleAction $action): JsonResponse
