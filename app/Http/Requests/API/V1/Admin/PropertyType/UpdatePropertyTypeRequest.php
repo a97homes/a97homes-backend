@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\State;
+namespace App\Http\Requests\API\V1\Admin\PropertyType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreStateRequest extends FormRequest
+class UpdatePropertyTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class StoreStateRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'country_id' => ['required', Rule::exists('countries', 'id')],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('states', 'name->ar')],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('states', 'name->en')],
-
+            'name.ar' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->ar')->ignore($this->route('property_type'))],
+            'name.en' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->en')->ignore($this->route('property_type'))],
         ];
     }
 }

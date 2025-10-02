@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\PropertyController;
+use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
 use App\Http\Controllers\API\V1\Admin\StateController;
+use App\Http\Controllers\API\V1\Admin\UnitController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('roles', RoleController::class);
@@ -17,7 +21,27 @@ Route::get('states/dropdown', [StateController::class, 'dropdown']);
 Route::apiResource('states', StateController::class);
 // ==========================state=========================
 
-// ==========================state=========================
+// ==========================city=========================
 Route::get('cities/dropdown', [CityController::class, 'dropdown']);
 Route::apiResource('cities', CityController::class);
-// ==========================state=========================
+// ==========================city=========================
+
+// ==========================property-type=========================
+Route::get('property-types/dropdown', [PropertyTypeController::class, 'dropdown']);
+Route::apiResource('property-types', PropertyTypeController::class);
+// =========================property-type=========================
+
+// =========================attribute=========================
+Route::get('attributes/dropdown', [AttributeController::class, 'dropdown']);
+Route::apiResource('attributes', AttributeController::class);
+// =========================attribute=========================
+
+// =========================unit=========================
+Route::get('units-dropdown', [UnitController::class, 'dropdown']);
+Route::apiResource('units', UnitController::class);
+// =========================unit=========================
+
+// =========================property=========================
+Route::get('properties-dropdown', [PropertyController::class, 'dropdown']);
+Route::apiResource('properties', PropertyController::class);
+// =========================property=========================

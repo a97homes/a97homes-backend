@@ -6,8 +6,8 @@ use App\Models\State;
 
 class DeleteStateAction
 {
-    public function execute(State $state): void
+    public function execute(State $state): bool
     {
-        $state->delete();
+        return $state->delete();
     }
 }

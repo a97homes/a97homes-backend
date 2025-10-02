@@ -15,5 +15,16 @@ return [
     'city_created_successfully' => 'City created successfully',
     'city_updated_successfully' => 'City updated successfully',
     'city_deleted_successfully' => 'City deleted successfully',
-
+    'property_type_created_successfully' => 'PropertyType created successfully.',
+    'property_type_updated_successfully' => 'PropertyType updated successfully.',
+    'property_type_deleted_successfully' => 'PropertyType deleted successfully.',
+    'attribute_created_successfully' => 'Attribute created successfully.',
+    'attribute_updated_successfully' => 'Attribute updated successfully.',
+    'attribute_deleted_successfully' => 'Attribute deleted successfully.',
+    'unit_created_successfully' => 'Unit created successfully.',
+    'unit_updated_successfully' => 'Unit updated successfully.',
+    'unit_deleted_successfully' => 'Unit deleted successfully.',
+    'property_created_successfully' => 'Property created successfully.',
+    'property_updated_successfully' => 'Property updated successfully.',
+    'property_deleted_successfully' => 'Property deleted successfully.',
 ];

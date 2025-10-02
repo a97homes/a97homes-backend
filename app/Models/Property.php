@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
 
-class PropertyType extends Model
+class Property extends Model
 {
     use CreatedAtFilter;
     use HasTranslations;
 
-    public array $translatable = ['name'];
-
     protected $fillable = ['name'];
+
+    public array $translatable = ['name'];
 
     public function attributes(): BelongsToMany
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_property_type');
+        return $this->belongsToMany(Attribute::class);
 
     }
 }

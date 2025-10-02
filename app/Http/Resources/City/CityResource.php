@@ -3,6 +3,7 @@
 namespace App\Http\Resources\City;
 
 use App\Http\Resources\State\StateResource;
+use App\Models\City;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
