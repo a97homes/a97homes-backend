@@ -8,7 +8,7 @@ class StoreRoleAction
 {
     public function execute(array $data): Role
     {
-        $data['guard'] = 'web';
+        $data['guard_name'] = 'web';
 
         return Role::create($data);
     }

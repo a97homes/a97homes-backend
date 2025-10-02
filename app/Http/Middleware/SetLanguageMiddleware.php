@@ -2,24 +2,26 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\App;
 
 class SetLanguageMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
-        if (in_array($request->header('Accept-Language'), ['ar', 'en'])) {
-            app()->setLocale($request->header('Accept-Language'));
+        if (in_array($request->header('Accept-language'), languages())) {
+            $locale = $request->header('Accept-language');
+            if (authCheck()) {
+                $user = authUser();
+                if ($locale !== $user->locale) {
+                    $user->update(['locale' => $locale]);
+                }
+            }
+            App::setLocale($locale);
+            Carbon::setLocale($locale);
         }
 
         return $next($request);
-
     }
 }
