@@ -5,22 +5,39 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Actions\PropertyType\DeletePropertyTypeAction;
 use App\Actions\PropertyType\StorePropertyTypeAction;
 use App\Actions\PropertyType\UpdatePropertyTypeAction;
+use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\PropertyType\StorePropertyTypeRequest;
 use App\Http\Requests\API\V1\Admin\PropertyType\UpdatePropertyTypeRequest;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeCollection;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Models\PropertyType;
+use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PropertyTypeController extends Controller
+class PropertyTypeController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTY_TYPES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTY_TYPES_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTY_TYPES_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTY_TYPES_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTY_TYPES_DESTROY]), only: ['destroy']),
+        ];
+    }
+
     public function index(): JsonResponse
     {
         $propertyTypes = QueryBuilder::for(PropertyType::class)
+            ->with('attributes:name')
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),

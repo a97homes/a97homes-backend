@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->json('name');
+            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
+            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
+            $table->string('value');
             $table->timestamps();
         });
     }
@@ -24,5 +27,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('properties');
+
     }
 };

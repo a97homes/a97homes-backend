@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Attribute\AttributeTypeEnum;
 use App\Filters\CreatedAtFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class Attribute extends Model
 
     public array $translatable = ['name'];
 
-    protected $fillable = ['name', 'type'];
+    protected $fillable = ['name', 'type', 'unit_id'];
 
     public function properties(): BelongsToMany
     {
@@ -31,4 +32,8 @@ class Attribute extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+
+    protected $casts = [
+        'type' => AttributeTypeEnum::class,
+    ];
 }

@@ -5,22 +5,41 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Actions\Property\DeletePropertyAction;
 use App\Actions\Property\StorePropertyAction;
 use App\Actions\Property\UpdatePropertyAction;
+use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\StorePropertyRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
+use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class PropertyController extends Controller
+class PropertyController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_DESTROY]), only: ['destroy']),
+        ];
+    }
+
     public function index(): JsonResponse
     {
         $properties = QueryBuilder::for(Property::class)
+            ->with(['city:id,name,state_id',
+                'city.state:id,name,country_id',
+                'city.state.country:id,name', ])
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
@@ -51,7 +70,7 @@ class PropertyController extends Controller
     }
 
     public function show(Property $property): JsonResponse
-    {
+    {  $property->load(['city:id,name,state_id','city.state:id,name,country_id','city.state.country:id,name', ]);
         return $this->ok(data: PropertyResource::make($property));
     }
 

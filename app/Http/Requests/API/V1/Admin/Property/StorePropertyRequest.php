@@ -3,6 +3,7 @@
 namespace App\Http\Requests\API\V1\Admin\Property;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePropertyRequest extends FormRequest
 {
@@ -25,6 +26,10 @@ class StorePropertyRequest extends FormRequest
             'name' => ['array', 'required'],
             'name.ar' => ['required', 'string', 'max:255'],
             'name.en' => ['required', 'string', 'max:255'],
+            'attributes_ids' => ['required', 'array'],
+            'attributes_ids.*' => ['required', Rule::exists('attributes', 'id')],
+            'city_id' => ['required', Rule::exists('cities', 'id')],
+            'property_type_id' => ['required', Rule::exists('property_types', 'id')],
         ];
     }
 }
