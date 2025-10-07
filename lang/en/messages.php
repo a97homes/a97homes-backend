@@ -30,4 +30,11 @@ return [
     'permission_has_associated_roles' => 'The permission associated with roles.',
     'permission_has_associated_users' => 'The permission associated with users.',
     'permissions_deleted_successfully' => 'Permission deleted successfully.',
+    'register_successfully' => 'register successfully',
+    'order_created_successfully' => 'order created successfully',
+    'order_accepted_successfully' => 'Order accepted successfully',
+    'order_rejected_successfully' => 'Order rejected successfully',
+    'you_are_not_authorized_to_access_this_resource' => 'you are not authorized to access this resource',
+    'uniqe_property_order' => 'uniqe property order',
+
 ];

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Models\Permission;
-use App\Sorts\CreatedAtSort;
+use App\Actions\Permission\DeletePermissionAction;
 use App\Enums\Role\UserRoleEnum;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Admin\Permission\DeletePermissionRequest;
+use App\Http\Resources\API\V1\Admin\Permission\PermissionCollection;
+use App\Http\Resources\API\V1\Admin\Permission\PermissionResource;
+use App\Models\Permission;
+use App\Permissions\PermissionRegistry;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
-
-use App\Permissions\PermissionRegistry;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use App\Actions\Permission\DeletePermissionAction;
-use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use App\Http\Resources\API\V1\Admin\Permission\PermissionResource;
-use App\Http\Resources\API\V1\Admin\Permission\PermissionCollection;
-use App\Http\Requests\API\V1\Admin\Permission\DeletePermissionRequest;
 
 class PermissionController extends Controller implements HasMiddleware
 {
@@ -34,11 +32,11 @@ class PermissionController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $permissions = QueryBuilder::for(Permission::class)
-           ->defaultSort('-id')
+            ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
             ])
-              ->allowedFilters([
+            ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),

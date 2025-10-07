@@ -1,6 +1,9 @@
 <?php
 
+use App\Exceptions\UnauthorizedExceptionRenderer;
+use App\Exceptions\UniqueConstraintViolationExceptionRendor;
 use App\Http\Middleware\SetLanguageMiddleware;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         using: function () {
             Route::middleware(['api', SetLanguageMiddleware::class])->prefix('api/v1')->group(base_path('routes/v1/api.php'));
             Route::middleware(['api', 'auth:sanctum', SetLanguageMiddleware::class])->prefix('api/admin/v1')->group(base_path('routes/v1/admin.php'));
+            Route::middleware(['api', 'auth:sanctum', SetLanguageMiddleware::class])->prefix('api/owner/v1')->group(base_path('routes/v1/user.php'));
             Route::middleware(['web'])->group(base_path('routes/web.php'));
         },
     )
@@ -26,4 +30,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {})->create();
+    ->withExceptions(function (Exceptions $exceptions): void {
+        if (request()->is('api/*')) {
+
+            $exceptions->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e) {
+                return (new UnauthorizedExceptionRenderer)->handle($e);
+            });
+            $exceptions->renderable(function (UniqueConstraintViolationException $e) {
+                return (new UniqueConstraintViolationExceptionRendor)->handle($e);
+            });
+        }
+    })->create();

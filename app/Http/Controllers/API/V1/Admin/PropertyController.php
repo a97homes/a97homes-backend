@@ -70,7 +70,9 @@ class PropertyController extends Controller implements HasMiddleware
     }
 
     public function show(Property $property): JsonResponse
-    {  $property->load(['city:id,name,state_id','city.state:id,name,country_id','city.state.country:id,name', ]);
+    {
+        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name']);
+
         return $this->ok(data: PropertyResource::make($property));
     }
 

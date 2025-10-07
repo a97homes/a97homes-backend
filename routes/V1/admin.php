@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
@@ -57,3 +58,8 @@ Route::apiResource('properties', PropertyController::class);
 Route::get('permissions/dropdown ', [PermissionController::class, 'dropdown']);
 Route::apiResource('permissions', PermissionController::class);
 // ========================permission=====================
+
+// ========================Order=====================
+Route::get('orders', [OrderController::class, 'index']);
+Route::put('orders/{order}/approve', [OrderController::class, 'approve']);
+Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
