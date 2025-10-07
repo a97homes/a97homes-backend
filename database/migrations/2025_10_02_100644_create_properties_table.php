@@ -16,7 +16,6 @@ return new class extends Migration
             $table->json('name');
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
             $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
-            $table->string('value');
             $table->timestamps();
         });
     }

@@ -39,19 +39,16 @@ class RoleController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $roles = QueryBuilder::for(Role::class)
-           // ->withCount('users')
+           ->withCount('users')
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
+            ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::custom('latest', new CreatedAtSort),
-                AllowedSort::custom('oldest', new CreatedAtSort),
-                AllowedSort::custom('default', new CreatedAtSort),
-
+                AllowedSort::field('id'),
             ])
-
             ->macroPaginate();
 
         return $this->ok(data: new RoleCollection($roles));

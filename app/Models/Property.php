@@ -19,12 +19,12 @@ class Property extends Model
 
     public function city(): BelongsTo
     {
-        return $this->belongsTo(City::class, 'city_id');
+        return $this->belongsTo(City::class);
     }
 
     public function propertyType(): BelongsTo
     {
-        return $this->belongsTo(PropertyType::class, 'property_type_id');
+        return $this->belongsTo(PropertyType::class);
     }
 
     public function attributes(): BelongsToMany

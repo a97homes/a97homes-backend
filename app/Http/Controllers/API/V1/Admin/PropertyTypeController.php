@@ -37,7 +37,7 @@ class PropertyTypeController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $propertyTypes = QueryBuilder::for(PropertyType::class)
-            ->with('attributes:name')
+            ->with('attributes:id,name')
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),

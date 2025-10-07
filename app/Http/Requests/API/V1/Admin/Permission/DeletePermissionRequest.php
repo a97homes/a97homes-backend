@@ -38,6 +38,8 @@ class DeletePermissionRequest extends FormRequest
     {
         $validator->after(function (Validator $validator) {
             $permission = $this->route('permission');
+			// TODO: @bnhashem
+			// roles_count -> withCount('roles')
 
             if ($permission->roles()->count() > 0) {
                 $validator->errors()->add('permission', __('messages.permission_has_associated_roles'));
