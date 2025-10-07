@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API\V1\Authentication;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Resources\API\V1\Authentication\AuthenticationResource;
 use App\Models\User\User;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Authentication\LoginRequest;
+use App\Http\Resources\API\V1\Authentication\AuthenticationResource;
 
 class LoginController extends Controller
 {

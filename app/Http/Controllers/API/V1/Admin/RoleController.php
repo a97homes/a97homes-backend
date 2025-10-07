@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Actions\Role\DeleteRoleAction;
-use App\Actions\Role\StoreRoleAction;
-use App\Actions\Role\UpdateRoleAction;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Role\DestroyRoleRequest;
-use App\Http\Requests\Role\StoreRoleRequest;
-use App\Http\Requests\Role\UpdateRoleRequest;
-use App\Http\Resources\API\V1\Role\RoleResource;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Actions\Role\StoreRoleAction;
+use App\Actions\Role\DeleteRoleAction;
+use App\Actions\Role\UpdateRoleAction;
+use App\Http\Resources\API\V1\Role\RoleResource;
+use App\Http\Requests\API\V1\Admin\Role\StoreRoleRequest;
+use App\Http\Requests\API\V1\Admin\Role\UpdateRoleRequest;
+use App\Http\Requests\API\V1\Admin\Role\DestroyRoleRequest;
 
 class RoleController extends Controller
 {
-    // TODO:: handle this class
+
     public function index() {}
 
     public function store(StoreRoleRequest $request, StoreRoleAction $action): JsonResponse

@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Role;
+namespace App\Http\Requests\API\V1\EndUser\Owner;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class UpdateRoleRequest extends FormRequest
+class RegisterOwnerRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -23,7 +21,11 @@ class UpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('roles', 'name')->ignore($this->role->id)],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
+            'password' => ['required', 'string', Password::min(config('password.password_default_length'))],
+
+
         ];
     }
 }

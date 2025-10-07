@@ -27,4 +27,5 @@ return [
     'property_created_successfully' => 'Property created successfully.',
     'property_updated_successfully' => 'Property updated successfully.',
     'property_deleted_successfully' => 'Property deleted successfully.',
+    'register_successfully'=>'register successfully'
 ];
