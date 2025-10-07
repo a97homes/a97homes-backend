@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Actions\Role\DeleteRoleAction;
-use App\Actions\Role\StoreRoleAction;
-use App\Actions\Role\UpdateRoleAction;
+use App\Models\Role;
+use App\Sorts\CreatedAtSort;
 use App\Enums\Role\UserRoleEnum;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Role\DestroyRoleRequest;
+use Spatie\QueryBuilder\AllowedSort;
+use App\Actions\Role\StoreRoleAction;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Actions\Role\DeleteRoleAction;
+use App\Actions\Role\UpdateRoleAction;
+use Spatie\QueryBuilder\AllowedFilter;
+use App\Permissions\PermissionRegistry;
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use App\Http\Resources\API\V1\Role\RoleCollection;
-use App\Http\Resources\API\V1\Role\RoleResource;
-use App\Permissions\PermissionRegistry;
-use App\Sorts\CreatedAtSort;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Http\Requests\Role\DestroyRoleRequest;
 use Illuminate\Routing\Controllers\Middleware;
+
+use App\Http\Resources\API\V1\Role\RoleResource;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Http\Resources\API\V1\Role\RoleCollection;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
-use Spatie\Permission\Models\Role;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class RoleController extends Controller implements HasMiddleware
 {
@@ -45,11 +46,9 @@ class RoleController extends Controller implements HasMiddleware
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
+              ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::custom('latest', new CreatedAtSort),
-                AllowedSort::custom('oldest', new CreatedAtSort),
-                AllowedSort::custom('default', new CreatedAtSort),
-
+                AllowedSort::field('id'),
             ])
 
             ->macroPaginate();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Models\Permission;
 use App\Sorts\CreatedAtSort;
 use App\Enums\Role\UserRoleEnum;
 use Illuminate\Http\JsonResponse;
@@ -9,8 +10,8 @@ use App\Http\Controllers\Controller;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
+
 use App\Permissions\PermissionRegistry;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Actions\Permission\DeletePermissionAction;
@@ -33,18 +34,16 @@ class PermissionController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $permissions = QueryBuilder::for(Permission::class)
-
+           ->defaultSort('-id')
             ->allowedSorts([
-                AllowedSort::custom('latest', new CreatedAtSort),
-                AllowedSort::custom('oldest', new CreatedAtSort),
-                AllowedSort::custom('default', new CreatedAtSort),
+                AllowedSort::field('id'),
             ])
               ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-             // ->withCount('users')
+              // ->withCount('users')
             ->macroPaginate();
 
         return $this->ok(data: new PermissionCollection($permissions));
