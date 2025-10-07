@@ -27,4 +27,7 @@ return [
     'property_created_successfully' => 'Property created successfully.',
     'property_updated_successfully' => 'Property updated successfully.',
     'property_deleted_successfully' => 'Property deleted successfully.',
+    'permission_has_associated_roles' => 'The permission associated with roles.',
+    'permission_has_associated_users' => 'The permission associated with users.',
+    'permissions_deleted_successfully' => 'Permission deleted successfully.',
 ];

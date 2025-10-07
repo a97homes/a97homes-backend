@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Actions\Country\DeleteCountryAction;
 use App\Actions\Country\StoreCountryAction;
 use App\Actions\Country\UpdateCountryAction;
-use App\Enums\UserRoleEnum;
+use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Country\StoreCountryRequest;
 use App\Http\Requests\API\V1\Admin\Country\UpdateCountryRequest;
@@ -21,19 +21,18 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CountryController extends Controller
-    // implements HasMiddleware
+class CountryController extends Controller implements HasMiddleware
 {
-    // public static function middleware(): array
-    // {
-    //     return [
-    //         new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_INDEX]), only: ['index']),
-    //         new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_STORE]), only: ['store']),
-    //         new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_SHOW]), only: ['show']),
-    //         new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_UPDATE]), only: ['update']),
-    //         new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_DESTROY]), only: ['destroy']),
-    //     ];
-    // }
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_DESTROY]), only: ['destroy']),
+        ];
+    }
 
     public function index(): JsonResponse
     {

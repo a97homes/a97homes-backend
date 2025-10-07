@@ -5,23 +5,39 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Actions\City\DeleteCityAction;
 use App\Actions\City\StoreCityAction;
 use App\Actions\City\UpdateCityAction;
+use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\City\StoreCityRequest;
 use App\Http\Requests\API\V1\Admin\City\UpdateCityRequest;
 use App\Http\Resources\City\CityCollection;
 use App\Http\Resources\City\CityResource;
 use App\Models\City;
+use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CityController extends Controller
+class CityController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_DESTROY]), only: ['destroy']),
+        ];
+    }
+
     public function index(): JsonResponse
     {
         $cities = QueryBuilder::for(City::class)
-            ->with('state.country')
+            ->with(['state:id,name,country_id', 'state.country:id,name'])
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::exact('state_id'),
@@ -42,10 +58,7 @@ class CityController extends Controller
     {
         $city = $action->execute($request->validated());
 
-        return $this->ok(
-            message: __('messages.city_created_successfully'),
-            data: CityResource::make($city)
-        );
+        return $this->ok(message: __('messages.city_created_successfully'), data: CityResource::make($city));
     }
 
     public function update(UpdateCityRequest $request, City $city, UpdateCityAction $action): JsonResponse
@@ -58,7 +71,8 @@ class CityController extends Controller
 
     public function show(City $city): JsonResponse
     {
-        return $this->ok(data: CityResource::make($city));
+        return $this->ok(data: CityResource::make(
+            $city->load(['state:id,name,country_id', 'state.country:id,name'])));
     }
 
     public function destroy(City $city, DeleteCityAction $action): JsonResponse

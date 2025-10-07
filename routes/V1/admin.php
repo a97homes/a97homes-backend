@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
@@ -10,7 +11,11 @@ use App\Http\Controllers\API\V1\Admin\StateController;
 use App\Http\Controllers\API\V1\Admin\UnitController;
 use Illuminate\Support\Facades\Route;
 
+// ==========================Role==========================
+Route::get('roles/dropdown', [RoleController::class, 'dropdown']);
 Route::apiResource('roles', RoleController::class);
+// ==========================Role==========================
+
 // ==========================country==========================
 Route::get('countries/dropdown', [CountryController::class, 'dropdown']);
 Route::apiResource('countries', CountryController::class);
@@ -39,11 +44,16 @@ Route::apiResource('attributes', AttributeController::class);
 // =========================attribute=========================
 
 // =========================unit=========================
-Route::get('units-dropdown', [UnitController::class, 'dropdown']);
+Route::get('units/dropdown', [UnitController::class, 'dropdown']);
 Route::apiResource('units', UnitController::class);
 // =========================unit=========================
 
 // =========================property=========================
-Route::get('properties-dropdown', [PropertyController::class, 'dropdown']);
+Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
 Route::apiResource('properties', PropertyController::class);
 // =========================property=========================
+
+// ========================permission=====================
+Route::get('permissions/dropdown ', [PermissionController::class, 'dropdown']);
+Route::apiResource('permissions', PermissionController::class);
+// ========================permission=====================

@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\User\TokenAbilityEnum;
+use App\Filters\CreatedAtFilter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,6 +16,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use CreatedAtFilter;
+
     use HasApiTokens;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */

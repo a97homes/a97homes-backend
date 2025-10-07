@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Admin\Attribute;
 
+use App\Enums\Attribute\AttributeTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +19,7 @@ class StoreAttributeRequest extends FormRequest
             'name' => ['required', 'array'],
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->en')],
-            'type' => ['required', 'string', 'max:255'], // TODO: adding Enum
+            'type' => ['required',  Rule::enum(AttributeTypeEnum::class)],
             'unit_id' => ['required', Rule::exists('units', 'id')],
         ];
     }

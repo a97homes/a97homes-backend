@@ -26,6 +26,8 @@ class StorePropertyTypeRequest extends FormRequest
             'name' => ['array', 'required'],
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name->ar')],
+            'attributes_ids' => ['required', 'array'],
+            'attributes_ids.*' => ['required', Rule::exists('attributes', 'id')],
         ];
     }
 }

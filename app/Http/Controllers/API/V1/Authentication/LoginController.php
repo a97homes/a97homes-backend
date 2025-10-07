@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 
 class LoginController extends Controller
 {
-    // TODO: adding translations
     public function login(LoginRequest $request): JsonResponse
     {
         $user = User::whereEmail($request->input('email'))->first();

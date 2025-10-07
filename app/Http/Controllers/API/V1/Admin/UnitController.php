@@ -5,19 +5,35 @@ namespace App\Http\Controllers\API\V1\Admin;
 use App\Actions\Unit\DeleteUnitAction;
 use App\Actions\Unit\StoreUnitAction;
 use App\Actions\Unit\UpdateUnitAction;
+use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Unit\StoreUnitRequest;
 use App\Http\Requests\API\V1\Admin\Unit\UpdateUnitRequest;
 use App\Http\Resources\API\V1\Unit\UnitCollection;
 use App\Http\Resources\API\V1\Unit\UnitResource;
 use App\Models\Unit;
+use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class UnitController extends Controller
+class UnitController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_UNITS_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_UNITS_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_UNITS_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_UNITS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_UNITS_DESTROY]), only: ['destroy']),
+        ];
+    }
+
     public function index(): JsonResponse
     {
         $units = QueryBuilder::for(Unit::class)
