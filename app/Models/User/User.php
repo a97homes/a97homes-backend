@@ -17,7 +17,6 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use CreatedAtFilter;
-
     use HasApiTokens;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */

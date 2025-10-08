@@ -38,7 +38,7 @@ class RoleController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $roles = QueryBuilder::for(Role::class)
-           // ->withCount('users')
+           ->withCount('users')
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
@@ -48,7 +48,6 @@ class RoleController extends Controller implements HasMiddleware
             ->allowedSorts([
                 AllowedSort::field('id'),
             ])
-
             ->macroPaginate();
 
         return $this->ok(data: new RoleCollection($roles));
