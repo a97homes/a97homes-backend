@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->json('name');
-            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
-            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
-            $table->string('value');
+            $table->json('name')->nullable();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->cascadeOnDelete();
+            $table->foreignId('property_type_id')->nullable()->constrained('property_types')->cascadeOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
+            $table->string('status');
             $table->timestamps();
         });
     }

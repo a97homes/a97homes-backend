@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
@@ -51,9 +52,18 @@ Route::apiResource('units', UnitController::class);
 // =========================property=========================
 Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
 Route::apiResource('properties', PropertyController::class);
+Route::post('properties/{property}/media', [PropertyController::class, 'addMedia']);
+Route::delete('properties/{property}/media', [PropertyController::class, 'deleteMediaAction']); // TODO
 // =========================property=========================
 
 // ========================permission=====================
 Route::get('permissions/dropdown ', [PermissionController::class, 'dropdown']);
 Route::apiResource('permissions', PermissionController::class);
 // ========================permission=====================
+
+// ========================Order=====================
+Route::get('orders', [OrderController::class, 'index']);
+Route::get('orders/{order}', [OrderController::class, 'show']);
+Route::patch('orders/{order}/approve', [OrderController::class, 'approve']);
+Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
+// ========================Order=====================

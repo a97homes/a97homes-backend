@@ -8,6 +8,7 @@ class DeleteCityAction
 {
     public function execute(City $city): bool
     {
+
         return $city->delete();
     }
 }
