@@ -11,14 +11,14 @@ class UnitSeeder extends Seeder
     {
         $units = [
             [
-				'name' => [
-					'en' => 'Meter',
-					'ar' => 'متر',
-				],
+                'name' => [
+                    'en' => 'Meter',
+                    'ar' => 'متر',
+                ],
                 'symbol' => [
-					'en' => 'm',
-					'ar' => 'م',
-				],
+                    'en' => 'm',
+                    'ar' => 'م',
+                ],
                 'type' => 'length',
             ],
             // [
