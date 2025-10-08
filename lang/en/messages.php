@@ -27,6 +27,8 @@ return [
     'property_created_successfully' => 'Property created successfully.',
     'property_updated_successfully' => 'Property updated successfully.',
     'property_deleted_successfully' => 'Property deleted successfully.',
+    'media_property_added_successfully' => 'Media property added successfully.',
+    'media_property_deleted_successfully' => 'Media property deleted successfully.',
     'permission_has_associated_roles' => 'The permission associated with roles.',
     'permission_has_associated_users' => 'The permission associated with users.',
     'permissions_deleted_successfully' => 'Permission deleted successfully.',
@@ -36,5 +38,6 @@ return [
     'order_rejected_successfully' => 'Order rejected successfully',
     'you_are_not_authorized_to_access_this_resource' => 'you are not authorized to access this resource',
     'uniqe_property_order' => 'uniqe property order',
-
+    'not_found' => 'not found',
+    'message_created_successfully' => 'message created successfully',
 ];

@@ -6,9 +6,9 @@ use App\Models\Order;
 
 class StoreOrderAction
 {
-    public function execute(): Order
+    public function execute(array $data): Order
     {
-        return Order::create([]);
+        return Order::create($data);
 
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\NotFoundHttpExceptionRenderer;
 use App\Exceptions\UnauthorizedExceptionRenderer;
 use App\Exceptions\UniqueConstraintViolationExceptionRendor;
 use App\Http\Middleware\SetLanguageMiddleware;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -39,5 +41,9 @@ return Application::configure(basePath: dirname(__DIR__))
             $exceptions->renderable(function (UniqueConstraintViolationException $e) {
                 return (new UniqueConstraintViolationExceptionRendor)->handle($e);
             });
+            $exceptions->renderable(function (NotFoundHttpException $e) {
+                return (new NotFoundHttpExceptionRenderer)->handle($e);
+            });
+
         }
     })->create();

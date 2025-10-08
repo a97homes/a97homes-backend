@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('status');
-            $table->unique(['status', 'user_id']);
+            $table->string('name')->nullable();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->cascadeOnDelete();
+            $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
+            $table->string('phone');
+            $table->string('description');
             $table->timestamps();
         });
     }

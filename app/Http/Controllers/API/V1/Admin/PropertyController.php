@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Actions\Media\AddMediaAction;
+use App\Actions\Media\DeleteMediaAction;
 use App\Actions\Property\DeletePropertyAction;
 use App\Actions\Property\StorePropertyAction;
 use App\Actions\Property\UpdatePropertyAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Admin\Property\StorePropertyRequest;
+use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
@@ -39,9 +41,12 @@ class PropertyController extends Controller implements HasMiddleware
         $properties = QueryBuilder::for(Property::class)
             ->with(['city:id,name,state_id',
                 'city.state:id,name,country_id',
-                'city.state.country:id,name', ])
+                'city.state.country:id,name',
+                'attributes:name,id'])
+
             ->allowedFilters([
                 AllowedFilter::partial('name'),
+                AllowedFilter::exact('attributes.name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
@@ -55,15 +60,16 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(data: new PropertyCollection($properties));
     }
 
-    public function store(StorePropertyRequest $request, StorePropertyAction $action): JsonResponse
+    public function store(StorePropertyAction $action): JsonResponse
     {
-        $property = $action->execute($request->validated());
+        $property = $action->execute();
 
         return $this->ok(message: __('messages.property_created_successfully'), data: PropertyResource::make($property));
     }
 
     public function update(UpdatePropertyRequest $request, Property $property, UpdatePropertyAction $action): JsonResponse
     {
+        $property->load('attributes:name,id');
         $action->execute($property, $request->validated());
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
@@ -88,5 +94,19 @@ class PropertyController extends Controller implements HasMiddleware
         $properties = Property::select('id', 'name')->get();
 
         return $this->ok(data: PropertyResource::collection($properties));
+    }
+
+    public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action)
+    {
+        $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
+
+        return $this->ok(message: __('messages.media_property_added_successfully'));
+    }
+
+    public function deleteMediaAction(Property $property, DeleteMediaAction $action)
+    {
+        $action->execute($property);
+
+        return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }
 }
