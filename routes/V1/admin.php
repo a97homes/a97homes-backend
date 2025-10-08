@@ -61,5 +61,7 @@ Route::apiResource('permissions', PermissionController::class);
 
 // ========================Order=====================
 Route::get('orders', [OrderController::class, 'index']);
-Route::put('orders/{order}/approve', [OrderController::class, 'approve']);
+Route::get('orders/{order}', [OrderController::class, 'show']);
+Route::patch('orders/{order}/approve', [OrderController::class, 'approve']);
 Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
+// ========================Order=====================

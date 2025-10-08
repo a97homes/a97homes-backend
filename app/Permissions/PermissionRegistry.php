@@ -110,6 +110,19 @@ class PermissionRegistry
     public const ADMIN_UNITS_DESTROY = 'admin.units.destroy';
 
     // ================= Units Permissions =================
+
+    // ================= Admin orders Permissions =================
+
+    public const ADMIN_ORDERS_INDEX = 'admin.orders.index';
+
+    public const ADMIN_ORDERS_SHOW = 'admin.orders.show';
+
+    public const ADMIN_ORDERS_APPROVE = 'admin.orders.approve';
+
+    public const ADMIN_ORDERS_REJECT = 'admin.orders.reject';
+
+    // ================= Admin orders Permissions =================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
