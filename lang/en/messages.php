@@ -40,4 +40,5 @@ return [
     'uniqe_property_order' => 'uniqe property order',
     'not_found' => 'not found',
     'message_created_successfully' => 'message created successfully',
+    'method_not_allowed' => 'method not allowed',
 ];

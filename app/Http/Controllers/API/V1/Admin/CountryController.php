@@ -6,6 +6,7 @@ use App\Actions\Country\DeleteCountryAction;
 use App\Actions\Country\StoreCountryAction;
 use App\Actions\Country\UpdateCountryAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Country\StoreCountryRequest;
 use App\Http\Requests\API\V1\Admin\Country\UpdateCountryRequest;
@@ -38,7 +39,7 @@ class CountryController extends Controller implements HasMiddleware
     {
         $countries = QueryBuilder::for(Country::class)
             ->allowedFilters([
-                AllowedFilter::partial('name'),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('code'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
