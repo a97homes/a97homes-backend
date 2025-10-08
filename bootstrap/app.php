@@ -6,11 +6,13 @@ use App\Exceptions\InvalidFilterQueryExceptionRenderer;
 use App\Exceptions\MethodNotAllowedHttpExceptionRenderer;
 use App\Exceptions\NotFoundHttpExceptionRenderer;
 use App\Exceptions\PhoneNumberFormatExceptionRenderer;
+use App\Exceptions\QueryExceptionRenderer;
 use App\Exceptions\UnauthorizedExceptionRenderer;
 use App\Exceptions\UniqueConstraintViolationExceptionRendor;
 use App\Exceptions\ValidationExceptionRenderer;
 use App\Http\Middleware\SetLanguageMiddleware;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -72,19 +74,29 @@ return Application::configure(basePath: dirname(__DIR__))
                 return (new NotFoundHttpExceptionRenderer)->handle($e);
             });
 
+            // Method Not Allowed Exception
             $exceptions->renderable(function (MethodNotAllowedHttpException $e) {
                 return (new MethodNotAllowedHttpExceptionRenderer)->handle($e);
             });
 
+            // Unauthorized Exception
             $exceptions->renderable(function (UnauthorizedException $e) {
                 return (new UnauthorizedExceptionRenderer)->handle($e);
             });
 
+            // Invalid Filter Query Exception
             $exceptions->renderable(function (InvalidFilterQuery $e) {
                 return (new InvalidFilterQueryExceptionRenderer)->handle($e);
             });
+
+            // Phone Number Format Exception
             $exceptions->renderable(function (NumberParseException $e) {
                 return (new PhoneNumberFormatExceptionRenderer)->handle($e);
+            });
+
+            // QueryException
+            $exceptions->renderable(function (QueryException $e) {
+                return (new QueryExceptionRenderer)->handle($e);
             });
 
         }

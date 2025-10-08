@@ -6,6 +6,7 @@ use App\Actions\Unit\DeleteUnitAction;
 use App\Actions\Unit\StoreUnitAction;
 use App\Actions\Unit\UpdateUnitAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Unit\StoreUnitRequest;
 use App\Http\Requests\API\V1\Admin\Unit\UpdateUnitRequest;
@@ -38,8 +39,7 @@ class UnitController extends Controller implements HasMiddleware
     {
         $units = QueryBuilder::for(Unit::class)
             ->allowedFilters([
-                AllowedFilter::partial('name'),
-                AllowedFilter::partial('symbol'),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])

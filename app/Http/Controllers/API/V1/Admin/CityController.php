@@ -6,6 +6,7 @@ use App\Actions\City\DeleteCityAction;
 use App\Actions\City\StoreCityAction;
 use App\Actions\City\UpdateCityAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\City\StoreCityRequest;
 use App\Http\Requests\API\V1\Admin\City\UpdateCityRequest;
@@ -37,9 +38,8 @@ class CityController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $cities = QueryBuilder::for(City::class)
-            ->with(['state:id,name,country_id', 'state.country:id,name'])
             ->allowedFilters([
-                AllowedFilter::partial('name'),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('state_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
@@ -47,7 +47,6 @@ class CityController extends Controller implements HasMiddleware
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('name'),
             ])
             ->macroPaginate();
 
@@ -65,14 +64,17 @@ class CityController extends Controller implements HasMiddleware
     {
         $action->execute($city, $request->validated());
 
-        return $this->ok(message: __('messages.city_updated_successfully'), data: CityResource::make($city)
+        return $this->ok(
+            message: __('messages.city_updated_successfully'),
+            data: CityResource::make($city)
         );
     }
 
     public function show(City $city): JsonResponse
     {
         return $this->ok(data: CityResource::make(
-            $city->load(['state:id,name,country_id', 'state.country:id,name'])));
+            $city->load(['state:id,name,country_id', 'state.country:id,name'])
+        ));
     }
 
     public function destroy(City $city, DeleteCityAction $action): JsonResponse

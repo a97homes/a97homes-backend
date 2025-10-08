@@ -6,6 +6,7 @@ use App\Actions\PropertyType\DeletePropertyTypeAction;
 use App\Actions\PropertyType\StorePropertyTypeAction;
 use App\Actions\PropertyType\UpdatePropertyTypeAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\PropertyType\StorePropertyTypeRequest;
 use App\Http\Requests\API\V1\Admin\PropertyType\UpdatePropertyTypeRequest;
@@ -39,14 +40,13 @@ class PropertyTypeController extends Controller implements HasMiddleware
         $propertyTypes = QueryBuilder::for(PropertyType::class)
             ->with('attributes:id,name')
             ->allowedFilters([
-                AllowedFilter::partial('name'),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('name'),
             ])
             ->macroPaginate();
 
@@ -69,6 +69,8 @@ class PropertyTypeController extends Controller implements HasMiddleware
 
     public function show(PropertyType $propertyType): JsonResponse
     {
+        $propertyType->load('attributes:id,name');
+
         return $this->ok(data: PropertyTypeResource::make($propertyType));
     }
 

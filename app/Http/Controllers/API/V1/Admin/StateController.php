@@ -6,6 +6,7 @@ use App\Actions\State\DeleteStateAction;
 use App\Actions\State\StoreStateAction;
 use App\Actions\State\UpdateStateAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\State\StoreStateRequest;
 use App\Http\Requests\API\V1\Admin\State\UpdateStateRequest;
@@ -39,7 +40,7 @@ class StateController extends Controller implements HasMiddleware
         $states = QueryBuilder::for(State::class)
             ->with(['country:id,name'])
             ->allowedFilters([
-                AllowedFilter::partial('name'),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('country_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
