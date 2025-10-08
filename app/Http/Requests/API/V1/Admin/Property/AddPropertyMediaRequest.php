@@ -26,7 +26,7 @@ class AddPropertyMediaRequest extends FormRequest
                 'required',
                 'file',
                 'mimes:jpg,jpeg,png,pdf', // TODO: get from config
-                'max' . config('media-library.max_file_size')
+                'max'.config('media-library.max_file_size'),
             ],
 
         ];

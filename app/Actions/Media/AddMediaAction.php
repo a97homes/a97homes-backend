@@ -2,7 +2,6 @@
 
 namespace App\Actions\Media;
 
-use App\Models\Property;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 

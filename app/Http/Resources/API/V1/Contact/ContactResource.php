@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V1\Contact;
 
-use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
