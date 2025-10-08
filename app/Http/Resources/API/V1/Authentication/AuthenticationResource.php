@@ -16,7 +16,7 @@ class AuthenticationResource extends JsonResource
 
         return [
             'id' => $this->whenHas('id', fn () => $user->id),
-            'name' => $this->whenHas('id', fn () => $user->name),
+            'name' => $this->whenHas('name', fn () => $user->name),
             'email' => $user->email,
             'locale' => $user->getUserLocale(),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),

@@ -24,10 +24,12 @@ class PropertyResource extends JsonResource
         $property = $this->resource;
 
         return [
-            'id' => $this->whenHas('id', fn () => $property->id),
+            'id' => $this->whenHas('id', fn () => $this->id),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($property, 'name')),
             'city' => CityResource::make($this->whenLoaded('city')),
+            'status' => $this->whenHas('status', fn () => $property->status),
             'attributes' => AttributeResource::collection($this->whenLoaded('attributes')),
+            'property_type' => PropertyResource::make($this->whenLoaded('propertyType')),
             'created_at' => $this->whenHas('created_at', fn () => $property->created_at),
         ];
     }
