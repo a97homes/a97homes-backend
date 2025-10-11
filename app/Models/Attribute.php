@@ -13,8 +13,8 @@ use Spatie\Translatable\HasTranslations;
 class Attribute extends Model
 {
     use CreatedAtFilter;
-    use HasTranslations;
     use HasArabicSearch;
+    use HasTranslations;
 
     public array $translatable = ['name'];
 

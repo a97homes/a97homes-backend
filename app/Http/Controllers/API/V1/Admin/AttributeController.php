@@ -40,7 +40,7 @@ class AttributeController extends Controller implements HasMiddleware
         $attributes = QueryBuilder::for(Attribute::class)
             ->with('unit:id,name')
             ->allowedFilters([
-                AllowedFilter::custom('name', new NameFilter()),
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('type'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
@@ -75,7 +75,8 @@ class AttributeController extends Controller implements HasMiddleware
 
     public function show(Attribute $attribute): JsonResponse
     {
-		$attribute->load('unit:id,name');
+        $attribute->load('unit:id,name');
+
         return $this->ok(data: AttributeResource::make($attribute));
     }
 

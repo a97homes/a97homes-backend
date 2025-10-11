@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use App\Enums\Role\UserRoleEnum;
+use App\Models\Role;
 use App\Models\User\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
-use Spatie\Permission\Models\Role;
 
 class UserRoleSeeder extends Seeder
 {

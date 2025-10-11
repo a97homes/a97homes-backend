@@ -3,6 +3,7 @@
 use App\Exceptions\AccessDeniedHttpExceptionRenderer;
 use App\Exceptions\AuthenticationExceptionRenderer;
 use App\Exceptions\InvalidFilterQueryExceptionRenderer;
+use App\Exceptions\InvalidFormatExceptionRenderer;
 use App\Exceptions\MethodNotAllowedHttpExceptionRenderer;
 use App\Exceptions\NotFoundHttpExceptionRenderer;
 use App\Exceptions\PhoneNumberFormatExceptionRenderer;
@@ -29,7 +30,6 @@ use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Exceptions\InvalidFormatExceptionRenderer;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -101,10 +101,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return (new QueryExceptionRenderer)->handle($e);
             });
 
-			// InvalidFormatException
-			$exceptions->renderable(function (InvalidFormatException $e) {
-				return (new InvalidFormatExceptionRenderer)->handle($e);
-			});
+            // InvalidFormatException
+            $exceptions->renderable(function (InvalidFormatException $e) {
+                return (new InvalidFormatExceptionRenderer)->handle($e);
+            });
 
         }
     })->create();

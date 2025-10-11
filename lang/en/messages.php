@@ -42,4 +42,5 @@ return [
     'message_created_successfully' => 'message created successfully',
     'method_not_allowed' => 'method not allowed',
     'invalid_date_format' => 'invalid date format',
+    'admin_role_cannot_be_updated' => 'admin role cannot be updated',
 ];
