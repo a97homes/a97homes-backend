@@ -20,7 +20,7 @@ class UpdateAttributeRequest extends FormRequest
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->ar')->ignore($this->attribute->id)],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->en')->ignore($this->attribute->id)],
             'type' => ['required',  Rule::enum(AttributeTypeEnum::class)],
-            'unit_id' => ['required', Rule::exists('units', 'id')],
+            'unit_id' => ['nullable', Rule::exists('units', 'id')],
 
         ];
     }

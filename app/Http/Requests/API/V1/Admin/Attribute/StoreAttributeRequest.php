@@ -20,7 +20,7 @@ class StoreAttributeRequest extends FormRequest
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('attributes', 'name->en')],
             'type' => ['required',  Rule::enum(AttributeTypeEnum::class)],
-            'unit_id' => ['required', Rule::exists('units', 'id')],
+            'unit_id' => ['nullable', Rule::exists('units', 'id')],
         ];
     }
 }

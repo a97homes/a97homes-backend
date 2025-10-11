@@ -41,4 +41,5 @@ return [
     'not_found' => 'not found',
     'message_created_successfully' => 'message created successfully',
     'method_not_allowed' => 'method not allowed',
+    'invalid_date_format' => 'invalid date format',
 ];

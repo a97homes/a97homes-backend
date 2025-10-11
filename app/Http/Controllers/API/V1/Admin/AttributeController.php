@@ -6,6 +6,7 @@ use App\Actions\Attribute\DeleteAttributeAction;
 use App\Actions\Attribute\StoreAttributeAction;
 use App\Actions\Attribute\UpdateAttributeAction;
 use App\Enums\Role\UserRoleEnum;
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Attribute\StoreAttributeRequest;
 use App\Http\Requests\API\V1\Admin\Attribute\UpdateAttributeRequest;
@@ -39,7 +40,7 @@ class AttributeController extends Controller implements HasMiddleware
         $attributes = QueryBuilder::for(Attribute::class)
             ->with('unit:id,name')
             ->allowedFilters([
-                AllowedFilter::partial('name'),
+                AllowedFilter::custom('name', new NameFilter()),
                 AllowedFilter::exact('type'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
@@ -74,6 +75,7 @@ class AttributeController extends Controller implements HasMiddleware
 
     public function show(Attribute $attribute): JsonResponse
     {
+		$attribute->load('unit:id,name');
         return $this->ok(data: AttributeResource::make($attribute));
     }
 

@@ -11,6 +11,7 @@ use App\Exceptions\UnauthorizedExceptionRenderer;
 use App\Exceptions\UniqueConstraintViolationExceptionRendor;
 use App\Exceptions\ValidationExceptionRenderer;
 use App\Http\Middleware\SetLanguageMiddleware;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -28,6 +29,7 @@ use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Exceptions\InvalidFormatExceptionRenderer;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -98,6 +100,11 @@ return Application::configure(basePath: dirname(__DIR__))
             $exceptions->renderable(function (QueryException $e) {
                 return (new QueryExceptionRenderer)->handle($e);
             });
+
+			// InvalidFormatException
+			$exceptions->renderable(function (InvalidFormatException $e) {
+				return (new InvalidFormatExceptionRenderer)->handle($e);
+			});
 
         }
     })->create();

@@ -12,31 +12,35 @@ class AttributesSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get unit IDs by type
+        $lengthUnit = \App\Models\Unit::where('type', 'length')->first();
+        $weightUnit = \App\Models\Unit::where('type', 'weight')->first();
+
         $attributes = [
             [
                 'name' => ['en' => 'Weight', 'ar' => 'الوزن'],
                 'type' => 'number',
-                'unit_id' => rand(1, 5),
+                'unit_id' => $weightUnit?->id,
             ],
             [
                 'name' => ['en' => 'Color', 'ar' => 'اللون'],
                 'type' => 'text',
-                'unit_id' => rand(1, 5),
+                'unit_id' => null, // Text attributes don't need units
             ],
             [
                 'name' => ['en' => 'Length', 'ar' => 'الطول'],
                 'type' => 'number',
-                'unit_id' => rand(1, 5),
+                'unit_id' => $lengthUnit?->id,
             ],
             [
                 'name' => ['en' => 'Material', 'ar' => 'المادة'],
                 'type' => 'text',
-                'unit_id' => rand(1, 5),
+                'unit_id' => null, // Text attributes don't need units
             ],
             [
                 'name' => ['en' => 'Width', 'ar' => 'العرض'],
                 'type' => 'number',
-                'unit_id' => rand(1, 5),
+                'unit_id' => $lengthUnit?->id,
             ],
         ];
 

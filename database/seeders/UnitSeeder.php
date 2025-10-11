@@ -21,48 +21,72 @@ class UnitSeeder extends Seeder
                 ],
                 'type' => 'length',
             ],
-            // [
-            //     'en' => 'Kilometer',
-            //     'ar' => 'كيلومتر',
-            //     'symbol_en' => 'km',
-            //     'symbol_ar' => 'كم',
-            //     'type' => 'length',
-            // ],
-            // [
-            //     'en' => 'Centimeter',
-            //     'ar' => 'سنتيمتر',
-            //     'symbol_en' => 'cm',
-            //     'symbol_ar' => 'سم',
-            //     'type' => 'length',
-            // ],
-            // [
-            //     'en' => 'Gram',
-            //     'ar' => 'جرام',
-            //     'symbol_en' => 'g',
-            //     'symbol_ar' => 'جم',
-            //     'type' => 'weight',
-            // ],
-            // [
-            //     'en' => 'Kilogram',
-            //     'ar' => 'كيلوجرام',
-            //     'symbol_en' => 'kg',
-            //     'symbol_ar' => 'كجم',
-            //     'type' => 'weight',
-            // ],
-            // [
-            //     'en' => 'Square Meter',
-            //     'ar' => 'متر مربع',
-            //     'symbol_en' => 'm²',
-            //     'symbol_ar' => 'م²',
-            //     'type' => 'area',
-            // ],
-            // [
-            //     'en' => 'Acre',
-            //     'ar' => 'فدان',
-            //     'symbol_en' => 'acre',
-            //     'symbol_ar' => 'فدان',
-            //     'type' => 'area',
-            // ],
+            [
+                'name' => [
+                    'en' => 'Kilometer',
+                    'ar' => 'كيلومتر',
+                ],
+                'symbol' => [
+                    'en' => 'km',
+                    'ar' => 'كم',
+                ],
+                'type' => 'length',
+            ],
+            [
+                'name' => [
+                    'en' => 'Centimeter',
+                    'ar' => 'سنتيمتر',
+                ],
+                'symbol' => [
+                    'en' => 'cm',
+                    'ar' => 'سم',
+                ],
+                'type' => 'length',
+            ],
+            [
+                'name' => [
+                    'en' => 'Gram',
+                    'ar' => 'جرام',
+                ],
+                'symbol' => [
+                    'en' => 'g',
+                    'ar' => 'جم',
+                ],
+                'type' => 'weight',
+            ],
+            [
+                'name' => [
+                    'en' => 'Kilogram',
+                    'ar' => 'كيلوجرام',
+                ],
+                'symbol' => [
+                    'en' => 'kg',
+                    'ar' => 'كجم',
+                ],
+                'type' => 'weight',
+            ],
+            [
+                'name' => [
+                    'en' => 'Square Meter',
+                    'ar' => 'متر مربع',
+                ],
+                'symbol' => [
+                    'en' => 'm²',
+                    'ar' => 'م²',
+                ],
+                'type' => 'area',
+            ],
+            [
+                'name' => [
+                    'en' => 'Acre',
+                    'ar' => 'فدان',
+                ],
+                'symbol' => [
+                    'en' => 'acre',
+                    'ar' => 'فدان',
+                ],
+                'type' => 'area',
+            ],
         ];
 
         foreach ($units as $unit) {

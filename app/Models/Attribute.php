@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Attribute\AttributeTypeEnum;
 use App\Filters\CreatedAtFilter;
+use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,6 +14,7 @@ class Attribute extends Model
 {
     use CreatedAtFilter;
     use HasTranslations;
+    use HasArabicSearch;
 
     public array $translatable = ['name'];
 
