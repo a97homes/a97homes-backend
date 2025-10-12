@@ -20,8 +20,7 @@ class MediaResource extends JsonResource
         return [
             'id' => $this->whenHas('id', fn () => $this->id),
             'name' => $this->whenHas('file_name', fn () => $property->file_name),
-            'url' => $this->whenHas('url', fn () => $this->getMedia()),
-
+            'url' => $this->whenHas('url', fn () => $this->getUrl()),
         ];
     }
 }

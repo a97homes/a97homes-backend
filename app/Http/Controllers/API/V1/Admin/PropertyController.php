@@ -19,6 +19,7 @@ use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -97,16 +98,17 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(data: PropertyResource::collection($properties));
     }
 
-    public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action)
+    public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action): JsonResponse
     {
         $media = $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
 
         return $this->ok(message: __('messages.media_property_added_successfully'), data: MediaResource::make($media));
+    
     }
 
-    public function deleteMediaAction(Property $property, int $mediaId, DeleteMediaAction $action)
+    public function deleteMediaAction(Property $property, Media $media, DeleteMediaAction $action): JsonResponse
     {
-        $action->execute($property, $mediaId);
+        $action->execute($property, $media->id);
 
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }
