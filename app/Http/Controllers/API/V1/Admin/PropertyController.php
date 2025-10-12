@@ -11,6 +11,7 @@ use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
+use App\Http\Resources\API\V1\Media\MediaResource;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
@@ -18,6 +19,7 @@ use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -96,16 +98,17 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(data: PropertyResource::collection($properties));
     }
 
-    public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action)
+    public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action): JsonResponse
     {
-        $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
+        $media = $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
 
-        return $this->ok(message: __('messages.media_property_added_successfully'));
+        return $this->ok(message: __('messages.media_property_added_successfully'), data: MediaResource::make($media));
+    
     }
 
-    public function deleteMediaAction(Property $property, DeleteMediaAction $action)
+    public function deleteMediaAction(Property $property, Media $media, DeleteMediaAction $action): JsonResponse
     {
-        $action->execute($property);
+        $action->execute($property, $media->id);
 
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }

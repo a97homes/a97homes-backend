@@ -6,9 +6,12 @@ use App\Models\Property;
 
 class DeleteMediaAction
 {
-    public function execute(Property $property)
+    public function execute(Property $property, int $mediaId): bool
     {
-        // TODO:
-        return $property->clearMediaCollection(Property::MEDIA_COLLECTION_FILE);
+		// TODO: check if the media is in the property collection
+        $property->deleteMedia($mediaId);
+
+        return true;
+
     }
 }

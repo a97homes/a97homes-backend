@@ -32,6 +32,7 @@ class PermissionController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $permissions = QueryBuilder::for(Permission::class)
+			->withCount('users')
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
@@ -41,7 +42,6 @@ class PermissionController extends Controller implements HasMiddleware
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
-              // ->withCount('users')
             ->macroPaginate();
 
         return $this->ok(data: new PermissionCollection($permissions));
@@ -61,7 +61,7 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function dropdown(): JsonResponse
     {
-        $permissions = Permission::query()->select(['id', 'name'])->get();
+        $permissions = Permission::query()->select(['id', 'name'])->orderBy('id', 'desc')->get();
 
         return $this->ok(data: PermissionResource::collection($permissions));
     }
