@@ -25,7 +25,7 @@ class ContactRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'email', 'max:150'], // TODO: https://laravel.com/docs/12.x/validation
+            'email' => ['required', 'email', 'max:150'],
             'phone' => ['nullable', 'max:20', 'string',
                 (new Phone)->international(), Rule::unique('contacts', 'phone')],
             'message' => ['required', 'string', 'max:1000'],

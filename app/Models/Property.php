@@ -42,7 +42,7 @@ class Property extends Model implements HasMedia
 
     }
 
-    protected array $casts = [
+    protected $casts = [
         'status' => PropertyStatusEnum::class,
     ];
 }

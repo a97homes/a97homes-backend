@@ -11,6 +11,7 @@ use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
+use App\Http\Resources\API\V1\Media\MediaResource;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
@@ -98,14 +99,14 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function addMedia(AddPropertyMediaRequest $request, Property $property, AddMediaAction $action)
     {
-        $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
+        $media = $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
 
-        return $this->ok(message: __('messages.media_property_added_successfully'));
+        return $this->ok(message: __('messages.media_property_added_successfully'), data: MediaResource::make($media));
     }
 
-    public function deleteMediaAction(Property $property, DeleteMediaAction $action)
+    public function deleteMediaAction(Property $property, int $mediaId, DeleteMediaAction $action)
     {
-        $action->execute($property);
+        $action->execute($property, $mediaId);
 
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }
