@@ -9,5 +9,4 @@ enum AttributeTypeEnum: string
     case BOOLEAN = 'boolean';
     case DATE = 'date';
     case Text = 'text';
-
 }

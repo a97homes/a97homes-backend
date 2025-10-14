@@ -32,7 +32,7 @@ class PermissionController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $permissions = QueryBuilder::for(Permission::class)
-			->withCount('users')
+            ->withCount('users')
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),

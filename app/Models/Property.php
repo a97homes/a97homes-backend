@@ -22,7 +22,7 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id'];
+    protected $fillable = ['name', 'property_type_id', 'city_id', 'status'];
 
     public array $translatable = ['name'];
 

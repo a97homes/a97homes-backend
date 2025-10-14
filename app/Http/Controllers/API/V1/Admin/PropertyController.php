@@ -7,10 +7,12 @@ use App\Actions\Media\DeleteMediaAction;
 use App\Actions\Property\DeletePropertyAction;
 use App\Actions\Property\StorePropertyAction;
 use App\Actions\Property\UpdatePropertyAction;
+use App\Actions\Property\UpdatePropertyStatusAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
+use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyStatusRequest;
 use App\Http\Resources\API\V1\Media\MediaResource;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
@@ -48,7 +50,7 @@ class PropertyController extends Controller implements HasMiddleware
 
             ->allowedFilters([
                 AllowedFilter::partial('name'),
-                AllowedFilter::exact('attributes.name'),
+                AllowedFilter::partial('attributes.name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
@@ -79,7 +81,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name']);
+        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id']);
 
         return $this->ok(data: PropertyResource::make($property));
     }
@@ -103,7 +105,7 @@ class PropertyController extends Controller implements HasMiddleware
         $media = $action->execute($property, $request->validated(), Property::MEDIA_COLLECTION_FILE);
 
         return $this->ok(message: __('messages.media_property_added_successfully'), data: MediaResource::make($media));
-    
+
     }
 
     public function deleteMediaAction(Property $property, Media $media, DeleteMediaAction $action): JsonResponse
@@ -111,5 +113,12 @@ class PropertyController extends Controller implements HasMiddleware
         $action->execute($property, $media->id);
 
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
+    }
+
+    public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action)
+    {
+        $property = $action->execute($property, $request->validated());
+
+        return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
     }
 }

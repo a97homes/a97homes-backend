@@ -16,6 +16,8 @@ class UserResource extends JsonResource
             'id' => $this->whenHas('id', fn () => $user->id),
             'name' => $this->whenHas('name', fn () => $user->name),
             'email' => $this->whenHas('email', fn () => $user->email),
+            'roles' => $this->getRoleNames(),
+            // 'roles' => $this->whenHas('roles', fn () => $user->getRoleNames()->all()),
             'created_at' => $this->whenHas('created_at', fn () => $user->created_at),
         ];
     }

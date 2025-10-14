@@ -8,8 +8,10 @@ use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
+use App\Http\Controllers\API\V1\Admin\SocialController;
 use App\Http\Controllers\API\V1\Admin\StateController;
 use App\Http\Controllers\API\V1\Admin\UnitController;
+use App\Http\Controllers\API\V1\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================Role==========================
@@ -51,6 +53,7 @@ Route::apiResource('units', UnitController::class);
 
 // =========================property=========================
 Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
+Route::patch('properties/{property}/status', [PropertyController::class, 'updateStatus']);
 Route::apiResource('properties', PropertyController::class);
 Route::post('properties/{property}/media', [PropertyController::class, 'addMedia']);
 Route::delete('properties/{property}/media/{media}', [PropertyController::class, 'deleteMediaAction']);
@@ -67,3 +70,9 @@ Route::get('orders/{order}', [OrderController::class, 'show']);
 Route::patch('orders/{order}/approve', [OrderController::class, 'approve']);
 Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
 // ========================Order=====================
+// ================User====================
+Route::apiResource('users', UserController::class);
+Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles']);
+// ================User====================
+
+Route::apiResource('socials', SocialController::class);

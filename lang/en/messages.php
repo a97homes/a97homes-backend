@@ -43,4 +43,9 @@ return [
     'method_not_allowed' => 'method not allowed',
     'invalid_date_format' => 'invalid date format',
     'admin_role_cannot_be_updated' => 'admin role cannot be updated',
+    'user_deleted_successfully' => 'user deleted successfully',
+    'roles_assigned_successfully' => 'roles assigned successfully',
+    'social_contact_created_successfully' => 'social contact created successfully',
+    'social_contact_deleted_successfully' => 'social contact deleted successfully',
+    'user_updated_successfully' => 'user updated successfully',
 ];

@@ -25,6 +25,7 @@ class CityResource extends JsonResource
             'id' => $this->whenHas('id', fn () => $city->id),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($city, 'name')),
             'state' => StateResource::make($this->whenLoaded('state')),
+            'properties_count' => $this->whenCounted('properties'),
             'created_at' => $this->whenHas('created_at', fn () => $city->created_at),
         ];
     }
