@@ -20,15 +20,10 @@ class SocialController extends Controller
                 AllowedSort::field('type'),
             ])
             ->defaultSort('-id')
-            ->macroPaginate();
+            ->get();
 
         return $this->ok(
             data: SocialResource::collection($socials)
         );
-    }
-
-    public function show(Social $social): JsonResponse
-    {
-        return $this->ok(data : SocialResource::make($social->load('media')));
     }
 }

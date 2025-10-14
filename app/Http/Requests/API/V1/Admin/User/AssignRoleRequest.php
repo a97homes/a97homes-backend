@@ -23,9 +23,8 @@ class AssignRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'user_id' => ['required', Rule::exists('users', 'id')],
             'roles' => ['required', 'array'],
-            'roles.*' => ['string', Rule::exists('roles', 'name')],
+            'roles.*' => ['string', Rule::exists('roles', 'name')], // TODO:: by id
         ];
     }
 }

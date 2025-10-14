@@ -15,4 +15,4 @@ Route::post('contact', [ContactController::class, 'store']);
 Route::get('cities/popular', [CityController::class, 'popular']);
 
 // =========================End-User-Socials===========
-Route::apiResource('socials', SocialController::class);
+Route::apiResource('socials', SocialController::class); // TODO:: adding except

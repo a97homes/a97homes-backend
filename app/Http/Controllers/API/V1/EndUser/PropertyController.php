@@ -16,22 +16,15 @@ class PropertyController extends Controller
     public function index(): JsonResponse
     {
         $properties = QueryBuilder::for(Property::class)
-            ->with(['city:id,name,state_id',
-                'city.state:id,name,country_id',
-                'city.state.country:id,name',
-                'attributes:name,id'])
-
             ->allowedFilters([
-                AllowedFilter::partial('name'), // attributes.name_en
+                AllowedFilter::partial('name'), // TODO:: NameFilter
                 AllowedFilter::exact('attributes.id'),
-
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('name'),
             ])
             ->macroPaginate();
 

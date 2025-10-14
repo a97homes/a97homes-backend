@@ -117,7 +117,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action)
     {
-        $property = $action->execute($property, $request->validated());
+        $property = $action->execute($property, $request->validated('status'));
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
     }

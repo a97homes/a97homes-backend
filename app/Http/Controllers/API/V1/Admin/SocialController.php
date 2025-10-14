@@ -17,10 +17,9 @@ class SocialController extends Controller
     public function index(): JsonResponse
     {
         $socials = QueryBuilder::for(Social::class)
-            ->with('media')
+            ->with('media') // TODO:: please remove it
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('type'),
             ])
             ->defaultSort('-id')
             ->macroPaginate();
@@ -48,8 +47,4 @@ class SocialController extends Controller
 
         return $this->ok(message: __('messages.social_contact_deleted_successfully'));
     }
-    // public function dropdown(): JsonResponse
-    // {
-
-    // }
 }

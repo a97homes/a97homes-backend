@@ -75,4 +75,4 @@ Route::apiResource('users', UserController::class);
 Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles']);
 // ================User====================
 
-Route::apiResource('socials', SocialController::class);
+Route::apiResource('socials', SocialController::class); // TODO:: adding except

@@ -6,9 +6,9 @@ use App\Models\Property;
 
 class UpdatePropertyStatusAction
 {
-    public function execute(Property $property, array $data): Property
+    public function execute(Property $property, string $status): Property
     {
-        $property->update($data);
+        $property->update(['status' => $status]);
 
         return $property;
     }

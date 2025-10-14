@@ -40,9 +40,7 @@ class UserController extends Controller
         return $this->ok(data: new UserCollection($users));
     }
 
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     public function show(User $user): JsonResponse
     {
@@ -66,7 +64,7 @@ class UserController extends Controller
 
     public function assignRoles(AssignRoleRequest $request, User $user, AssignRolesToUserAction $action): JsonResponse
     {
-        $action->execute($user, $request->roles);
+        $action->execute($user, $request->validated('roles'));
 
         return $this->ok(message: __('messages.roles_assigned_successfully'));
 

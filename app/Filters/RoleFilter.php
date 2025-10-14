@@ -9,7 +9,7 @@ class RoleFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property)
     {
-
+        // TODO: search by id
         return $query->whereHas('roles', fn ($q) => $q->where('name', $value));
     }
 }
