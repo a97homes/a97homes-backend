@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\API\V1\Admin\Property;
 
+use App\Enums\PropertyStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddPropertyMediaRequest extends FormRequest
+class UpdatePropertyStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +24,10 @@ class AddPropertyMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => [
+            'status' => [
                 'required',
-                'file',
-                'mimes:jpg,jpeg,png,pdf',
-                'max:'.config('media-library.max_file_size'),
-
+                Rule::enum(PropertyStatusEnum::class)->only([PropertyStatusEnum::ACTIVE, PropertyStatusEnum::BLOCKED]),
             ],
-
         ];
     }
 }

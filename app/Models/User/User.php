@@ -19,6 +19,8 @@ class User extends Authenticatable
     use CreatedAtFilter;
     use HasApiTokens;
 
+    protected $guard_name = 'web';
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 

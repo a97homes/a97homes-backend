@@ -29,6 +29,7 @@ class StorePropertyRequest extends FormRequest
             'attributes_ids' => ['required', 'array'],
             'attributes_ids.*' => ['required', Rule::exists('attributes', 'id')],
             'city_id' => ['required', Rule::exists('cities', 'id')],
+            'order_id' => ['required', Rule::exists('orders', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
         ];
     }

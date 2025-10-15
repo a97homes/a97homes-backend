@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\Property;
+namespace App\Http\Requests\API\V1\Admin\Social;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddPropertyMediaRequest extends FormRequest
+class StoreSocialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,9 @@ class AddPropertyMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg,png,pdf',
-                'max:'.config('media-library.max_file_size'),
-
-            ],
-
+            'type' => ['required', 'string', 'max:255'],
+            'link' => ['required', 'url', 'max:255'],
+            'icon' => ['max:255', 'required', 'string'],
         ];
     }
 }

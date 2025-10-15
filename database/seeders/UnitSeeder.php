@@ -23,50 +23,6 @@ class UnitSeeder extends Seeder
             ],
             [
                 'name' => [
-                    'en' => 'Kilometer',
-                    'ar' => 'كيلومتر',
-                ],
-                'symbol' => [
-                    'en' => 'km',
-                    'ar' => 'كم',
-                ],
-                'type' => 'length',
-            ],
-            [
-                'name' => [
-                    'en' => 'Centimeter',
-                    'ar' => 'سنتيمتر',
-                ],
-                'symbol' => [
-                    'en' => 'cm',
-                    'ar' => 'سم',
-                ],
-                'type' => 'length',
-            ],
-            [
-                'name' => [
-                    'en' => 'Gram',
-                    'ar' => 'جرام',
-                ],
-                'symbol' => [
-                    'en' => 'g',
-                    'ar' => 'جم',
-                ],
-                'type' => 'weight',
-            ],
-            [
-                'name' => [
-                    'en' => 'Kilogram',
-                    'ar' => 'كيلوجرام',
-                ],
-                'symbol' => [
-                    'en' => 'kg',
-                    'ar' => 'كجم',
-                ],
-                'type' => 'weight',
-            ],
-            [
-                'name' => [
                     'en' => 'Square Meter',
                     'ar' => 'متر مربع',
                 ],
@@ -86,6 +42,50 @@ class UnitSeeder extends Seeder
                     'ar' => 'فدان',
                 ],
                 'type' => 'area',
+            ],
+            [
+                'name' => [
+                    'en' => 'Room',
+                    'ar' => 'غرفة',
+                ],
+                'symbol' => [
+                    'en' => 'room',
+                    'ar' => 'غرفة',
+                ],
+                'type' => 'count',
+            ],
+            [
+                'name' => [
+                    'en' => 'Bathroom',
+                    'ar' => 'حمام',
+                ],
+                'symbol' => [
+                    'en' => 'bath',
+                    'ar' => 'حمام',
+                ],
+                'type' => 'count',
+            ],
+            [
+                'name' => [
+                    'en' => 'Year',
+                    'ar' => 'سنة',
+                ],
+                'symbol' => [
+                    'en' => 'yr',
+                    'ar' => 'سنة',
+                ],
+                'type' => 'time',
+            ],
+            [
+                'name' => [
+                    'en' => 'Price per Square Meter',
+                    'ar' => 'السعر لكل متر مربع',
+                ],
+                'symbol' => [
+                    'en' => 'EGP/m²',
+                    'ar' => 'ج.م/م²',
+                ],
+                'type' => 'price',
             ],
         ];
 

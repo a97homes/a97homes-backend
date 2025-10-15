@@ -18,6 +18,8 @@ class PropertyTypeSeeder extends Seeder
             ['name' => ['en' => 'Studio', 'ar' => 'استوديو']],
             ['name' => ['en' => 'Office', 'ar' => 'مكتب']],
             ['name' => ['en' => 'Shop', 'ar' => 'محل']],
+            ['name' => ['en' => 'Penthouse', 'ar' => 'بنتهاوس']],
+            ['name' => ['en' => 'Townhouse', 'ar' => 'تاون هاوس']],
         ];
 
         foreach ($propertyTypes as $type) {

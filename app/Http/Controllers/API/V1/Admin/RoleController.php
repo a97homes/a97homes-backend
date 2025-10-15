@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Actions\Role\AssignPermissionsToRoleAction;
 use App\Actions\Role\DeleteRoleAction;
 use App\Actions\Role\StoreRoleAction;
 use App\Actions\Role\UpdateRoleAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Admin\Role\AssignPermissionsRequest;
 use App\Http\Requests\Role\DestroyRoleRequest;
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
@@ -84,5 +86,13 @@ class RoleController extends Controller implements HasMiddleware
         $roles = Role::query()->select(['id', 'name'])->get();
 
         return $this->ok(data: RoleResource::collection($roles));
+    }
+
+    public function assignPermissions(AssignPermissionsRequest $request, Role $role, AssignPermissionsToRoleAction $action): JsonResponse
+    {
+
+        $action->execute($role, $request->validated('permissions'));
+
+        return $this->ok(message: __('messages.permissions_assigned_successfully'));
     }
 }
