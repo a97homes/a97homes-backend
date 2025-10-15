@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\Property;
+namespace App\Http\Requests\API\V1\Admin\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddPropertyMediaRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +23,8 @@ class AddPropertyMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg,png,pdf',
-                'max:'.config('media-library.max_file_size'),
-
-            ],
-
+            'roles' => ['required', 'array'],
+            'roles.*' => ['string', Rule::exists('roles', 'id')],
         ];
     }
 }

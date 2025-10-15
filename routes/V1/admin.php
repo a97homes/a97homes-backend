@@ -15,6 +15,7 @@ use App\Http\Controllers\API\V1\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================Role==========================
+Route::post('roles/{role}/assign-permissions', [RoleController::class, 'assignPermissions']);
 Route::get('roles/dropdown', [RoleController::class, 'dropdown']);
 Route::apiResource('roles', RoleController::class);
 // ==========================Role==========================
@@ -70,9 +71,13 @@ Route::get('orders/{order}', [OrderController::class, 'show']);
 Route::patch('orders/{order}/approve', [OrderController::class, 'approve']);
 Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
 // ========================Order=====================
+
 // ================User====================
-Route::apiResource('users', UserController::class);
+Route::put('users/{user}/update-roles', [UserController::class, 'updateRoles']);
 Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles']);
+Route::apiResource('users', UserController::class);
 // ================User====================
 
-Route::apiResource('socials', SocialController::class); // TODO:: adding except
+// ===============social====================
+Route::apiResource('socials', SocialController::class)->except(['update']);
+// ===============social====================

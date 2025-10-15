@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\EndUser;
 
+use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
@@ -17,7 +18,7 @@ class PropertyController extends Controller
     {
         $properties = QueryBuilder::for(Property::class)
             ->allowedFilters([
-                AllowedFilter::partial('name'), // TODO:: NameFilter
+                AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('attributes.id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),

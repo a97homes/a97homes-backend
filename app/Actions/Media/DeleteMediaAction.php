@@ -8,10 +8,12 @@ class DeleteMediaAction
 {
     public function execute(Property $property, int $mediaId): bool
     {
-        // TODO: check if the media is in the property collection
-        $property->deleteMedia($mediaId);
+        $media = $property->media()->find($mediaId);
 
-        return true;
+        if ($media) {
+            $property->deleteMedia($mediaId);
+        }
 
+        return false;
     }
 }

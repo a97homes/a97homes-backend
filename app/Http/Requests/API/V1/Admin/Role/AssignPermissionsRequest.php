@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\User;
+namespace App\Http\Requests\API\V1\Admin\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AssignRoleRequest extends FormRequest
+class AssignPermissionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,8 @@ class AssignRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'roles' => ['required', 'array'],
-            'roles.*' => ['string', Rule::exists('roles', 'name')], // TODO:: by id
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['integer', Rule::exists('permissions', 'id')],
         ];
     }
 }

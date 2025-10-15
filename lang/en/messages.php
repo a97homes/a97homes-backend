@@ -48,4 +48,7 @@ return [
     'social_contact_created_successfully' => 'social contact created successfully',
     'social_contact_deleted_successfully' => 'social contact deleted successfully',
     'user_updated_successfully' => 'user updated successfully',
+    'admin_cannot_be_deleted' => 'admin cannot be deleted',
+    'permissions_assigned_successfully' => 'permissions assigned successfully',
+    'roles_updated_successfully' => 'roles_updated_successfully',
 ];

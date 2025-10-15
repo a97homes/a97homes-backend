@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Actions\Role\UpdateUserRolesAction;
 use App\Actions\User\AssignRolesToUserAction;
 use App\Actions\User\DeleteUserAction;
 use App\Actions\User\UpdateUserAction;
 use App\Filters\RoleFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Admin\User\AssignRoleRequest;
+use App\Http\Requests\API\V1\Admin\User\DeleteUserRequest;
+use App\Http\Requests\API\V1\Admin\User\RoleRequest;
 use App\Http\Requests\API\V1\Admin\User\UpdateUserRequest;
 use App\Http\Resources\API\V1\User\UserCollection;
 use App\Http\Resources\API\V1\User\UserResource;
@@ -55,18 +57,25 @@ class UserController extends Controller
         );
     }
 
-    public function destroy(User $user, DeleteUserAction $action): JsonResponse
+    public function destroy(DeleteUserRequest $request, User $user, DeleteUserAction $action): JsonResponse
     {
         $action->execute($user);
 
         return $this->ok(message: __('messages.user_deleted_successfully'));
     }
 
-    public function assignRoles(AssignRoleRequest $request, User $user, AssignRolesToUserAction $action): JsonResponse
+    public function assignRoles(RoleRequest $request, User $user, AssignRolesToUserAction $action): JsonResponse
     {
         $action->execute($user, $request->validated('roles'));
 
         return $this->ok(message: __('messages.roles_assigned_successfully'));
 
+    }
+
+    public function updateRoles(RoleRequest $request, User $user, UpdateUserRolesAction $action): JsonResponse
+    {
+        $action->execute($user, $request->validated('roles'));
+
+        return $this->ok(message: __('messages.roles_updated_successfully'));
     }
 }

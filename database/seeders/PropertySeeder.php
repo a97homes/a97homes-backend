@@ -15,7 +15,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        // IDs من السييدرز اللي عندك
+        // ✅ نجيب الـ IDs مع التأكد إنهم موجودين فعلاً
         $nasrCityId = City::where('name->en', 'Nasr City')->value('id');
         $maadiId = City::where('name->en', 'Maadi')->value('id');
         $octoberId = City::where('name->en', '6th of October')->value('id');
@@ -29,18 +29,20 @@ class PropertySeeder extends Seeder
         $properties = [
             [
                 'name' => ['en' => 'Luxury Apartment in Nasr City', 'ar' => 'شقة فاخرة في مدينة نصر'],
+
                 'property_type_id' => $apartmentTypeId,
                 'city_id' => $nasrCityId,
                 'status' => 'active',
             ],
             [
                 'name' => ['en' => 'Modern Villa in 6th of October', 'ar' => 'فيلا حديثة في 6 أكتوبر'],
+
                 'property_type_id' => $villaTypeId,
                 'city_id' => $octoberId,
                 'status' => 'active',
             ],
             [
-                'name' => ['en' => 'Office Space in Maadi', 'ar' => 'مكتب في المعادي'],
+                'name' => ['en' => 'Office Space in Maadi', 'ar' => 'مكتب إداري في المعادي'],
                 'property_type_id' => $officeTypeId,
                 'city_id' => $maadiId,
                 'status' => 'pending',
@@ -56,11 +58,11 @@ class PropertySeeder extends Seeder
         foreach ($properties as $data) {
             $property = Property::create($data);
 
-            // لو عندك جدول attributes، اربط 2 عشوائيين لكل عقار
             if (class_exists(Attribute::class)) {
-                $attributeIds = Attribute::inRandomOrder()->take(2)->pluck('id');
+                $attributeIds = Attribute::inRandomOrder()->take(rand(3, 5))->pluck('id');
                 $property->attributes()->attach($attributeIds);
             }
         }
+
     }
 }
