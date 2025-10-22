@@ -56,6 +56,7 @@ class PropertyController extends Controller implements HasMiddleware
                 AllowedFilter::exact('project_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
+                // TODO: search by developer id
             ])
             ->defaultSort('-id')
             ->allowedSorts([

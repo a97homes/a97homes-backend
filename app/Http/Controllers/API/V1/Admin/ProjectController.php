@@ -43,7 +43,7 @@ class ProjectController extends Controller implements HasMiddleware
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
-            ->allowedSorts(['id', 'name'])
+            ->allowedSorts(['id'])
             ->macroPaginate();
 
         return $this->ok(data: new ProjectCollection($projects));

@@ -25,17 +25,6 @@ class StoreProjectRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'developer_id' => ['required', Rule::exists('developers', 'id')],
-            'property_type_ids' => ['nullable', 'array'],
-            'property_type_ids.*' => ['required', Rule::exists('property_types', 'id')],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'developer_id.required' => __('messages.developer_id_required'),
-            'developer_id.exists' => __('messages.developer_id_exists'),
-            'property_type_ids.*.exists' => __('messages.property_type_exists'),
         ];
     }
 }

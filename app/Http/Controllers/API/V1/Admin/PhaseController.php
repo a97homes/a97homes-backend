@@ -41,12 +41,12 @@ class PhaseController extends Controller implements HasMiddleware
             ->allowedFilters([
                 AllowedFilter::exact('project_id'),
                 AllowedFilter::exact('property_type_id'),
-                AllowedFilter::custom('name', new NameFilter),
+                AllowedFilter::partial('name'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
-            ->allowedSorts(['id', 'name'])
+            ->allowedSorts(['id'])
             ->macroPaginate();
 
         return $this->ok(data: new PhaseCollection($phases));

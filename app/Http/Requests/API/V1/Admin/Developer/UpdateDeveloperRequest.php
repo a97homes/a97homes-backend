@@ -23,7 +23,7 @@ class UpdateDeveloperRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'about' => ['required', 'string'],
+            'about' => ['required', 'string', 'max:10000'],
         ];
     }
 }

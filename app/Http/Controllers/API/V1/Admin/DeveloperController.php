@@ -38,12 +38,12 @@ class DeveloperController extends Controller implements HasMiddleware
     {
         $developers = QueryBuilder::for(Developer::class)
             ->allowedFilters([
-                AllowedFilter::custom('name', new NameFilter),
+                AllowedFilter::custom('name', new NameFilter), // use partial for search
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
-            ->allowedSorts(['id', 'name'])
+            ->allowedSorts(['id'])
             ->macroPaginate();
 
         return $this->ok(data: new DeveloperCollection($developers));

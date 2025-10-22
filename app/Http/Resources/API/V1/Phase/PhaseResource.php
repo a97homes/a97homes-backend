@@ -4,11 +4,14 @@ namespace App\Http\Resources\API\V1\Phase;
 
 use App\Http\Resources\API\V1\Project\ProjectResource;
 use App\Models\Phase;
+use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PhaseResource extends JsonResource
 {
+    use HasTranslatableFields;
+
     /**
      * Transform the resource into an array.
      *

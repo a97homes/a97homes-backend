@@ -23,9 +23,4 @@ class Project extends Model
     {
         return $this->hasMany(Phase::class);
     }
-
-    public function propertyTypes(): BelongsToMany
-    {
-        return $this->belongsToMany(PropertyType::class);
-    }
 }
