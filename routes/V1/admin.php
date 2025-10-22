@@ -3,8 +3,11 @@
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\DeveloperController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
+use App\Http\Controllers\API\V1\Admin\PhaseController;
+use App\Http\Controllers\API\V1\Admin\ProjectController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
@@ -81,3 +84,18 @@ Route::apiResource('users', UserController::class);
 // ===============social====================
 Route::apiResource('socials', SocialController::class)->except(['update']);
 // ===============social====================
+
+// =====================Developer Routes============
+Route::get('developers/dropdown ', [DeveloperController::class, 'dropdown']);
+Route::apiResource('developers', DeveloperController::class);
+// =====================Developer Routes============
+
+// ======================Project Routes=================
+Route::get('projects/dropdown ', [ProjectController::class, 'dropdown']);
+Route::apiResource('projects', ProjectController::class);
+// ======================Project Routes=================
+
+// ======================Phase Routes==================
+Route::get('phases/dropdown ', [PhaseController::class, 'dropdown']);
+Route::apiResource('phases', PhaseController::class);
+// ======================Phase Routes==================

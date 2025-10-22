@@ -30,6 +30,12 @@ class UpdatePropertyRequest extends FormRequest
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
             'attributes_ids' => ['required', 'array'],
             'attributes_ids.*' => ['required', Rule::exists('attributes', 'id')],
+            'project_id' => ['required', 'integer', Rule::exists('projects', 'id')],
+            'phase_id' => ['nullable', 'integer', Rule::exists('phases', 'id')],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'address' => ['required', 'string', 'max:255'],
+
         ];
     }
 }

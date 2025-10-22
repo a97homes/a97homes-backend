@@ -123,6 +123,43 @@ class PermissionRegistry
 
     // ================= Admin orders Permissions =================
 
+    // ==================== Developer Permissions =================
+    public const ADMIN_DEVELOPERS_INDEX = 'admin.developers.index';
+
+    public const ADMIN_DEVELOPERS_STORE = 'admin.developers.store';
+
+    public const ADMIN_DEVELOPERS_SHOW = 'admin.developers.show';
+
+    public const ADMIN_DEVELOPERS_UPDATE = 'admin.developers.update';
+
+    public const ADMIN_DEVELOPERS_DESTROY = 'admin.developers.destroy';
+    // ==================== Developer Permissions =================
+
+    // ==================== Phase Permissions ======================
+    public const ADMIN_PHASES_INDEX = 'admin.phases.index';
+
+    public const ADMIN_PHASES_STORE = 'admin.phases.store';
+
+    public const ADMIN_PHASES_SHOW = 'admin.phases.show';
+
+    public const ADMIN_PHASES_UPDATE = 'admin.phases.update';
+
+    public const ADMIN_PHASES_DESTROY = 'admin.phases.destroy';
+
+    // ==================== Phase Permissions ======================
+
+    // ==================== Project Permissions ======================
+    public const ADMIN_PROJECTS_INDEX = 'admin.projects.index';
+
+    public const ADMIN_PROJECTS_STORE = 'admin.projects.store';
+
+    public const ADMIN_PROJECTS_SHOW = 'admin.projects.show';
+
+    public const ADMIN_PROJECTS_UPDATE = 'admin.projects.update';
+
+    public const ADMIN_PROJECTS_DESTROY = 'admin.projects.destroy';
+    // ==================== Project Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
