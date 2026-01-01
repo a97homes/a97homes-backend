@@ -36,9 +36,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         using: function () {
-            Route::middleware(['api', SetLanguageMiddleware::class])->prefix('api/v1')->group(base_path('routes/v1/api.php'));
-            Route::middleware(['api', 'auth:sanctum', SetLanguageMiddleware::class])->prefix('api/admin/v1')->group(base_path('routes/v1/admin.php'));
-            Route::middleware(['api', SetLanguageMiddleware::class])->prefix('api/owner/v1')->group(base_path('routes/v1/user.php'));
+            Route::middleware(['api', SetLanguageMiddleware::class])->prefix('api/V1')->group(base_path('routes/V1/api.php'));
+            Route::middleware(['api', 'auth:sanctum', SetLanguageMiddleware::class])->prefix('api/admin/V1')->group(base_path('routes/V1/admin.php'));
+            Route::middleware(['api', SetLanguageMiddleware::class])->prefix('api/owner/V1')->group(base_path('routes/V1/user.php'));
             Route::middleware(['web'])->group(base_path('routes/web.php'));
         },
     )
