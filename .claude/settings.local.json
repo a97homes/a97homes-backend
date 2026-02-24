@@ -7,12 +7,14 @@
       "Bash(find C:\\\\laragon\\\\www\\\\A97Infinity:*)",
       "mcp__claude_ai_Figma__whoami",
       "mcp__claude_ai_Figma__get_screenshot",
-      "mcp__claude_ai_Figma__get_design_context"
+      "mcp__claude_ai_Figma__get_design_context",
+      "Bash(cd /c/laragon/www/A97Infinity && php artisan make:migration add_offer_featured_price_to_properties_table --table=properties --no-interaction 2>&1)",
+      "Bash(cd /c/laragon/www/A97Infinity && php artisan make:migration create_developers_table --create=developers --no-interaction 2>&1 && php artisan make:migration create_projects_table --create=projects --no-interaction 2>&1 && php artisan make:migration create_compounds_table --create=compounds --no-interaction 2>&1 && php artisan make:migration create_banners_table --create=banners --no-interaction 2>&1)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "laravel-boost",
     "herd"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
