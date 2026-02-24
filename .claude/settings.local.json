@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(cd:*)",
+      "mcp__claude_ai_Figma__get_metadata",
+      "Bash(find C:\\\\laragon\\\\www\\\\A97Infinity:*)",
+      "mcp__claude_ai_Figma__whoami",
+      "mcp__claude_ai_Figma__get_screenshot",
+      "mcp__claude_ai_Figma__get_design_context"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "laravel-boost",
+    "herd"
+  ],
+  "enableAllProjectMcpServers": true
+}
