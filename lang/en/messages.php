@@ -51,4 +51,17 @@ return [
     'admin_cannot_be_deleted' => 'admin cannot be deleted',
     'permissions_assigned_successfully' => 'permissions assigned successfully',
     'roles_updated_successfully' => 'roles_updated_successfully',
+    'developer_id_required' => 'The developer field is required.',
+    'developer_id_exists' => 'The selected developer does not exist.',
+    'property_type_exists' => 'One or more selected property types do not exist.',
+    'phase_created_successfully' => 'Phase created successfully.',
+    'phase_updated_successfully' => 'Phase updated successfully.',
+    'phase_deleted_successfully' => 'Phase deleted successfully.',
+    'project_created_successfully' => 'Project created successfully.',
+    'project_updated_successfully' => 'Project updated successfully.',
+    'project_deleted_successfully' => 'Project deleted successfully.',
+    'developer_created_successfully' => 'Developer created successfully.',
+    'developer_updated_successfully' => 'Developer updated successfully.',
+    'developer_deleted_successfully' => 'Developer deleted successfully.',
+
 ];
