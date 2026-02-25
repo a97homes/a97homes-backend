@@ -8,6 +8,7 @@ use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class Attribute extends Model
@@ -33,6 +34,11 @@ class Attribute extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function options(): HasMany
+    {
+        return $this->hasMany(AttributeOption::class)->orderBy('sort_order');
     }
 
     protected $casts = [

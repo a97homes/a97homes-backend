@@ -8,5 +8,6 @@ enum AttributeTypeEnum: string
     case STRING = 'string';
     case BOOLEAN = 'boolean';
     case DATE = 'date';
-    case Text = 'text';
+    case TEXT = 'text';
+    case SELECT = 'select';
 }
