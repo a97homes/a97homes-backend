@@ -53,9 +53,9 @@ Route::apiResource('units', UnitController::class);
 // =========================unit=========================
 
 // =========================property=========================
+Route::apiResource('properties', PropertyController::class);
 Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
 Route::patch('properties/{property}/status', [PropertyController::class, 'updateStatus']);
-Route::apiResource('properties', PropertyController::class);
 Route::post('properties/{property}/media', [PropertyController::class, 'addMedia']);
 Route::delete('properties/{property}/media/{media}', [PropertyController::class, 'deleteMediaAction']);
 // =========================property=========================

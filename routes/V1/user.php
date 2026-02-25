@@ -2,6 +2,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\EndUser\CityController;
+use App\Http\Controllers\API\V1\EndUser\CompoundController;
 use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\OrderController;
 use App\Http\Controllers\API\V1\EndUser\SocialController;
@@ -16,3 +17,4 @@ Route::get('cities/popular', [CityController::class, 'popular']);
 
 // =========================End-User-Socials===========
 Route::get('socials', [SocialController::class, 'index']);
+// Route::get('compounds', [CompoundController::class, 'index']);

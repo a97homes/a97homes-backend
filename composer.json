@@ -19,6 +19,7 @@
         "spatie/laravel-medialibrary": "^11.15",
         "spatie/laravel-permission": "^6.21",
         "spatie/laravel-query-builder": "^6.3",
+        "spatie/laravel-sluggable": "^3.8",
         "spatie/laravel-translatable": "^6.11",
         "spiral/roadrunner-cli": "^2.6.0",
         "spiral/roadrunner-http": "^3.3.0"

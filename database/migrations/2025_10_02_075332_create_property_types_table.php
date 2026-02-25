@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('property_types', function (Blueprint $table) {
             $table->id();
             $table->json('name');
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
