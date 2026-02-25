@@ -22,7 +22,7 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id'];
+    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'phase_id', 'project_id', 'address'];
 
     public array $translatable = ['name'];
 
@@ -40,6 +40,16 @@ class Property extends Model implements HasMedia
     {
         return $this->belongsToMany(Attribute::class);
 
+    }
+
+    public function phase(): BelongsTo
+    {
+        return $this->belongsTo(Phase::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     protected $casts = [

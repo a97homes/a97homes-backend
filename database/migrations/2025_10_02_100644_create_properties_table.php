@@ -18,6 +18,11 @@ return new class extends Migration
             $table->foreignId('property_type_id')->nullable()->constrained('property_types')->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
             $table->string('status');
+            $table->string('address');
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->foreignId('phase_id')->nullable()->constrained('phases')->cascadeOnDelete();
+            $table->decimal('latitude', 10, 7)->nullable(); // 26.8206
+            $table->decimal('longitude', 10, 7)->nullable(); // 30.8025
             $table->timestamps();
         });
     }

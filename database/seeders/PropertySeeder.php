@@ -4,65 +4,64 @@ namespace Database\Seeders;
 
 use App\Models\Attribute;
 use App\Models\City;
+use App\Models\Developer;
+use App\Models\Phase;
+use App\Models\Project;
 use App\Models\Property;
 use App\Models\PropertyType;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // ✅ نجيب الـ IDs مع التأكد إنهم موجودين فعلاً
-        $nasrCityId = City::where('name->en', 'Nasr City')->value('id');
-        $maadiId = City::where('name->en', 'Maadi')->value('id');
-        $octoberId = City::where('name->en', '6th of October')->value('id');
-        $businessBayId = City::where('name->en', 'Business Bay')->value('id');
+        // ==================== تأكد من وجود Developer ====================
+        $developer = Developer::firstOrCreate(
+            ['id' => 1],
+            ['name' => 'Default Developer', 'about' => 'Developer for seeding purposes']
+        );
 
-        $apartmentTypeId = PropertyType::where('name->en', 'Apartment')->value('id');
-        $villaTypeId = PropertyType::where('name->en', 'Villa')->value('id');
-        $officeTypeId = PropertyType::where('name->en', 'Office')->value('id');
-        $shopTypeId = PropertyType::where('name->en', 'Shop')->value('id');
+        // ==================== تأكد من وجود Project ====================
+        $project = Project::firstOrCreate(
+            ['id' => 1],
+            ['name' => 'Default Project', 'developer_id' => $developer->id]
+        );
 
+        // ==================== تأكد من وجود PropertyType ====================
+        $apartmentTypeId = PropertyType::firstOrCreate(['name->en' => 'Apartment'], ['name' => ['en' => 'Apartment', 'ar' => 'شقة']])->id;
+
+        // ==================== تأكد من وجود Phase ====================
+        $phase = Phase::firstOrCreate(
+            ['id' => 1],
+            ['name' => 'Default Phase', 'project_id' => $project->id, 'property_type_id' => $apartmentTypeId]
+        );
+
+        // ==================== تأكد من وجود Cities ====================
+        $nasrCityId = City::firstOrCreate(['name->en' => 'Nasr City'], ['name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر']])->id;
+
+        // ==================== إنشاء Property ====================
         $properties = [
             [
                 'name' => ['en' => 'Luxury Apartment in Nasr City', 'ar' => 'شقة فاخرة في مدينة نصر'],
-
                 'property_type_id' => $apartmentTypeId,
                 'city_id' => $nasrCityId,
                 'status' => 'active',
-            ],
-            [
-                'name' => ['en' => 'Modern Villa in 6th of October', 'ar' => 'فيلا حديثة في 6 أكتوبر'],
+                'address' => '123 Nasr City Street',
+                'project_id' => $project->id,
 
-                'property_type_id' => $villaTypeId,
-                'city_id' => $octoberId,
-                'status' => 'active',
-            ],
-            [
-                'name' => ['en' => 'Office Space in Maadi', 'ar' => 'مكتب إداري في المعادي'],
-                'property_type_id' => $officeTypeId,
-                'city_id' => $maadiId,
-                'status' => 'pending',
-            ],
-            [
-                'name' => ['en' => 'Retail Shop in Business Bay', 'ar' => 'محل تجاري في الخليج التجاري'],
-                'property_type_id' => $shopTypeId,
-                'city_id' => $businessBayId,
-                'status' => 'blocked',
+                'latitude' => 30.0626,
+                'longitude' => 31.2497,
             ],
         ];
 
         foreach ($properties as $data) {
             $property = Property::create($data);
 
+            // إرفاق Attributes عشوائية إذا موجودة
             if (class_exists(Attribute::class)) {
                 $attributeIds = Attribute::inRandomOrder()->take(rand(3, 5))->pluck('id');
                 $property->attributes()->attach($attributeIds);
             }
         }
-
     }
 }
