@@ -19,16 +19,20 @@ class Attribute extends Model
 
     public array $translatable = ['name'];
 
-    protected $fillable = ['name', 'type', 'unit_id'];
+    protected $fillable = ['name', 'type', 'unit_id', 'is_filterable'];
 
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'attribute_property');
+        return $this->belongsToMany(Property::class, 'attribute_property')
+            ->withPivot('value')
+            ->withTimestamps();
     }
 
     public function propertyTypes(): BelongsToMany
     {
-        return $this->belongsToMany(PropertyType::class, 'attribute_property_type');
+        return $this->belongsToMany(PropertyType::class, 'attribute_property_type')
+            ->withPivot('is_required')
+            ->withTimestamps();
     }
 
     public function unit(): BelongsTo
@@ -41,7 +45,23 @@ class Attribute extends Model
         return $this->hasMany(AttributeOption::class)->orderBy('sort_order');
     }
 
-    protected $casts = [
-        'type' => AttributeTypeEnum::class,
-    ];
+    public function activeOptions(): HasMany
+    {
+        return $this->hasMany(AttributeOption::class)
+            ->where('is_active', true)
+            ->orderBy('sort_order');
+    }
+
+    public function isSelectType(): bool
+    {
+        return $this->type === AttributeTypeEnum::Select;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'type' => AttributeTypeEnum::class,
+            'is_filterable' => 'boolean',
+        ];
+    }
 }

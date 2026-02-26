@@ -32,6 +32,8 @@ class PropertyType extends Model
 
     public function attributes(): BelongsToMany
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_property_type');
+        return $this->belongsToMany(Attribute::class, 'attribute_property_type')
+            ->withPivot('is_required')
+            ->withTimestamps();
     }
 }

@@ -38,8 +38,16 @@ class Property extends Model implements HasMedia
 
     public function attributes(): BelongsToMany
     {
-        return $this->belongsToMany(Attribute::class);
+        return $this->belongsToMany(Attribute::class, 'attribute_property')
+            ->withPivot('value')
+            ->withTimestamps();
+    }
 
+    public function selectedOptions(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributeOption::class, 'attribute_property_option')
+            ->withPivot('attribute_id')
+            ->withTimestamps();
     }
 
     public function phase(): BelongsTo

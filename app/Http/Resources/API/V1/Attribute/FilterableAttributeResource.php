@@ -2,13 +2,14 @@
 
 namespace App\Http\Resources\API\V1\Attribute;
 
+use App\Enums\Attribute\AttributeTypeEnum;
 use App\Http\Resources\API\V1\Unit\UnitResource;
 use App\Models\Attribute;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AttributeResource extends JsonResource
+class FilterableAttributeResource extends JsonResource
 {
     use HasTranslatableFields;
 
@@ -21,12 +22,13 @@ class AttributeResource extends JsonResource
         $attribute = $this->resource;
 
         return [
-            'id' => $this->whenHas('id', fn () => $attribute->id),
-            'name' => $this->whenHas('name', fn () => $this->getTranslatableField($attribute, 'name')),
-            'type' => $this->whenHas('type', fn () => $attribute->type),
-            'value' => $this->when($attribute->pivot?->value !== null, fn () => $attribute->pivot?->value),
+            'id' => $attribute->id,
+            'name' => $this->getTranslatableField($attribute, 'name'),
+            'type' => $attribute->type,
             'unit' => UnitResource::make($this->whenLoaded('unit')),
-            'created_at' => $this->whenHas('created_at', fn () => $attribute->created_at),
+            'options' => $attribute->type === AttributeTypeEnum::Select
+                ? AttributeOptionResource::collection($this->whenLoaded('activeOptions'))
+                : [],
         ];
     }
 }

@@ -28,3 +28,5 @@ frankenphp
 frankenphp-worker.php
 rr
 .rr.yaml
+.mcp.json
+/.claude

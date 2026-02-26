@@ -3,7 +3,6 @@
 namespace App\Http\Resources\API\V1\Project;
 
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
-use App\Http\Resources\API\V1\Phase\PhaseCollection;
 use App\Http\Resources\API\V1\Phase\PhaseResource;
 use App\Models\Project;
 use Illuminate\Http\Request;

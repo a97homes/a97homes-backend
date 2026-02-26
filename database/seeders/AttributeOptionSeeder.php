@@ -10,7 +10,37 @@ class AttributeOptionSeeder extends Seeder
 {
     public function run(): void
     {
-        $optionsMap = [
+        $optionsMap = $this->getOptionsMap();
+
+        foreach ($optionsMap as $attributeName => $options) {
+            $attribute = Attribute::where('name->en', $attributeName)->first();
+
+            if (! $attribute) {
+                continue;
+            }
+
+            foreach ($options as $sortOrder => $option) {
+                AttributeOption::updateOrCreate(
+                    [
+                        'attribute_id' => $attribute->id,
+                        'value->en' => $option['en'],
+                    ],
+                    [
+                        'value' => $option,
+                        'sort_order' => $sortOrder,
+                        'is_active' => true,
+                    ],
+                );
+            }
+        }
+    }
+
+    /**
+     * @return array<string, array<int, array{en: string, ar: string}>>
+     */
+    private function getOptionsMap(): array
+    {
+        return [
             'Finishing Type' => [
                 ['en' => 'Super Lux', 'ar' => 'سوبر لوكس'],
                 ['en' => 'Lux', 'ar' => 'لوكس'],
@@ -92,26 +122,5 @@ class AttributeOptionSeeder extends Seeder
                 ['en' => 'No AC', 'ar' => 'بدون تكييف'],
             ],
         ];
-
-        foreach ($optionsMap as $attributeName => $options) {
-            $attribute = Attribute::where('name->en', $attributeName)->first();
-
-            if (! $attribute) {
-                continue;
-            }
-
-            foreach ($options as $sortOrder => $option) {
-                AttributeOption::updateOrCreate(
-                    [
-                        'attribute_id' => $attribute->id,
-                        'value->en' => $option['en'],
-                    ],
-                    [
-                        'value' => $option,
-                        'sort_order' => $sortOrder,
-                    ],
-                );
-            }
-        }
     }
 }

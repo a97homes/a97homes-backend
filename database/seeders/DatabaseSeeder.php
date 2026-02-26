@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([StateSeeder::class]);
         $this->call([CitySeeder::class]);
         $this->call([PropertyTypeSeeder::class]);
+        $this->call([AttributePropertyTypeSeeder::class]);
         $this->call([DeveloperSeeder::class]);
         $this->call([PropertySeeder::class]);
     }
