@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
+use App\Http\Controllers\API\V1\Admin\CompanyInfoController;
+use App\Http\Controllers\API\V1\Admin\CompoundController;
+use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
-use App\Http\Controllers\API\V1\Admin\PhaseController;
-use App\Http\Controllers\API\V1\Admin\ProjectController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
@@ -90,12 +91,18 @@ Route::get('developers/dropdown ', [DeveloperController::class, 'dropdown']);
 Route::apiResource('developers', DeveloperController::class);
 // =====================Developer Routes============
 
-// ======================Project Routes=================
-Route::get('projects/dropdown ', [ProjectController::class, 'dropdown']);
-Route::apiResource('projects', ProjectController::class);
-// ======================Project Routes=================
+// ======================Compound Routes=================
+Route::get('compounds/dropdown ', [CompoundController::class, 'dropdown']);
+Route::apiResource('compounds', CompoundController::class);
+Route::post('compounds/{compound}/media', [CompoundController::class, 'addMedia']);
+Route::delete('compounds/{compound}/media/{media}', [CompoundController::class, 'deleteMedia']);
+// ======================Compound Routes=================
 
-// ======================Phase Routes==================
-Route::get('phases/dropdown ', [PhaseController::class, 'dropdown']);
-Route::apiResource('phases', PhaseController::class);
-// ======================Phase Routes==================
+// ======================Contact Routes==================
+Route::apiResource('contacts', ContactController::class)->only(['index', 'show', 'destroy']);
+// ======================Contact Routes==================
+
+// ======================Company Info Routes==================
+Route::get('company-info', [CompanyInfoController::class, 'show']);
+Route::put('company-info', [CompanyInfoController::class, 'update']);
+// ======================Company Info Routes==================

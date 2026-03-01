@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use App\Models\Attribute;
 use App\Models\AttributeOption;
 use App\Models\City;
+use App\Models\Compound;
 use App\Models\Developer;
-use App\Models\Phase;
-use App\Models\Project;
 use App\Models\Property;
 use App\Models\PropertyType;
 use Illuminate\Database\Seeder;
@@ -30,9 +29,9 @@ class PropertySeeder extends Seeder
             ['name' => 'Default Developer', 'about' => 'Developer for seeding purposes'],
         );
 
-        $project = Project::firstOrCreate(
+        $compound = Compound::firstOrCreate(
             ['id' => 1],
-            ['name' => 'Default Project', 'developer_id' => $developer->id],
+            ['name' => 'Default Compound', 'developer_id' => $developer->id],
         );
 
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
@@ -48,11 +47,6 @@ class PropertySeeder extends Seeder
         $shopTypeId = $propertyTypes->get('Shop')?->id;
         $townhouseTypeId = $propertyTypes->get('Townhouse')?->id;
 
-        $phase = Phase::firstOrCreate(
-            ['id' => 1],
-            ['name' => 'Default Phase', 'project_id' => $project->id, 'property_type_id' => $apartmentTypeId],
-        );
-
         $properties = [
             // ===========================
             // APARTMENTS
@@ -64,41 +58,40 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => '15 Abbas El-Akkad Street, Nasr City',
-                    'project_id' => $project->id,
-                    'phase_id' => $phase->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0626,
                     'longitude' => 31.2497,
                 ],
                 'scalar_values' => [
-                    'Area' => '180',
-                    'Built-up Area' => '165',
-                    'Number of Bedrooms' => '3',
-                    'Number of Bathrooms' => '2',
-                    'Number of Living Rooms' => '1',
-                    'Number of Kitchens' => '1',
-                    'Floor Number' => '7',
-                    'Total Price' => '3500000',
-                    'Price per m²' => '19444',
-                    'Down Payment' => '20',
-                    'Monthly Installment' => '35000',
-                    'Installment Period' => '60',
-                    'Ceiling Height' => '3',
+                    'area' => '180',
+                    'built-up-area' => '165',
+                    'number-of-bedrooms' => '3',
+                    'number-of-bathrooms' => '2',
+                    'number-of-living-rooms' => '1',
+                    'number-of-kitchens' => '1',
+                    'floor-number' => '7',
+                    'total-price' => '3500000',
+                    'price-per-m2' => '19444',
+                    'down-payment' => '20',
+                    'monthly-installment' => '35000',
+                    'installment-period' => '60',
+                    'ceiling-height' => '3',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Super Lux'],
-                    'View' => ['City View', 'Garden View'],
-                    'Direction' => ['North'],
-                    'Furnishing Status' => ['Furnished'],
-                    'Payment Method' => ['Installment'],
-                    'Ownership Type' => ['Freehold'],
-                    'Property Condition' => ['New'],
-                    'Flooring Type' => ['Porcelain'],
-                    'Cooling Type' => ['Split AC'],
+                    'finishing-type' => ['Super Lux'],
+                    'view' => ['City View', 'Garden View'],
+                    'direction' => ['North'],
+                    'furnishing-status' => ['Furnished'],
+                    'payment-method' => ['Installment'],
+                    'ownership-type' => ['Freehold'],
+                    'property-condition' => ['New'],
+                    'flooring-type' => ['Porcelain'],
+                    'cooling-type' => ['Split AC'],
                 ],
                 'boolean_true' => [
-                    'Balcony', 'Parking', 'Elevator', 'Security', 'Air Conditioning',
-                    'Intercom', 'CCTV', 'Satellite/Cable TV', 'Electricity', 'Water Supply',
-                    'Natural Gas', 'Internet',
+                    'balcony', 'parking', 'elevator', 'security', 'air-conditioning',
+                    'intercom', 'cctv', 'satellite-cable-tv', 'electricity', 'water-supply',
+                    'natural-gas', 'internet',
                 ],
             ],
             [
@@ -108,41 +101,40 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => '5th Settlement, New Cairo',
-                    'project_id' => $project->id,
-                    'phase_id' => $phase->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0074,
                     'longitude' => 31.4913,
                 ],
                 'scalar_values' => [
-                    'Area' => '220',
-                    'Number of Bedrooms' => '4',
-                    'Number of Bathrooms' => '3',
-                    'Number of Living Rooms' => '2',
-                    'Number of Kitchens' => '1',
-                    'Floor Number' => '3',
-                    'Total Price' => '5200000',
-                    'Price per m²' => '23636',
-                    'Down Payment' => '30',
-                    'Monthly Installment' => '45000',
-                    'Installment Period' => '84',
+                    'area' => '220',
+                    'number-of-bedrooms' => '4',
+                    'number-of-bathrooms' => '3',
+                    'number-of-living-rooms' => '2',
+                    'number-of-kitchens' => '1',
+                    'floor-number' => '3',
+                    'total-price' => '5200000',
+                    'price-per-m2' => '23636',
+                    'down-payment' => '30',
+                    'monthly-installment' => '45000',
+                    'installment-period' => '84',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Extra Super Lux'],
-                    'View' => ['Garden View', 'Pool View'],
-                    'Direction' => ['Northeast'],
-                    'Furnishing Status' => ['Semi-Furnished'],
-                    'Payment Method' => ['Cash & Installment'],
-                    'Ownership Type' => ['Freehold'],
-                    'Property Condition' => ['Ready to Move'],
-                    'Flooring Type' => ['Marble'],
-                    'Cooling Type' => ['Central AC'],
-                    'Heating Type' => ['Central Heating'],
+                    'finishing-type' => ['Extra Super Lux'],
+                    'view' => ['Garden View', 'Pool View'],
+                    'direction' => ['Northeast'],
+                    'furnishing-status' => ['Semi-Furnished'],
+                    'payment-method' => ['Cash & Installment'],
+                    'ownership-type' => ['Freehold'],
+                    'property-condition' => ['Ready to Move'],
+                    'flooring-type' => ['Marble'],
+                    'cooling-type' => ['Central AC'],
+                    'heating-type' => ['Central Heating'],
                 ],
                 'boolean_true' => [
-                    'Balcony', 'Parking', 'Elevator', 'Security', 'Swimming Pool',
-                    'Gym', 'Air Conditioning', 'Intercom', 'Fire System', 'CCTV',
-                    'Smart Home', "Maid's Room", 'Storage Room', 'Electricity',
-                    'Water Supply', 'Natural Gas', 'Internet',
+                    'balcony', 'parking', 'elevator', 'security', 'swimming-pool',
+                    'gym', 'air-conditioning', 'intercom', 'fire-system', 'cctv',
+                    'smart-home', 'maids-room', 'storage-room', 'electricity',
+                    'water-supply', 'natural-gas', 'internet',
                 ],
             ],
 
@@ -156,48 +148,48 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => 'Madinaty, New Cairo',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.1069,
                     'longitude' => 31.6388,
                 ],
                 'scalar_values' => [
-                    'Area' => '450',
-                    'Land Area' => '600',
-                    'Built-up Area' => '380',
-                    'Garden Area' => '120',
-                    'Roof Area' => '80',
-                    'Number of Bedrooms' => '5',
-                    'Number of Bathrooms' => '4',
-                    'Number of Living Rooms' => '2',
-                    'Number of Kitchens' => '2',
-                    'Number of Floors' => '3',
-                    'Number of Parking Spaces' => '2',
-                    'Street Width' => '16',
-                    'Total Price' => '15000000',
-                    'Price per m²' => '25000',
-                    'Down Payment' => '25',
-                    'Monthly Installment' => '120000',
-                    'Installment Period' => '96',
+                    'area' => '450',
+                    'land-area' => '600',
+                    'built-up-area' => '380',
+                    'garden-area' => '120',
+                    'roof-area' => '80',
+                    'number-of-bedrooms' => '5',
+                    'number-of-bathrooms' => '4',
+                    'number-of-living-rooms' => '2',
+                    'number-of-kitchens' => '2',
+                    'number-of-floors' => '3',
+                    'number-of-parking-spaces' => '2',
+                    'street-width' => '16',
+                    'total-price' => '15000000',
+                    'price-per-m2' => '25000',
+                    'down-payment' => '25',
+                    'monthly-installment' => '120000',
+                    'installment-period' => '96',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Extra Super Lux'],
-                    'View' => ['Garden View', 'Landscape View'],
-                    'Direction' => ['North'],
-                    'Furnishing Status' => ['Furnished'],
-                    'Payment Method' => ['Cash & Installment'],
-                    'Ownership Type' => ['Freehold'],
-                    'Property Condition' => ['New'],
-                    'Flooring Type' => ['Marble', 'Parquet'],
-                    'Cooling Type' => ['Central AC'],
-                    'Heating Type' => ['Central Heating'],
+                    'finishing-type' => ['Extra Super Lux'],
+                    'view' => ['Garden View', 'Landscape View'],
+                    'direction' => ['North'],
+                    'furnishing-status' => ['Furnished'],
+                    'payment-method' => ['Cash & Installment'],
+                    'ownership-type' => ['Freehold'],
+                    'property-condition' => ['New'],
+                    'flooring-type' => ['Marble', 'Parquet'],
+                    'cooling-type' => ['Central AC'],
+                    'heating-type' => ['Central Heating'],
                 ],
                 'boolean_true' => [
-                    'Balcony', 'Parking', 'Security', 'Swimming Pool', 'Gym',
-                    'Garden', 'Air Conditioning', 'Central Gas', 'Internet',
-                    'Fire System', 'CCTV', 'Smart Home', 'Solar Energy',
-                    "Maid's Room", "Driver's Room", 'Storage Room', 'Laundry Room',
-                    'Private Garden', 'Private Pool', 'Jacuzzi', 'Roof Access', 'Terrace',
-                    'Electricity', 'Water Supply', 'Natural Gas', 'Doorman',
+                    'balcony', 'parking', 'security', 'swimming-pool', 'gym',
+                    'garden', 'air-conditioning', 'central-gas', 'internet',
+                    'fire-system', 'cctv', 'smart-home', 'solar-energy',
+                    'maids-room', 'drivers-room', 'storage-room', 'laundry-room',
+                    'private-garden', 'private-pool', 'jacuzzi', 'roof-access', 'terrace',
+                    'electricity', 'water-supply', 'natural-gas', 'doorman',
                 ],
             ],
 
@@ -211,30 +203,30 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => 'Talaat Harb Street, Downtown Cairo',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0444,
                     'longitude' => 31.2357,
                 ],
                 'scalar_values' => [
-                    'Area' => '55',
-                    'Number of Bathrooms' => '1',
-                    'Floor Number' => '5',
-                    'Total Price' => '850000',
-                    'Price per m²' => '15454',
+                    'area' => '55',
+                    'number-of-bathrooms' => '1',
+                    'floor-number' => '5',
+                    'total-price' => '850000',
+                    'price-per-m2' => '15454',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Fully Finished'],
-                    'View' => ['City View'],
-                    'Direction' => ['West'],
-                    'Furnishing Status' => ['Furnished'],
-                    'Payment Method' => ['Cash'],
-                    'Property Condition' => ['Renovated'],
-                    'Flooring Type' => ['Ceramic'],
-                    'Cooling Type' => ['Split AC'],
+                    'finishing-type' => ['Fully Finished'],
+                    'view' => ['City View'],
+                    'direction' => ['West'],
+                    'furnishing-status' => ['Furnished'],
+                    'payment-method' => ['Cash'],
+                    'property-condition' => ['Renovated'],
+                    'flooring-type' => ['Ceramic'],
+                    'cooling-type' => ['Split AC'],
                 ],
                 'boolean_true' => [
-                    'Elevator', 'Security', 'Air Conditioning', 'Internet',
-                    'Electricity', 'Water Supply',
+                    'elevator', 'security', 'air-conditioning', 'internet',
+                    'electricity', 'water-supply',
                 ],
             ],
 
@@ -248,39 +240,39 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => '26th of July Street, Zamalek',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0616,
                     'longitude' => 31.2213,
                 ],
                 'scalar_values' => [
-                    'Area' => '350',
-                    'Roof Area' => '150',
-                    'Number of Bedrooms' => '4',
-                    'Number of Bathrooms' => '3',
-                    'Number of Living Rooms' => '2',
-                    'Number of Kitchens' => '1',
-                    'Floor Number' => '12',
-                    'Total Price' => '25000000',
-                    'Price per m²' => '50000',
+                    'area' => '350',
+                    'roof-area' => '150',
+                    'number-of-bedrooms' => '4',
+                    'number-of-bathrooms' => '3',
+                    'number-of-living-rooms' => '2',
+                    'number-of-kitchens' => '1',
+                    'floor-number' => '12',
+                    'total-price' => '25000000',
+                    'price-per-m2' => '50000',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Extra Super Lux'],
-                    'View' => ['Nile View', 'City View'],
-                    'Direction' => ['West'],
-                    'Furnishing Status' => ['Furnished'],
-                    'Payment Method' => ['Cash'],
-                    'Ownership Type' => ['Freehold'],
-                    'Property Condition' => ['New'],
-                    'Flooring Type' => ['Marble', 'Parquet'],
-                    'Cooling Type' => ['Central AC'],
-                    'Heating Type' => ['Underfloor Heating'],
+                    'finishing-type' => ['Extra Super Lux'],
+                    'view' => ['Nile View', 'City View'],
+                    'direction' => ['West'],
+                    'furnishing-status' => ['Furnished'],
+                    'payment-method' => ['Cash'],
+                    'ownership-type' => ['Freehold'],
+                    'property-condition' => ['New'],
+                    'flooring-type' => ['Marble', 'Parquet'],
+                    'cooling-type' => ['Central AC'],
+                    'heating-type' => ['Underfloor Heating'],
                 ],
                 'boolean_true' => [
-                    'Balcony', 'Parking', 'Elevator', 'Security', 'Swimming Pool',
-                    'Gym', 'Air Conditioning', 'Smart Home', 'Fire System', 'CCTV',
-                    "Maid's Room", 'Laundry Room', 'Private Pool', 'Jacuzzi',
-                    'Roof Access', 'Terrace', 'Electricity', 'Water Supply',
-                    'Natural Gas', 'Internet',
+                    'balcony', 'parking', 'elevator', 'security', 'swimming-pool',
+                    'gym', 'air-conditioning', 'smart-home', 'fire-system', 'cctv',
+                    'maids-room', 'laundry-room', 'private-pool', 'jacuzzi',
+                    'roof-access', 'terrace', 'electricity', 'water-supply',
+                    'natural-gas', 'internet',
                 ],
             ],
 
@@ -294,34 +286,34 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => 'Smart Village, 6th of October',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0715,
                     'longitude' => 31.0175,
                 ],
                 'scalar_values' => [
-                    'Area' => '120',
-                    'Number of Rooms' => '4',
-                    'Number of Bathrooms' => '2',
-                    'Floor Number' => '3',
-                    'Total Price' => '4000000',
-                    'Price per m²' => '33333',
-                    'Ceiling Height' => '3.5',
-                    'Building Age' => '2',
+                    'area' => '120',
+                    'number-of-rooms' => '4',
+                    'number-of-bathrooms' => '2',
+                    'floor-number' => '3',
+                    'total-price' => '4000000',
+                    'price-per-m2' => '33333',
+                    'ceiling-height' => '3.5',
+                    'building-age' => '2',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Fully Finished'],
-                    'View' => ['Landscape View'],
-                    'Direction' => ['South'],
-                    'Furnishing Status' => ['Semi-Furnished'],
-                    'Payment Method' => ['Installment'],
-                    'Property Condition' => ['Ready to Move'],
-                    'Flooring Type' => ['Porcelain'],
-                    'Cooling Type' => ['Central AC'],
+                    'finishing-type' => ['Fully Finished'],
+                    'view' => ['Landscape View'],
+                    'direction' => ['South'],
+                    'furnishing-status' => ['Semi-Furnished'],
+                    'payment-method' => ['Installment'],
+                    'property-condition' => ['Ready to Move'],
+                    'flooring-type' => ['Porcelain'],
+                    'cooling-type' => ['Central AC'],
                 ],
                 'boolean_true' => [
-                    'Parking', 'Elevator', 'Security', 'Air Conditioning',
-                    'Fire System', 'CCTV', 'Intercom', 'Electricity',
-                    'Water Supply', 'Internet',
+                    'parking', 'elevator', 'security', 'air-conditioning',
+                    'fire-system', 'cctv', 'intercom', 'electricity',
+                    'water-supply', 'internet',
                 ],
             ],
 
@@ -335,31 +327,31 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => 'Al-Merghany Street, Heliopolis',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 30.0867,
                     'longitude' => 31.3225,
                 ],
                 'scalar_values' => [
-                    'Area' => '80',
-                    'Number of Bathrooms' => '1',
-                    'Floor Number' => '0',
-                    'Total Price' => '6000000',
-                    'Price per m²' => '75000',
-                    'Ceiling Height' => '4',
-                    'Street Width' => '24',
+                    'area' => '80',
+                    'number-of-bathrooms' => '1',
+                    'floor-number' => '0',
+                    'total-price' => '6000000',
+                    'price-per-m2' => '75000',
+                    'ceiling-height' => '4',
+                    'street-width' => '24',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Core & Shell'],
-                    'View' => ['Main Road View'],
-                    'Direction' => ['East'],
-                    'Furnishing Status' => ['Unfurnished'],
-                    'Payment Method' => ['Cash & Installment'],
-                    'Property Condition' => ['New'],
-                    'Cooling Type' => ['No AC'],
+                    'finishing-type' => ['Core & Shell'],
+                    'view' => ['Main Road View'],
+                    'direction' => ['East'],
+                    'furnishing-status' => ['Unfurnished'],
+                    'payment-method' => ['Cash & Installment'],
+                    'property-condition' => ['New'],
+                    'cooling-type' => ['No AC'],
                 ],
                 'boolean_true' => [
-                    'Parking', 'Security', 'Fire System', 'CCTV',
-                    'Electricity', 'Water Supply',
+                    'parking', 'security', 'fire-system', 'cctv',
+                    'electricity', 'water-supply',
                 ],
             ],
 
@@ -373,42 +365,42 @@ class PropertySeeder extends Seeder
                     'city_id' => $cityId,
                     'status' => 'active',
                     'address' => 'Palm Hills, 6th of October',
-                    'project_id' => $project->id,
+                    'compound_id' => $compound->id,
                     'latitude' => 29.9712,
                     'longitude' => 31.0156,
                 ],
                 'scalar_values' => [
-                    'Area' => '250',
-                    'Land Area' => '300',
-                    'Built-up Area' => '220',
-                    'Garden Area' => '40',
-                    'Number of Bedrooms' => '4',
-                    'Number of Bathrooms' => '3',
-                    'Number of Living Rooms' => '1',
-                    'Number of Kitchens' => '1',
-                    'Number of Floors' => '2',
-                    'Number of Parking Spaces' => '1',
-                    'Total Price' => '8000000',
-                    'Price per m²' => '26666',
-                    'Down Payment' => '15',
-                    'Monthly Installment' => '70000',
-                    'Installment Period' => '96',
+                    'area' => '250',
+                    'land-area' => '300',
+                    'built-up-area' => '220',
+                    'garden-area' => '40',
+                    'number-of-bedrooms' => '4',
+                    'number-of-bathrooms' => '3',
+                    'number-of-living-rooms' => '1',
+                    'number-of-kitchens' => '1',
+                    'number-of-floors' => '2',
+                    'number-of-parking-spaces' => '1',
+                    'total-price' => '8000000',
+                    'price-per-m2' => '26666',
+                    'down-payment' => '15',
+                    'monthly-installment' => '70000',
+                    'installment-period' => '96',
                 ],
                 'select_options' => [
-                    'Finishing Type' => ['Super Lux'],
-                    'View' => ['Landscape View', 'Garden View'],
-                    'Direction' => ['Southeast'],
-                    'Furnishing Status' => ['Semi-Furnished'],
-                    'Payment Method' => ['Installment'],
-                    'Ownership Type' => ['Freehold'],
-                    'Property Condition' => ['Under Construction'],
-                    'Flooring Type' => ['Porcelain', 'HDF'],
-                    'Cooling Type' => ['Split AC'],
+                    'finishing-type' => ['Super Lux'],
+                    'view' => ['Landscape View', 'Garden View'],
+                    'direction' => ['Southeast'],
+                    'furnishing-status' => ['Semi-Furnished'],
+                    'payment-method' => ['Installment'],
+                    'ownership-type' => ['Freehold'],
+                    'property-condition' => ['Under Construction'],
+                    'flooring-type' => ['Porcelain', 'HDF'],
+                    'cooling-type' => ['Split AC'],
                 ],
                 'boolean_true' => [
-                    'Balcony', 'Parking', 'Security', 'Garden', 'Air Conditioning',
-                    'Central Gas', 'Internet', 'Private Garden', 'Terrace',
-                    'Electricity', 'Water Supply', 'Natural Gas', 'Storage Room',
+                    'balcony', 'parking', 'security', 'garden', 'air-conditioning',
+                    'central-gas', 'internet', 'private-garden', 'terrace',
+                    'electricity', 'water-supply', 'natural-gas', 'storage-room',
                 ],
             ],
         ];
@@ -427,10 +419,10 @@ class PropertySeeder extends Seeder
 
     private function loadAttributesAndOptions(): void
     {
-        $this->attributes = Attribute::all()->keyBy(fn ($a) => $a->getTranslation('name', 'en'));
+        $this->attributes = Attribute::all()->keyBy('slug');
 
         $this->optionsByAttribute = AttributeOption::with('attribute')->get()
-            ->groupBy(fn ($o) => $o->attribute->getTranslation('name', 'en'))
+            ->groupBy(fn ($o) => $o->attribute->slug)
             ->map(fn ($options) => $options->keyBy(fn ($o) => $o->getTranslation('value', 'en')));
     }
 
@@ -441,8 +433,8 @@ class PropertySeeder extends Seeder
     {
         $syncData = [];
 
-        foreach ($values as $attributeName => $value) {
-            $attribute = $this->attributes->get($attributeName);
+        foreach ($values as $slug => $value) {
+            $attribute = $this->attributes->get($slug);
 
             if (! $attribute) {
                 continue;
@@ -457,14 +449,14 @@ class PropertySeeder extends Seeder
     }
 
     /**
-     * @param  array<int, string>  $attributeNames
+     * @param  array<int, string>  $slugs
      */
-    private function attachBooleanAttributes(Property $property, array $attributeNames): void
+    private function attachBooleanAttributes(Property $property, array $slugs): void
     {
         $syncData = [];
 
-        foreach ($attributeNames as $attributeName) {
-            $attribute = $this->attributes->get($attributeName);
+        foreach ($slugs as $slug) {
+            $attribute = $this->attributes->get($slug);
 
             if (! $attribute) {
                 continue;
@@ -485,15 +477,14 @@ class PropertySeeder extends Seeder
     {
         $pivotInserts = [];
 
-        foreach ($selections as $attributeName => $optionNames) {
-            $attribute = $this->attributes->get($attributeName);
-            $options = $this->optionsByAttribute->get($attributeName);
+        foreach ($selections as $slug => $optionNames) {
+            $attribute = $this->attributes->get($slug);
+            $options = $this->optionsByAttribute->get($slug);
 
             if (! $attribute || ! $options) {
                 continue;
             }
 
-            // Ensure attribute is linked in attribute_property pivot
             $property->attributes()->syncWithoutDetaching([
                 $attribute->id => ['value' => null],
             ]);

@@ -14,7 +14,6 @@ class SocialController extends Controller
     public function index(): JsonResponse
     {
         $socials = QueryBuilder::for(Social::class)
-            ->with('media')
             ->allowedSorts([
                 AllowedSort::field('id'),
                 AllowedSort::field('type'),

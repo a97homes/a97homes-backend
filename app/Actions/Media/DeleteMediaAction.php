@@ -2,16 +2,18 @@
 
 namespace App\Actions\Media;
 
-use App\Models\Property;
+use Illuminate\Database\Eloquent\Model;
 
 class DeleteMediaAction
 {
-    public function execute(Property $property, int $mediaId): bool
+    public function execute(Model $model, int $mediaId): bool
     {
-        $media = $property->media()->find($mediaId);
+        $media = $model->media()->find($mediaId);
 
         if ($media) {
-            $property->deleteMedia($mediaId);
+            $model->deleteMedia($mediaId);
+
+            return true;
         }
 
         return false;

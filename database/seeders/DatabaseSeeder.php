@@ -25,5 +25,12 @@ class DatabaseSeeder extends Seeder
         $this->call([AttributePropertyTypeSeeder::class]);
         $this->call([DeveloperSeeder::class]);
         $this->call([PropertySeeder::class]);
+        $this->call([CompoundSeeder::class]);
+        $this->call([DiscountSeeder::class]);
+        $this->call([FavoriteSeeder::class]);
+        $this->call([PropertyFavoriteSeeder::class]);
+        $this->call([SellUnitSeeder::class]);
+        $this->call([CompanyInfoSeeder::class]);
+        $this->call([SocialSeeder::class]);
     }
 }

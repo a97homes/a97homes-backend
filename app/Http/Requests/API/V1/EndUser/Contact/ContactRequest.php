@@ -27,7 +27,7 @@ class ContactRequest extends FormRequest
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:150'],
             'phone' => ['nullable', 'max:20', 'string',
-                (new Phone)->international(), Rule::unique('contacts', 'phone')],
+                (new Phone)->international()],
             'message' => ['required', 'string', 'max:1000'],
         ];
     }

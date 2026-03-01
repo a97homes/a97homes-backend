@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\API\V1\Attribute;
 
-use App\Enums\Attribute\AttributeTypeEnum;
 use App\Http\Resources\API\V1\Unit\UnitResource;
 use App\Models\Attribute;
 use App\Traits\HasTranslatableFields;
@@ -23,12 +22,11 @@ class FilterableAttributeResource extends JsonResource
 
         return [
             'id' => $attribute->id,
+            'slug' => $attribute->slug,
             'name' => $this->getTranslatableField($attribute, 'name'),
             'type' => $attribute->type,
             'unit' => UnitResource::make($this->whenLoaded('unit')),
-            'options' => $attribute->type === AttributeTypeEnum::Select
-                ? AttributeOptionResource::collection($this->whenLoaded('activeOptions'))
-                : [],
+            'options' => AttributeOptionResource::collection($this->whenLoaded('activeOptions')),
         ];
     }
 }

@@ -8,6 +8,15 @@ class StoreDeveloperAction
 {
     public function execute(array $data): Developer
     {
-        return Developer::create($data);
+        $logo = $data['logo'] ?? null;
+        unset($data['logo']);
+
+        $developer = Developer::create($data);
+
+        if ($logo) {
+            $developer->addMedia($logo)->toMediaCollection(Developer::MEDIA_COLLECTION_LOGO);
+        }
+
+        return $developer;
     }
 }

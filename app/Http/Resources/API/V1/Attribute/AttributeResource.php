@@ -22,6 +22,7 @@ class AttributeResource extends JsonResource
 
         return [
             'id' => $this->whenHas('id', fn () => $attribute->id),
+            'slug' => $this->whenHas('slug', fn () => $attribute->slug),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($attribute, 'name')),
             'type' => $this->whenHas('type', fn () => $attribute->type),
             'value' => $this->when($attribute->pivot?->value !== null, fn () => $attribute->pivot?->value),

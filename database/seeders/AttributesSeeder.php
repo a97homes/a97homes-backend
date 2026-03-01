@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Attribute;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class AttributesSeeder extends Seeder
 {
@@ -18,42 +19,49 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Area', 'ar' => 'المساحة'],
+                'slug' => 'area',
                 'type' => 'number',
                 'unit_id' => $units['area'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Land Area', 'ar' => 'مساحة الأرض'],
+                'slug' => 'land-area',
                 'type' => 'number',
                 'unit_id' => $units['area'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Built-up Area', 'ar' => 'المساحة المبنية'],
+                'slug' => 'built-up-area',
                 'type' => 'number',
                 'unit_id' => $units['area'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Garden Area', 'ar' => 'مساحة الحديقة'],
+                'slug' => 'garden-area',
                 'type' => 'number',
                 'unit_id' => $units['area'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Roof Area', 'ar' => 'مساحة السطح'],
+                'slug' => 'roof-area',
                 'type' => 'number',
                 'unit_id' => $units['area'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Street Width', 'ar' => 'عرض الشارع'],
+                'slug' => 'street-width',
                 'type' => 'number',
                 'unit_id' => $units['length'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Ceiling Height', 'ar' => 'ارتفاع السقف'],
+                'slug' => 'ceiling-height',
                 'type' => 'number',
                 'unit_id' => $units['length'],
                 'is_filterable' => false,
@@ -64,30 +72,35 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Number of Rooms', 'ar' => 'عدد الغرف'],
+                'slug' => 'number-of-rooms',
                 'type' => 'number',
                 'unit_id' => $units['count'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Number of Bedrooms', 'ar' => 'عدد غرف النوم'],
+                'slug' => 'number-of-bedrooms',
                 'type' => 'number',
                 'unit_id' => $units['count'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Number of Bathrooms', 'ar' => 'عدد الحمامات'],
+                'slug' => 'number-of-bathrooms',
                 'type' => 'number',
                 'unit_id' => $units['bath'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Number of Living Rooms', 'ar' => 'عدد غرف المعيشة'],
+                'slug' => 'number-of-living-rooms',
                 'type' => 'number',
                 'unit_id' => $units['count'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Number of Kitchens', 'ar' => 'عدد المطابخ'],
+                'slug' => 'number-of-kitchens',
                 'type' => 'number',
                 'unit_id' => $units['count'],
                 'is_filterable' => false,
@@ -98,30 +111,35 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Floor Number', 'ar' => 'رقم الدور'],
+                'slug' => 'floor-number',
                 'type' => 'number',
                 'unit_id' => $units['floor'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Number of Floors', 'ar' => 'عدد الطوابق'],
+                'slug' => 'number-of-floors',
                 'type' => 'number',
                 'unit_id' => $units['floor'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Building Age', 'ar' => 'عمر المبنى'],
+                'slug' => 'building-age',
                 'type' => 'number',
                 'unit_id' => $units['timeYear'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Number of Units', 'ar' => 'عدد الوحدات'],
+                'slug' => 'number-of-units',
                 'type' => 'number',
                 'unit_id' => null,
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Number of Parking Spaces', 'ar' => 'عدد مواقف السيارات'],
+                'slug' => 'number-of-parking-spaces',
                 'type' => 'number',
                 'unit_id' => $units['parking'],
                 'is_filterable' => false,
@@ -132,30 +150,35 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Total Price', 'ar' => 'السعر الإجمالي'],
+                'slug' => 'total-price',
                 'type' => 'number',
                 'unit_id' => $units['price'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Price per m²', 'ar' => 'السعر لكل متر مربع'],
+                'slug' => 'price-per-m2',
                 'type' => 'number',
                 'unit_id' => $units['pricePerMeter'],
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Down Payment', 'ar' => 'المقدم'],
+                'slug' => 'down-payment',
                 'type' => 'number',
                 'unit_id' => $units['percent'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Monthly Installment', 'ar' => 'القسط الشهري'],
+                'slug' => 'monthly-installment',
                 'type' => 'number',
                 'unit_id' => $units['price'],
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Installment Period', 'ar' => 'فترة التقسيط'],
+                'slug' => 'installment-period',
                 'type' => 'number',
                 'unit_id' => $units['timeMonth'],
                 'is_filterable' => false,
@@ -166,60 +189,70 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Finishing Type', 'ar' => 'نوع التشطيب'],
+                'slug' => 'finishing-type',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'View', 'ar' => 'الإطلالة'],
+                'slug' => 'view',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Direction', 'ar' => 'الاتجاه'],
+                'slug' => 'direction',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Furnishing Status', 'ar' => 'حالة الفرش'],
+                'slug' => 'furnishing-status',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Payment Method', 'ar' => 'طريقة الدفع'],
+                'slug' => 'payment-method',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Ownership Type', 'ar' => 'نوع الملكية'],
+                'slug' => 'ownership-type',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Property Condition', 'ar' => 'حالة العقار'],
+                'slug' => 'property-condition',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Flooring Type', 'ar' => 'نوع الأرضيات'],
+                'slug' => 'flooring-type',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Heating Type', 'ar' => 'نوع التدفئة'],
+                'slug' => 'heating-type',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => false,
             ],
             [
                 'name' => ['en' => 'Cooling Type', 'ar' => 'نوع التبريد'],
+                'slug' => 'cooling-type',
                 'type' => 'select',
                 'unit_id' => null,
                 'is_filterable' => false,
@@ -230,12 +263,14 @@ class AttributesSeeder extends Seeder
             // ===========================
             [
                 'name' => ['en' => 'Delivery Date', 'ar' => 'تاريخ التسليم'],
+                'slug' => 'delivery-date',
                 'type' => 'date',
                 'unit_id' => null,
                 'is_filterable' => true,
             ],
             [
                 'name' => ['en' => 'Construction Date', 'ar' => 'تاريخ البناء'],
+                'slug' => 'construction-date',
                 'type' => 'date',
                 'unit_id' => null,
                 'is_filterable' => false,
@@ -265,6 +300,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Doorman', 'ar' => 'بواب'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => true,
@@ -280,6 +316,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Laundry Room', 'ar' => 'غرفة غسيل'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => true,
@@ -296,6 +333,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Terrace', 'ar' => 'تراس'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => true,
@@ -312,6 +350,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Landline Phone', 'ar' => 'هاتف أرضي'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => false,
@@ -332,6 +371,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Medical Center', 'ar' => 'مركز طبي'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => false,
@@ -349,6 +389,7 @@ class AttributesSeeder extends Seeder
                 ['en' => 'Public Transport Nearby', 'ar' => 'قريب من المواصلات'],
             ])->map(fn (array $name) => [
                 'name' => $name,
+                'slug' => Str::slug($name['en']),
                 'type' => 'boolean',
                 'unit_id' => null,
                 'is_filterable' => false,
@@ -357,7 +398,7 @@ class AttributesSeeder extends Seeder
 
         foreach ($attributes as $attribute) {
             Attribute::updateOrCreate(
-                ['name->en' => $attribute['name']['en']],
+                ['slug' => $attribute['slug']],
                 $attribute,
             );
         }

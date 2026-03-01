@@ -22,8 +22,9 @@ class UpdateDeveloperRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'about' => ['required', 'string', 'max:10000'],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'about' => ['sometimes', 'string', 'max:10000'],
+            'logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:'.config('media-library.max_file_size')],
         ];
     }
 }

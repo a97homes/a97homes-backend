@@ -52,11 +52,18 @@ class DeveloperSeeder extends Seeder
             ],
         ];
 
-        foreach ($developers as $developer) {
-            Developer::firstOrCreate(
-                ['name' => $developer['name']],
-                $developer
+        foreach ($developers as $index => $developerData) {
+            $developer = Developer::firstOrCreate(
+                ['name' => $developerData['name']],
+                $developerData
             );
+
+            if ($developer->getFirstMedia(Developer::MEDIA_COLLECTION_LOGO) === null) {
+                $developer
+                    ->addMediaFromUrl('https://placehold.co/400x400/png?text='.urlencode($index + 1))
+                    ->usingFileName("developer_{$developer->id}_logo.png")
+                    ->toMediaCollection(Developer::MEDIA_COLLECTION_LOGO);
+            }
         }
     }
 }

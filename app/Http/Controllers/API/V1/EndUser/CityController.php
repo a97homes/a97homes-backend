@@ -11,13 +11,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CityController extends Controller
 {
-    public function dropdown(): JsonResponse
-    {
-        $cities = City::select('id', 'name')->get();
-
-        return $this->ok(data: CityResource::collection($cities));
-    }
-
     public function popular(): JsonResponse
     {
         $cities = QueryBuilder::for(City::class)

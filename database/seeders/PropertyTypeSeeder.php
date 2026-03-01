@@ -13,7 +13,6 @@ class PropertyTypeSeeder extends Seeder
     public function run(): void
     {
         $propertyTypes = [
-            ['name' => ['en' => 'Compound', 'ar' => 'كمبوندات']],
             ['name' => ['en' => 'Apartment', 'ar' => 'شقة']],
             ['name' => ['en' => 'Villa', 'ar' => 'فيلا']],
             ['name' => ['en' => 'Studio', 'ar' => 'استوديو']],

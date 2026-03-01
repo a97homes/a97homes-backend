@@ -51,9 +51,8 @@ class PropertyController extends Controller implements HasMiddleware
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::partial('attributes.name'),
-                AllowedFilter::exact('phase_id'),
                 AllowedFilter::partial('address'),
-                AllowedFilter::exact('project_id'),
+                AllowedFilter::exact('compound_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
                 // TODO: search by developer id
@@ -85,7 +84,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'project:id,name,developer_id', 'project.developer:id,name', 'project.phases:id,name,project_id']);
+        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.phases:id,name,compound_id']);
 
         return $this->ok(data: PropertyResource::make($property));
     }

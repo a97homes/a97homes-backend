@@ -19,11 +19,15 @@ return new class extends Migration
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
             $table->string('status');
             $table->string('address');
-            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
-            $table->foreignId('phase_id')->nullable()->constrained('phases')->cascadeOnDelete();
-            $table->decimal('latitude', 10, 7)->nullable(); // 26.8206
-            $table->decimal('longitude', 10, 7)->nullable(); // 30.8025
+            $table->decimal('price', 15, 2)->nullable();
+            $table->decimal('resale_price', 15, 2)->nullable();
+            $table->foreignId('compound_id')->constrained('compounds')->cascadeOnDelete();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
+
+            $table->index('price');
+            $table->index(['compound_id', 'price']);
         });
     }
 

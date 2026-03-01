@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests\API\V1\Admin\Compound;
+
+use App\Enums\CompletionStatusEnum;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateCompoundRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'name' => ['sometimes', 'string', 'max:255'],
+            'developer_id' => ['sometimes', Rule::exists('developers', 'id')],
+            'city_id' => ['nullable', 'integer', Rule::exists('cities', 'id')],
+            'completion_status' => ['nullable', 'string', Rule::in(array_column(CompletionStatusEnum::cases(), 'value'))],
+            'description' => ['nullable', 'array'],
+            'description.en' => ['nullable', 'string'],
+            'description.ar' => ['nullable', 'string'],
+            'delivery_date' => ['nullable', 'date'],
+        ];
+    }
+}

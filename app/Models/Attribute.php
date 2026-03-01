@@ -19,7 +19,7 @@ class Attribute extends Model
 
     public array $translatable = ['name'];
 
-    protected $fillable = ['name', 'type', 'unit_id', 'is_filterable'];
+    protected $fillable = ['name', 'slug', 'type', 'unit_id', 'is_filterable'];
 
     public function properties(): BelongsToMany
     {

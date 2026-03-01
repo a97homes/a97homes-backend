@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\API\V1\Contact;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\BasePaginationResource;
 
-class ContactCollection extends ResourceCollection
+class ContactCollection extends BasePaginationResource
 {
     public $collects = ContactResource::class;
 }

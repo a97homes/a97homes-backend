@@ -21,7 +21,7 @@ class PropertyTypeController extends Controller
     {
         $attributes = $propertyType->attributes()
             ->where('is_filterable', true)
-            ->with(['unit', 'activeOptions'])
+            ->with(['unit'])
             ->orderByPivot('is_required', 'desc')
             ->get();
 

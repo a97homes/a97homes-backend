@@ -135,30 +135,31 @@ class PermissionRegistry
     public const ADMIN_DEVELOPERS_DESTROY = 'admin.developers.destroy';
     // ==================== Developer Permissions =================
 
-    // ==================== Phase Permissions ======================
-    public const ADMIN_PHASES_INDEX = 'admin.phases.index';
+    // ==================== Contact Permissions ======================
+    public const ADMIN_CONTACTS_INDEX = 'admin.contacts.index';
 
-    public const ADMIN_PHASES_STORE = 'admin.phases.store';
+    public const ADMIN_CONTACTS_SHOW = 'admin.contacts.show';
 
-    public const ADMIN_PHASES_SHOW = 'admin.phases.show';
+    public const ADMIN_CONTACTS_DESTROY = 'admin.contacts.destroy';
+    // ==================== Contact Permissions ======================
 
-    public const ADMIN_PHASES_UPDATE = 'admin.phases.update';
+    // ==================== Compound Permissions ======================
+    public const ADMIN_COMPOUNDS_INDEX = 'admin.compounds.index';
 
-    public const ADMIN_PHASES_DESTROY = 'admin.phases.destroy';
+    public const ADMIN_COMPOUNDS_STORE = 'admin.compounds.store';
 
-    // ==================== Phase Permissions ======================
+    public const ADMIN_COMPOUNDS_SHOW = 'admin.compounds.show';
 
-    // ==================== Project Permissions ======================
-    public const ADMIN_PROJECTS_INDEX = 'admin.projects.index';
+    public const ADMIN_COMPOUNDS_UPDATE = 'admin.compounds.update';
 
-    public const ADMIN_PROJECTS_STORE = 'admin.projects.store';
+    public const ADMIN_COMPOUNDS_DESTROY = 'admin.compounds.destroy';
+    // ==================== Compound Permissions ======================
 
-    public const ADMIN_PROJECTS_SHOW = 'admin.projects.show';
+    // ==================== CompanyInfo Permissions ====================
+    public const ADMIN_COMPANY_INFO_SHOW = 'admin.company_info.show';
 
-    public const ADMIN_PROJECTS_UPDATE = 'admin.projects.update';
-
-    public const ADMIN_PROJECTS_DESTROY = 'admin.projects.destroy';
-    // ==================== Project Permissions ======================
+    public const ADMIN_COMPANY_INFO_UPDATE = 'admin.company_info.update';
+    // ==================== CompanyInfo Permissions ====================
 
     public static function all(): array
     {

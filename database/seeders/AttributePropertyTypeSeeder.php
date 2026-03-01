@@ -11,7 +11,7 @@ class AttributePropertyTypeSeeder extends Seeder
     public function run(): void
     {
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
-        $attributes = Attribute::all()->keyBy(fn ($a) => $a->getTranslation('name', 'en'));
+        $attributes = Attribute::all()->keyBy('slug');
 
         if ($propertyTypes->isEmpty() || $attributes->isEmpty()) {
             return;
@@ -29,7 +29,7 @@ class AttributePropertyTypeSeeder extends Seeder
             $syncData = [];
 
             foreach ($attributeAssignments as $assignment) {
-                $attribute = $attributes->get($assignment['name']);
+                $attribute = $attributes->get($assignment['slug']);
 
                 if (! $attribute) {
                     continue;
@@ -43,56 +43,56 @@ class AttributePropertyTypeSeeder extends Seeder
     }
 
     /**
-     * @return array<string, array<int, array{name: string, required: bool}>>
+     * @return array<string, array<int, array{slug: string, required: bool}>>
      */
     private function getMapping(): array
     {
         $shared = [
-            ['name' => 'Area', 'required' => true],
-            ['name' => 'Total Price', 'required' => true],
-            ['name' => 'Finishing Type', 'required' => true],
-            ['name' => 'Payment Method', 'required' => true],
-            ['name' => 'Ownership Type', 'required' => false],
-            ['name' => 'Property Condition', 'required' => false],
-            ['name' => 'View', 'required' => false],
-            ['name' => 'Direction', 'required' => false],
-            ['name' => 'Price per m²', 'required' => false],
-            ['name' => 'Down Payment', 'required' => false],
-            ['name' => 'Monthly Installment', 'required' => false],
-            ['name' => 'Installment Period', 'required' => false],
-            ['name' => 'Delivery Date', 'required' => false],
-            ['name' => 'Electricity', 'required' => false],
-            ['name' => 'Water Supply', 'required' => false],
-            ['name' => 'Natural Gas', 'required' => false],
-            ['name' => 'Internet', 'required' => false],
+            ['slug' => 'area', 'required' => true],
+            ['slug' => 'total-price', 'required' => true],
+            ['slug' => 'finishing-type', 'required' => true],
+            ['slug' => 'payment-method', 'required' => true],
+            ['slug' => 'ownership-type', 'required' => false],
+            ['slug' => 'property-condition', 'required' => false],
+            ['slug' => 'view', 'required' => false],
+            ['slug' => 'direction', 'required' => false],
+            ['slug' => 'price-per-m2', 'required' => false],
+            ['slug' => 'down-payment', 'required' => false],
+            ['slug' => 'monthly-installment', 'required' => false],
+            ['slug' => 'installment-period', 'required' => false],
+            ['slug' => 'delivery-date', 'required' => false],
+            ['slug' => 'electricity', 'required' => false],
+            ['slug' => 'water-supply', 'required' => false],
+            ['slug' => 'natural-gas', 'required' => false],
+            ['slug' => 'internet', 'required' => false],
         ];
 
         $residentialCommon = [
             ...$shared,
-            ['name' => 'Number of Bedrooms', 'required' => true],
-            ['name' => 'Number of Bathrooms', 'required' => true],
-            ['name' => 'Number of Rooms', 'required' => false],
-            ['name' => 'Number of Living Rooms', 'required' => false],
-            ['name' => 'Number of Kitchens', 'required' => false],
-            ['name' => 'Furnishing Status', 'required' => true],
-            ['name' => 'Flooring Type', 'required' => false],
-            ['name' => 'Heating Type', 'required' => false],
-            ['name' => 'Cooling Type', 'required' => false],
-            ['name' => 'Balcony', 'required' => false],
-            ['name' => 'Parking', 'required' => false],
-            ['name' => 'Elevator', 'required' => false],
-            ['name' => 'Security', 'required' => false],
-            ['name' => 'Air Conditioning', 'required' => false],
-            ['name' => 'Central Gas', 'required' => false],
-            ['name' => 'Intercom', 'required' => false],
-            ['name' => 'Satellite/Cable TV', 'required' => false],
-            ['name' => 'Fire System', 'required' => false],
-            ['name' => 'CCTV', 'required' => false],
-            ['name' => 'Smart Home', 'required' => false],
-            ['name' => "Maid's Room", 'required' => false],
-            ['name' => "Driver's Room", 'required' => false],
-            ['name' => 'Storage Room', 'required' => false],
-            ['name' => 'Laundry Room', 'required' => false],
+            ['slug' => 'number-of-bedrooms', 'required' => true],
+            ['slug' => 'number-of-bathrooms', 'required' => true],
+            ['slug' => 'number-of-rooms', 'required' => false],
+            ['slug' => 'number-of-living-rooms', 'required' => false],
+            ['slug' => 'number-of-kitchens', 'required' => false],
+            ['slug' => 'furnishing-status', 'required' => true],
+            ['slug' => 'flooring-type', 'required' => false],
+            ['slug' => 'heating-type', 'required' => false],
+            ['slug' => 'cooling-type', 'required' => false],
+            ['slug' => 'balcony', 'required' => false],
+            ['slug' => 'parking', 'required' => false],
+            ['slug' => 'elevator', 'required' => false],
+            ['slug' => 'security', 'required' => false],
+            ['slug' => 'air-conditioning', 'required' => false],
+            ['slug' => 'central-gas', 'required' => false],
+            ['slug' => 'intercom', 'required' => false],
+            ['slug' => 'satellite-cable-tv', 'required' => false],
+            ['slug' => 'fire-system', 'required' => false],
+            ['slug' => 'cctv', 'required' => false],
+            ['slug' => 'smart-home', 'required' => false],
+            ['slug' => 'maids-room', 'required' => false],
+            ['slug' => 'drivers-room', 'required' => false],
+            ['slug' => 'storage-room', 'required' => false],
+            ['slug' => 'laundry-room', 'required' => false],
         ];
 
         return [
@@ -101,11 +101,11 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Apartment' => [
                 ...$residentialCommon,
-                ['name' => 'Built-up Area', 'required' => false],
-                ['name' => 'Floor Number', 'required' => true],
-                ['name' => 'Number of Floors', 'required' => false],
-                ['name' => 'Building Age', 'required' => false],
-                ['name' => 'Ceiling Height', 'required' => false],
+                ['slug' => 'built-up-area', 'required' => false],
+                ['slug' => 'floor-number', 'required' => true],
+                ['slug' => 'number-of-floors', 'required' => false],
+                ['slug' => 'building-age', 'required' => false],
+                ['slug' => 'ceiling-height', 'required' => false],
             ],
 
             // ===========================
@@ -113,23 +113,23 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Villa' => [
                 ...$residentialCommon,
-                ['name' => 'Land Area', 'required' => true],
-                ['name' => 'Built-up Area', 'required' => false],
-                ['name' => 'Garden Area', 'required' => false],
-                ['name' => 'Roof Area', 'required' => false],
-                ['name' => 'Number of Floors', 'required' => true],
-                ['name' => 'Number of Parking Spaces', 'required' => false],
-                ['name' => 'Street Width', 'required' => false],
-                ['name' => 'Private Garden', 'required' => false],
-                ['name' => 'Private Pool', 'required' => false],
-                ['name' => 'Jacuzzi', 'required' => false],
-                ['name' => 'Roof Access', 'required' => false],
-                ['name' => 'Terrace', 'required' => false],
-                ['name' => 'Garden', 'required' => false],
-                ['name' => 'Swimming Pool', 'required' => false],
-                ['name' => 'Gym', 'required' => false],
-                ['name' => 'Solar Energy', 'required' => false],
-                ['name' => 'Doorman', 'required' => false],
+                ['slug' => 'land-area', 'required' => true],
+                ['slug' => 'built-up-area', 'required' => false],
+                ['slug' => 'garden-area', 'required' => false],
+                ['slug' => 'roof-area', 'required' => false],
+                ['slug' => 'number-of-floors', 'required' => true],
+                ['slug' => 'number-of-parking-spaces', 'required' => false],
+                ['slug' => 'street-width', 'required' => false],
+                ['slug' => 'private-garden', 'required' => false],
+                ['slug' => 'private-pool', 'required' => false],
+                ['slug' => 'jacuzzi', 'required' => false],
+                ['slug' => 'roof-access', 'required' => false],
+                ['slug' => 'terrace', 'required' => false],
+                ['slug' => 'garden', 'required' => false],
+                ['slug' => 'swimming-pool', 'required' => false],
+                ['slug' => 'gym', 'required' => false],
+                ['slug' => 'solar-energy', 'required' => false],
+                ['slug' => 'doorman', 'required' => false],
             ],
 
             // ===========================
@@ -137,16 +137,16 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Studio' => [
                 ...$shared,
-                ['name' => 'Number of Bathrooms', 'required' => true],
-                ['name' => 'Furnishing Status', 'required' => true],
-                ['name' => 'Floor Number', 'required' => true],
-                ['name' => 'Flooring Type', 'required' => false],
-                ['name' => 'Cooling Type', 'required' => false],
-                ['name' => 'Balcony', 'required' => false],
-                ['name' => 'Elevator', 'required' => false],
-                ['name' => 'Security', 'required' => false],
-                ['name' => 'Air Conditioning', 'required' => false],
-                ['name' => 'Building Age', 'required' => false],
+                ['slug' => 'number-of-bathrooms', 'required' => true],
+                ['slug' => 'furnishing-status', 'required' => true],
+                ['slug' => 'floor-number', 'required' => true],
+                ['slug' => 'flooring-type', 'required' => false],
+                ['slug' => 'cooling-type', 'required' => false],
+                ['slug' => 'balcony', 'required' => false],
+                ['slug' => 'elevator', 'required' => false],
+                ['slug' => 'security', 'required' => false],
+                ['slug' => 'air-conditioning', 'required' => false],
+                ['slug' => 'building-age', 'required' => false],
             ],
 
             // ===========================
@@ -154,15 +154,15 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Penthouse' => [
                 ...$residentialCommon,
-                ['name' => 'Roof Area', 'required' => false],
-                ['name' => 'Floor Number', 'required' => true],
-                ['name' => 'Number of Floors', 'required' => false],
-                ['name' => 'Private Pool', 'required' => false],
-                ['name' => 'Jacuzzi', 'required' => false],
-                ['name' => 'Roof Access', 'required' => false],
-                ['name' => 'Terrace', 'required' => false],
-                ['name' => 'Swimming Pool', 'required' => false],
-                ['name' => 'Gym', 'required' => false],
+                ['slug' => 'roof-area', 'required' => false],
+                ['slug' => 'floor-number', 'required' => true],
+                ['slug' => 'number-of-floors', 'required' => false],
+                ['slug' => 'private-pool', 'required' => false],
+                ['slug' => 'jacuzzi', 'required' => false],
+                ['slug' => 'roof-access', 'required' => false],
+                ['slug' => 'terrace', 'required' => false],
+                ['slug' => 'swimming-pool', 'required' => false],
+                ['slug' => 'gym', 'required' => false],
             ],
 
             // ===========================
@@ -170,46 +170,46 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Townhouse' => [
                 ...$residentialCommon,
-                ['name' => 'Land Area', 'required' => false],
-                ['name' => 'Built-up Area', 'required' => false],
-                ['name' => 'Garden Area', 'required' => false],
-                ['name' => 'Number of Floors', 'required' => true],
-                ['name' => 'Number of Parking Spaces', 'required' => false],
-                ['name' => 'Private Garden', 'required' => false],
-                ['name' => 'Terrace', 'required' => false],
-                ['name' => 'Garden', 'required' => false],
+                ['slug' => 'land-area', 'required' => false],
+                ['slug' => 'built-up-area', 'required' => false],
+                ['slug' => 'garden-area', 'required' => false],
+                ['slug' => 'number-of-floors', 'required' => true],
+                ['slug' => 'number-of-parking-spaces', 'required' => false],
+                ['slug' => 'private-garden', 'required' => false],
+                ['slug' => 'terrace', 'required' => false],
+                ['slug' => 'garden', 'required' => false],
             ],
 
             // ===========================
             // COMPOUND
             // ===========================
             'Compound' => [
-                ['name' => 'Area', 'required' => true],
-                ['name' => 'Total Price', 'required' => false],
-                ['name' => 'Number of Units', 'required' => false],
-                ['name' => 'Payment Method', 'required' => false],
-                ['name' => 'Delivery Date', 'required' => false],
-                ['name' => 'Security', 'required' => false],
-                ['name' => 'Swimming Pool', 'required' => false],
-                ['name' => 'Gym', 'required' => false],
-                ['name' => 'Garden', 'required' => false],
-                ['name' => 'Clubhouse', 'required' => false],
-                ['name' => 'Kids Area', 'required' => false],
-                ['name' => 'Commercial Area', 'required' => false],
-                ['name' => 'Mosque', 'required' => false],
-                ['name' => 'Jogging Track', 'required' => false],
-                ['name' => 'Sports Courts', 'required' => false],
-                ['name' => 'Spa', 'required' => false],
-                ['name' => 'Business Center', 'required' => false],
-                ['name' => 'Medical Center', 'required' => false],
-                ['name' => 'School Nearby', 'required' => false],
-                ['name' => 'Hospital Nearby', 'required' => false],
-                ['name' => 'Mall Nearby', 'required' => false],
-                ['name' => 'Metro Nearby', 'required' => false],
-                ['name' => 'Highway Access', 'required' => false],
-                ['name' => 'Public Transport Nearby', 'required' => false],
-                ['name' => 'CCTV', 'required' => false],
-                ['name' => 'Fire System', 'required' => false],
+                ['slug' => 'area', 'required' => true],
+                ['slug' => 'total-price', 'required' => false],
+                ['slug' => 'number-of-units', 'required' => false],
+                ['slug' => 'payment-method', 'required' => false],
+                ['slug' => 'delivery-date', 'required' => false],
+                ['slug' => 'security', 'required' => false],
+                ['slug' => 'swimming-pool', 'required' => false],
+                ['slug' => 'gym', 'required' => false],
+                ['slug' => 'garden', 'required' => false],
+                ['slug' => 'clubhouse', 'required' => false],
+                ['slug' => 'kids-area', 'required' => false],
+                ['slug' => 'commercial-area', 'required' => false],
+                ['slug' => 'mosque', 'required' => false],
+                ['slug' => 'jogging-track', 'required' => false],
+                ['slug' => 'sports-courts', 'required' => false],
+                ['slug' => 'spa', 'required' => false],
+                ['slug' => 'business-center', 'required' => false],
+                ['slug' => 'medical-center', 'required' => false],
+                ['slug' => 'school-nearby', 'required' => false],
+                ['slug' => 'hospital-nearby', 'required' => false],
+                ['slug' => 'mall-nearby', 'required' => false],
+                ['slug' => 'metro-nearby', 'required' => false],
+                ['slug' => 'highway-access', 'required' => false],
+                ['slug' => 'public-transport-nearby', 'required' => false],
+                ['slug' => 'cctv', 'required' => false],
+                ['slug' => 'fire-system', 'required' => false],
             ],
 
             // ===========================
@@ -217,21 +217,21 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Office' => [
                 ...$shared,
-                ['name' => 'Floor Number', 'required' => true],
-                ['name' => 'Number of Rooms', 'required' => false],
-                ['name' => 'Number of Bathrooms', 'required' => false],
-                ['name' => 'Furnishing Status', 'required' => false],
-                ['name' => 'Cooling Type', 'required' => false],
-                ['name' => 'Flooring Type', 'required' => false],
-                ['name' => 'Elevator', 'required' => false],
-                ['name' => 'Security', 'required' => false],
-                ['name' => 'Parking', 'required' => false],
-                ['name' => 'Air Conditioning', 'required' => false],
-                ['name' => 'Fire System', 'required' => false],
-                ['name' => 'CCTV', 'required' => false],
-                ['name' => 'Intercom', 'required' => false],
-                ['name' => 'Building Age', 'required' => false],
-                ['name' => 'Ceiling Height', 'required' => false],
+                ['slug' => 'floor-number', 'required' => true],
+                ['slug' => 'number-of-rooms', 'required' => false],
+                ['slug' => 'number-of-bathrooms', 'required' => false],
+                ['slug' => 'furnishing-status', 'required' => false],
+                ['slug' => 'cooling-type', 'required' => false],
+                ['slug' => 'flooring-type', 'required' => false],
+                ['slug' => 'elevator', 'required' => false],
+                ['slug' => 'security', 'required' => false],
+                ['slug' => 'parking', 'required' => false],
+                ['slug' => 'air-conditioning', 'required' => false],
+                ['slug' => 'fire-system', 'required' => false],
+                ['slug' => 'cctv', 'required' => false],
+                ['slug' => 'intercom', 'required' => false],
+                ['slug' => 'building-age', 'required' => false],
+                ['slug' => 'ceiling-height', 'required' => false],
             ],
 
             // ===========================
@@ -239,17 +239,17 @@ class AttributePropertyTypeSeeder extends Seeder
             // ===========================
             'Shop' => [
                 ...$shared,
-                ['name' => 'Floor Number', 'required' => false],
-                ['name' => 'Ceiling Height', 'required' => false],
-                ['name' => 'Street Width', 'required' => false],
-                ['name' => 'Number of Bathrooms', 'required' => false],
-                ['name' => 'Furnishing Status', 'required' => false],
-                ['name' => 'Cooling Type', 'required' => false],
-                ['name' => 'Elevator', 'required' => false],
-                ['name' => 'Security', 'required' => false],
-                ['name' => 'Parking', 'required' => false],
-                ['name' => 'Fire System', 'required' => false],
-                ['name' => 'CCTV', 'required' => false],
+                ['slug' => 'floor-number', 'required' => false],
+                ['slug' => 'ceiling-height', 'required' => false],
+                ['slug' => 'street-width', 'required' => false],
+                ['slug' => 'number-of-bathrooms', 'required' => false],
+                ['slug' => 'furnishing-status', 'required' => false],
+                ['slug' => 'cooling-type', 'required' => false],
+                ['slug' => 'elevator', 'required' => false],
+                ['slug' => 'security', 'required' => false],
+                ['slug' => 'parking', 'required' => false],
+                ['slug' => 'fire-system', 'required' => false],
+                ['slug' => 'cctv', 'required' => false],
             ],
         ];
     }

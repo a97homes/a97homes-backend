@@ -12,8 +12,8 @@ class AttributeOptionSeeder extends Seeder
     {
         $optionsMap = $this->getOptionsMap();
 
-        foreach ($optionsMap as $attributeName => $options) {
-            $attribute = Attribute::where('name->en', $attributeName)->first();
+        foreach ($optionsMap as $attributeSlug => $options) {
+            $attribute = Attribute::where('slug', $attributeSlug)->first();
 
             if (! $attribute) {
                 continue;
@@ -41,7 +41,7 @@ class AttributeOptionSeeder extends Seeder
     private function getOptionsMap(): array
     {
         return [
-            'Finishing Type' => [
+            'finishing-type' => [
                 ['en' => 'Super Lux', 'ar' => 'سوبر لوكس'],
                 ['en' => 'Lux', 'ar' => 'لوكس'],
                 ['en' => 'Semi-Finished', 'ar' => 'نصف تشطيب'],
@@ -50,7 +50,7 @@ class AttributeOptionSeeder extends Seeder
                 ['en' => 'Fully Finished', 'ar' => 'تشطيب كامل'],
                 ['en' => 'Extra Super Lux', 'ar' => 'إكسترا سوبر لوكس'],
             ],
-            'View' => [
+            'view' => [
                 ['en' => 'Sea View', 'ar' => 'إطلالة بحرية'],
                 ['en' => 'Garden View', 'ar' => 'إطلالة حديقة'],
                 ['en' => 'City View', 'ar' => 'إطلالة على المدينة'],
@@ -66,7 +66,7 @@ class AttributeOptionSeeder extends Seeder
                 ['en' => 'Landscape View', 'ar' => 'إطلالة على المناظر الطبيعية'],
                 ['en' => 'Courtyard View', 'ar' => 'إطلالة على الفناء'],
             ],
-            'Direction' => [
+            'direction' => [
                 ['en' => 'North', 'ar' => 'شمال'],
                 ['en' => 'South', 'ar' => 'جنوب'],
                 ['en' => 'East', 'ar' => 'شرق'],
@@ -76,30 +76,30 @@ class AttributeOptionSeeder extends Seeder
                 ['en' => 'Southeast', 'ar' => 'جنوب شرق'],
                 ['en' => 'Southwest', 'ar' => 'جنوب غرب'],
             ],
-            'Furnishing Status' => [
+            'furnishing-status' => [
                 ['en' => 'Furnished', 'ar' => 'مفروش'],
                 ['en' => 'Semi-Furnished', 'ar' => 'نصف مفروش'],
                 ['en' => 'Unfurnished', 'ar' => 'بدون فرش'],
             ],
-            'Payment Method' => [
+            'payment-method' => [
                 ['en' => 'Cash', 'ar' => 'كاش'],
                 ['en' => 'Installment', 'ar' => 'تقسيط'],
                 ['en' => 'Cash & Installment', 'ar' => 'كاش وتقسيط'],
                 ['en' => 'Bank Mortgage', 'ar' => 'تمويل بنكي'],
             ],
-            'Ownership Type' => [
+            'ownership-type' => [
                 ['en' => 'Freehold', 'ar' => 'تمليك'],
                 ['en' => 'Leasehold', 'ar' => 'إيجار'],
                 ['en' => 'Usufruct', 'ar' => 'حق الانتفاع'],
             ],
-            'Property Condition' => [
+            'property-condition' => [
                 ['en' => 'New', 'ar' => 'جديد'],
                 ['en' => 'Resale', 'ar' => 'إعادة بيع'],
                 ['en' => 'Under Construction', 'ar' => 'تحت الإنشاء'],
                 ['en' => 'Ready to Move', 'ar' => 'جاهز للسكن'],
                 ['en' => 'Renovated', 'ar' => 'مجدد'],
             ],
-            'Flooring Type' => [
+            'flooring-type' => [
                 ['en' => 'Ceramic', 'ar' => 'سيراميك'],
                 ['en' => 'Marble', 'ar' => 'رخام'],
                 ['en' => 'Porcelain', 'ar' => 'بورسلين'],
@@ -109,13 +109,13 @@ class AttributeOptionSeeder extends Seeder
                 ['en' => 'Granite', 'ar' => 'جرانيت'],
                 ['en' => 'Epoxy', 'ar' => 'إيبوكسي'],
             ],
-            'Heating Type' => [
+            'heating-type' => [
                 ['en' => 'Central Heating', 'ar' => 'تدفئة مركزية'],
                 ['en' => 'Individual Heating', 'ar' => 'تدفئة فردية'],
                 ['en' => 'Underfloor Heating', 'ar' => 'تدفئة أرضية'],
                 ['en' => 'No Heating', 'ar' => 'بدون تدفئة'],
             ],
-            'Cooling Type' => [
+            'cooling-type' => [
                 ['en' => 'Central AC', 'ar' => 'تكييف مركزي'],
                 ['en' => 'Split AC', 'ar' => 'تكييف سبليت'],
                 ['en' => 'Window AC', 'ar' => 'تكييف شباك'],
