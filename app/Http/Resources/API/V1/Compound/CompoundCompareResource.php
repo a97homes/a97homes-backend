@@ -24,9 +24,9 @@ class CompoundCompareResource extends JsonResource
                 'logo' => $compound->developer->logo_url,
             ]),
             'location' => $this->whenLoaded('city', fn () => $this->formatLocation($compound)),
-            'starting_price' => $compound->properties_min_price ?? null,
+            'starting_price' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
             'resale_price' => $compound->isCompleted()
-                ? ($compound->properties_min_resale_price ?? null)
+                ? ($compound->properties_min_resale_price !== null ? (int) $compound->properties_min_resale_price : null)
                 : null,
             'discount_percentage' => $this->whenLoaded('activeDiscount', fn () => $compound->activeDiscount?->percentage),
             'unit_types' => $this->whenLoaded('properties', fn () => $compound->properties
@@ -40,8 +40,8 @@ class CompoundCompareResource extends JsonResource
             'delivery_date' => $compound->delivery_date?->toDateString(),
             'total_units' => $this->whenLoaded('properties', fn () => $compound->properties->count()),
             'price_range' => $this->whenLoaded('properties', fn () => [
-                'min' => $compound->properties_min_price ?? null,
-                'max' => $compound->properties_max_price ?? null,
+                'min' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
+                'max' => $compound->properties_max_price !== null ? (int) $compound->properties_max_price : null,
             ]),
         ];
     }

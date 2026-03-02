@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;
 
@@ -16,14 +17,15 @@ class PriceRangeFilter implements Filter
             return;
         }
 
-        $query->whereHas('properties', function (Builder $q) use ($min, $max) {
-            if ($min !== null) {
-                $q->where('price', '>=', $min);
-            }
+        $minPriceSubquery = Property::selectRaw('MIN(price)')
+            ->whereColumn('compound_id', 'compounds.id');
 
-            if ($max !== null) {
-                $q->where('price', '<=', $max);
-            }
-        });
+        if ($min !== null) {
+            $query->where($minPriceSubquery, '>=', (int) $min);
+        }
+
+        if ($max !== null) {
+            $query->where($minPriceSubquery, '<=', (int) $max);
+        }
     }
 }

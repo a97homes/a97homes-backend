@@ -28,11 +28,13 @@ class CompoundResource extends JsonResource
             'description' => $this->whenHas('description', fn () => $compound->description),
             'developer' => DeveloperResource::make($this->whenLoaded('developer')),
             'city' => CityResource::make($this->whenLoaded('city')),
-            'starting_price' => $compound->properties_min_price ?? null,
-            'resale_price' => $compound->isCompleted() ? ($compound->properties_min_resale_price ?? null) : null,
+            'starting_price' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
+            'resale_price' => $compound->isCompleted()
+                ? ($compound->properties_min_resale_price !== null ? (int) $compound->properties_min_resale_price : null)
+                : null,
             'price_range' => [
-                'min' => $compound->properties_min_price ?? null,
-                'max' => $compound->properties_max_price ?? null,
+                'min' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
+                'max' => $compound->properties_max_price !== null ? (int) $compound->properties_max_price : null,
             ],
             'discount_percentage' => $this->whenLoaded('activeDiscount', fn () => $compound->activeDiscount?->percentage),
             'properties_types' => PropertyTypeResource::collection($this->whenLoaded('properties', fn () => $compound->properties
