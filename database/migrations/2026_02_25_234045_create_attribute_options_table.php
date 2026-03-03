@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('attribute_id')->constrained('attributes')->cascadeOnDelete();
             $table->json('value');
             $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

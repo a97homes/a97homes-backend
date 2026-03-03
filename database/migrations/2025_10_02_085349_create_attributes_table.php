@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->json('name');
+            $table->string('slug')->unique();
             $table->string('type');
-            $table->foreignId('unit_id')->nullable()->constrained('units')->cascadeOnDelete();
+            $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete();
+            $table->boolean('is_filterable')->default(false);
             $table->timestamps();
+
+            $table->index('type');
         });
     }
 

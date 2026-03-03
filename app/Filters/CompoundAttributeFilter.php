@@ -13,10 +13,15 @@ class CompoundAttributeFilter implements Filter
 
     public function __invoke(Builder $query, $value, string $property): void
     {
+        if ($value === null || $value === '') {
+            return;
+        }
+
         $query->whereHas('properties', function (Builder $q) use ($value) {
             $q->whereHas('attributes', function (Builder $attrQuery) use ($value) {
                 $attrQuery->where('attributes.slug', $this->attributeSlug)
-                    ->where('attribute_property.value', $value);
+                    ->whereNotNull('attribute_property.value')
+                    ->whereRaw('CAST(attribute_property.value AS NUMERIC) = ?', [(int) $value]);
             });
         });
     }

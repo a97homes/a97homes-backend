@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
             $table->json('name')->nullable();
-            $table->foreignId('city_id')->nullable()->constrained('cities')->cascadeOnDelete();
-            $table->foreignId('property_type_id')->nullable()->constrained('property_types')->cascadeOnDelete();
-            $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
+            $table->foreignId('property_type_id')->nullable()->constrained('property_types')->nullOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
             $table->string('status');
             $table->string('address');
-            $table->decimal('price', 15, 2)->nullable();
-            $table->decimal('resale_price', 15, 2)->nullable();
+            $table->unsignedBigInteger('price')->nullable();
+            $table->unsignedBigInteger('resale_price')->nullable();
             $table->foreignId('compound_id')->constrained('compounds')->cascadeOnDelete();
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();

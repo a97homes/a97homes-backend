@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attribute_id')->constrained('attributes')->cascadeOnDelete();
             $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->text('value')->nullable();
             $table->timestamps();
+
+            $table->unique(['property_id', 'attribute_id']);
         });
     }
 
