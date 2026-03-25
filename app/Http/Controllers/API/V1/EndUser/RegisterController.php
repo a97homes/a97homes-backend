@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1\EndUser;
 
 use App\Actions\Register\RegisterAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\EndUser\registerRequest;
+use App\Http\Requests\API\V1\EndUser\RegisterRequest;
 use App\Http\Resources\API\V1\Authentication\AuthenticationResource;
 use Illuminate\Http\JsonResponse;
 
