@@ -11,7 +11,7 @@ class CountryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $countries = Country::select('id', 'name', 'code')->get();
+        $countries = Country::select('id', 'name', 'code', 'phone_code')->get();
 
         return $this->ok(data: CountryResource::collection($countries));
     }

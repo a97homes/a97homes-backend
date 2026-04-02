@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Hash;
 class PasswordRule implements ValidationRule
 {
     public function __construct(
-        public ?string $email
+        public ?string $email = null,
+        public ?string $phone = null,
+        public ?string $countryCode = null,
     ) {}
 
     /**
@@ -20,11 +22,14 @@ class PasswordRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! $this->email) {
+        if (! $this->email && ! $this->phone) {
             return;
         }
 
-        $user = User::whereEmail($this->email)->first();
+        $user = User::query()
+            ->when($this->email, fn ($query) => $query->where('email', $this->email))
+            ->when(! $this->email && $this->phone, fn ($query) => $query->where('phone', $this->phone)->where('country_code', $this->countryCode))
+            ->first();
 
         if (! $user || ! Hash::check($value, $user->password)) {
             $fail(__('auth.failed'));

@@ -198,6 +198,8 @@ return [
         'name' => 'Name',
         'name.ar' => 'Name in Arabic',
         'name.en' => 'Name in English',
+        'phone' => 'Phone Number',
+        'country_code' => 'Country Code',
     ],
 
 ];

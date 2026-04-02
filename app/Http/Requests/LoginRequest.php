@@ -15,6 +15,15 @@ class LoginRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->phone) {
+            $this->merge([
+                'phone' => ltrim($this->phone, '0'),
+            ]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,8 +32,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string', new PasswordRule($this->email)],
+            'email' => ['required_without:phone', 'nullable', 'email'],
+            'country_code' => ['required_with:phone', 'nullable', 'string', 'max:10'],
+            'phone' => ['required_without:email', 'nullable', 'string'],
+            'password' => ['required', 'string', new PasswordRule($this->email, $this->phone, $this->country_code)],
         ];
     }
 }

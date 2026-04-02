@@ -18,6 +18,8 @@ class AuthenticationResource extends JsonResource
             'id' => $this->whenHas('id', fn () => $user->id),
             'name' => $this->whenHas('name', fn () => $user->name),
             'email' => $user->email,
+            'country_code' => $user->country_code,
+            'phone' => $user->phone,
             'locale' => $user->getUserLocale(),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'fcm_token' => $user->fcm_token,
