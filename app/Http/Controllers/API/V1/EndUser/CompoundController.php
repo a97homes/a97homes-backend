@@ -30,6 +30,7 @@ class CompoundController extends Controller
                 'properties:id,compound_id,property_type_id,price,resale_price',
                 'properties.propertyType:id,name',
                 'activeDiscount',
+                'media',
             ])
             ->withMin('properties', 'price')
             ->withMin('properties', 'resale_price')
@@ -93,6 +94,7 @@ class CompoundController extends Controller
                 'properties:id,compound_id,property_type_id,price,resale_price',
                 'properties.propertyType:id,name',
                 'activeDiscount',
+                'media',
             ])
             ->withMin('properties', 'price')
             ->withMin('properties', 'resale_price')

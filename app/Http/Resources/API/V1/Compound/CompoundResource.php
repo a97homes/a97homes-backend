@@ -43,6 +43,21 @@ class CompoundResource extends JsonResource
                 ->unique('id')
                 ->values())),
             'total_units' => $this->whenLoaded('properties', fn () => $compound->properties->count()),
+            'properties' => $this->whenLoaded('properties', fn () => $compound->properties->map(fn ($p) => [
+                'id' => $p->id,
+                'price' => $p->price,
+                'resale_price' => $p->resale_price,
+                'property_type' => $p->relationLoaded('propertyType') && $p->propertyType
+                    ? PropertyTypeResource::make($p->propertyType)
+                    : null,
+                'media' => $p->relationLoaded('media')
+                    ? $p->media->map(fn ($m) => [
+                        'id' => $m->id,
+                        'url' => $m->getFullUrl(),
+                        'type' => $m->mime_type,
+                    ])
+                    : [],
+            ])),
             'media' => $this->whenLoaded('media', fn () => $compound->media->map(fn ($m) => [
                 'id' => $m->id,
                 'url' => $m->getFullUrl(),
