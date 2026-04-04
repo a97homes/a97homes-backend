@@ -46,6 +46,9 @@ class PropertyController extends Controller implements HasMiddleware
             ->with(['city:id,name,state_id',
                 'city.state:id,name,country_id',
                 'city.state.country:id,name',
+                'compound:id,name,developer_id',
+                'compound.developer:id,name',
+                'compound.developer.media',
                 'attributes:name,id'])
 
             ->allowedFilters([
@@ -55,7 +58,7 @@ class PropertyController extends Controller implements HasMiddleware
                 AllowedFilter::exact('compound_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
-                // TODO: search by developer id
+                AllowedFilter::exact('compound.developer_id'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
@@ -84,7 +87,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.phases:id,name,compound_id']);
+        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id']);
 
         return $this->ok(data: PropertyResource::make($property));
     }

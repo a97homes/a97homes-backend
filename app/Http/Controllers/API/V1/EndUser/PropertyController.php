@@ -24,6 +24,9 @@ class PropertyController extends Controller
                 'city:id,name,state_id',
                 'city.state:id,name',
                 'propertyType:id,name',
+                'compound:id,name,developer_id',
+                'compound.developer:id,name',
+                'compound.developer.media',
                 'attributes' => fn ($q) => $q->with('unit'),
                 'selectedOptions',
                 'media',
@@ -34,6 +37,7 @@ class PropertyController extends Controller
                 AllowedFilter::exact('city_id'),
                 AllowedFilter::exact('compound_id'),
                 AllowedFilter::exact('status'),
+                AllowedFilter::exact('compound.developer_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
@@ -61,6 +65,8 @@ class PropertyController extends Controller
             'attributes' => fn ($q) => $q->with('unit'),
             'selectedOptions.attribute',
             'compound',
+            'compound.developer:id,name',
+            'compound.developer.media',
             'media',
         ]);
 
