@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
 class Contact extends Model
@@ -12,6 +13,7 @@ class Contact extends Model
         'email',
         'message',
         'phone',
+        'city_id',
     ];
 
     protected function casts(): array
@@ -19,5 +21,10 @@ class Contact extends Model
         return [
             'phone' => E164PhoneNumberCast::class,
         ];
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 }

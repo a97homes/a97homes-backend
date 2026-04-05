@@ -32,6 +32,7 @@ class Compound extends Model implements HasMedia
         'completion_status',
         'description',
         'delivery_date',
+        'is_featured',
     ];
 
     public array $translatable = ['description'];
@@ -41,6 +42,7 @@ class Compound extends Model implements HasMedia
         return [
             'completion_status' => CompletionStatusEnum::class,
             'delivery_date' => 'date',
+            'is_featured' => 'boolean',
         ];
     }
 
@@ -75,6 +77,16 @@ class Compound extends Model implements HasMedia
     public function discounts(): HasMany
     {
         return $this->hasMany(Discount::class);
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
+
+    public function activeOffers(): HasMany
+    {
+        return $this->hasMany(Offer::class)->where('is_active', true);
     }
 
     public function activeDiscount(): HasOne

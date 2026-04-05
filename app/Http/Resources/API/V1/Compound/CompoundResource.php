@@ -3,6 +3,7 @@
 namespace App\Http\Resources\API\V1\Compound;
 
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
+use App\Http\Resources\API\V1\Offer\OfferResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Http\Resources\City\CityResource;
 use App\Models\Compound;
@@ -63,6 +64,7 @@ class CompoundResource extends JsonResource
                 'url' => $m->getFullUrl(),
                 'type' => $m->mime_type,
             ])),
+            'offers' => OfferResource::collection($this->whenLoaded('activeOffers')),
             'is_favorited' => (bool) ($compound->is_favorited ?? $compound->favorites_count ?? false),
         ];
     }

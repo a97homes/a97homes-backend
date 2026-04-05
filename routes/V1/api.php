@@ -3,13 +3,14 @@
 use App\Http\Controllers\API\V1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
 use App\Http\Controllers\API\V1\EndUser\CityController;
-use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
 use App\Http\Controllers\API\V1\EndUser\CompoundController;
+use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\CountryController;
 use App\Http\Controllers\API\V1\EndUser\DeveloperController;
-use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
+use App\Http\Controllers\API\V1\EndUser\HomeController;
+use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
 use App\Http\Controllers\API\V1\EndUser\RegisterController;
@@ -18,6 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
+
+// =========================Homepage==========================
+Route::get('offers', [HomeController::class, 'offers']);
+Route::get('banners', [HomeController::class, 'banners']);
+Route::get('latest-projects', [HomeController::class, 'latestProjects']);
+Route::get('popular-areas', [HomeController::class, 'popularAreas']);
+Route::get('featured-compounds', [HomeController::class, 'featuredCompounds']);
+Route::get('featured-properties', [HomeController::class, 'featuredProperties']);
+// =========================Homepage==========================
 
 // =========================Location==========================
 Route::get('countries', [CountryController::class, 'index']);

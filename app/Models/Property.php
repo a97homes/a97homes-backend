@@ -24,7 +24,7 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price'];
+    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price', 'is_featured'];
 
     public array $translatable = ['name'];
 
@@ -74,6 +74,7 @@ class Property extends Model implements HasMedia
             'status' => PropertyStatusEnum::class,
             'price' => 'integer',
             'resale_price' => 'integer',
+            'is_featured' => 'boolean',
         ];
     }
 }

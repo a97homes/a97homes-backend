@@ -33,5 +33,8 @@ class DatabaseSeeder extends Seeder
         $this->call([CompanyInfoSeeder::class]);
         $this->call([SocialSeeder::class]);
         $this->call([AssignAttributesToPropertiesSeeder::class]);
+        $this->call([OfferSeeder::class]);
+        $this->call([BannerSeeder::class]);
+        $this->call([FeaturedSeeder::class]);
     }
 }

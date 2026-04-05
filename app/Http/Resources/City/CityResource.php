@@ -26,6 +26,10 @@ class CityResource extends JsonResource
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($city, 'name')),
             'state' => StateResource::make($this->whenLoaded('state')),
             'properties_count' => $this->whenCounted('properties'),
+            'image_url' => $this->when(
+                $city->relationLoaded('media'),
+                fn () => $city->getFirstMediaUrl(\App\Models\City::MEDIA_COLLECTION_IMAGE) ?: null
+            ),
             'created_at' => $this->whenHas('created_at', fn () => $city->created_at),
         ];
     }

@@ -7,13 +7,18 @@ use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
-class City extends Model
+class City extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
     use HasTranslations;
+    use InteractsWithMedia;
+
+    public const MEDIA_COLLECTION_IMAGE = 'city_image';
 
     public array $translatable = ['name'];
 
