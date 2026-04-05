@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\V1\EndUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Banner\BannerResource;
+use App\Http\Resources\API\V1\Compound\CompoundCollection;
+use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\City\CityResource;
 use App\Models\Banner;
 use App\Models\City;
@@ -77,7 +79,7 @@ class HomeController extends Controller
             ->latest()
             ->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Compound\CompoundCollection($compounds));
+        return $this->ok(data: new CompoundCollection($compounds));
     }
 
     /**
@@ -118,7 +120,7 @@ class HomeController extends Controller
             ->latest()
             ->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Compound\CompoundCollection($compounds));
+        return $this->ok(data: new CompoundCollection($compounds));
     }
 
     /**
@@ -154,6 +156,6 @@ class HomeController extends Controller
 
         $properties = $query->latest()->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Property\PropertyCollection($properties));
+        return $this->ok(data: new PropertyCollection($properties));
     }
 }
