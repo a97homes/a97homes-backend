@@ -29,21 +29,21 @@ class CompoundResource extends JsonResource
             'description' => $this->whenHas('description', fn () => $compound->description),
             'developer' => DeveloperResource::make($this->whenLoaded('developer')),
             'city' => CityResource::make($this->whenLoaded('city')),
-            'starting_price' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
-            'resale_price' => $compound->isCompleted()
+            'starting_price' => $this->whenHas('properties_min_price', fn () => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null),
+            'resale_price' => $this->whenHas('properties_min_resale_price', fn () => $compound->isCompleted()
                 ? ($compound->properties_min_resale_price !== null ? (int) $compound->properties_min_resale_price : null)
-                : null,
-            'price_range' => [
+                : null),
+            'price_range' => $this->whenHas('properties_min_price', fn () => [
                 'min' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
                 'max' => $compound->properties_max_price !== null ? (int) $compound->properties_max_price : null,
-            ],
+            ]),
             'discount_percentage' => $this->whenLoaded('activeDiscount', fn () => $compound->activeDiscount?->percentage),
             'properties_types' => PropertyTypeResource::collection($this->whenLoaded('properties', fn () => $compound->properties
                 ->pluck('propertyType')
                 ->filter()
                 ->unique('id')
                 ->values())),
-            'total_units' => $this->whenLoaded('properties', fn () => $compound->properties->count()),
+            'total_units' => $this->whenHas('properties_count', fn () => $compound->properties_count),
             'properties' => $this->whenLoaded('properties', fn () => $compound->properties->map(fn ($p) => [
                 'id' => $p->id,
                 'price' => $p->price,

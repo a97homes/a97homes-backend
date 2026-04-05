@@ -6,6 +6,7 @@ use App\Filters\CreatedAtFilter;
 use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
@@ -28,6 +29,11 @@ class PropertyType extends Model
                 return $model->getTranslation('name', 'en');
             })
             ->saveSlugsTo('slug');
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class);
     }
 
     public function attributes(): BelongsToMany

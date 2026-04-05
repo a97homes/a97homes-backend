@@ -102,21 +102,12 @@ class HomeController extends Controller
      */
     public function featuredCompounds(): JsonResponse
     {
-        $compounds = Compound::query()
+        $compounds = Compound::select('id', 'name')
             ->with([
-                'developer:id,name',
-                'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
                 'media',
-                'properties:id,compound_id,property_type_id,price,resale_price',
-                'properties.propertyType:id,name',
-                'activeDiscount',
             ])
-            ->where('is_featured', true)
-            ->withMin('properties', 'price')
-            ->withMax('properties', 'price')
             ->withCount('properties')
+            ->where('is_featured', true)
             ->latest()
             ->macroPaginate();
 
