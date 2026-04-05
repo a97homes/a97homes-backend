@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\V1\EndUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Banner\BannerResource;
+use App\Http\Resources\API\V1\Compound\CompoundCollection;
+use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\City\CityResource;
 use App\Models\Banner;
 use App\Models\City;
@@ -77,7 +79,7 @@ class HomeController extends Controller
             ->latest()
             ->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Compound\CompoundCollection($compounds));
+        return $this->ok(data: new CompoundCollection($compounds));
     }
 
     /**
@@ -100,25 +102,16 @@ class HomeController extends Controller
      */
     public function featuredCompounds(): JsonResponse
     {
-        $compounds = Compound::query()
+        $compounds = Compound::select('id', 'name')
             ->with([
-                'developer:id,name',
-                'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
                 'media',
-                'properties:id,compound_id,property_type_id,price,resale_price',
-                'properties.propertyType:id,name',
-                'activeDiscount',
             ])
-            ->where('is_featured', true)
-            ->withMin('properties', 'price')
-            ->withMax('properties', 'price')
             ->withCount('properties')
+            ->where('is_featured', true)
             ->latest()
             ->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Compound\CompoundCollection($compounds));
+        return $this->ok(data: new CompoundCollection($compounds));
     }
 
     /**
@@ -154,6 +147,6 @@ class HomeController extends Controller
 
         $properties = $query->latest()->macroPaginate();
 
-        return $this->ok(data: new \App\Http\Resources\API\V1\Property\PropertyCollection($properties));
+        return $this->ok(data: new PropertyCollection($properties));
     }
 }

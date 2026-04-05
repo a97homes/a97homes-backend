@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PropertyStatusEnum;
+use App\Enums\SaleTypeEnum;
 use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Observers\PropertyObserver;
@@ -24,7 +25,7 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price', 'is_featured'];
+    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
 
     public array $translatable = ['name'];
 
@@ -72,6 +73,7 @@ class Property extends Model implements HasMedia
     {
         return [
             'status' => PropertyStatusEnum::class,
+            'sale_type' => SaleTypeEnum::class,
             'price' => 'integer',
             'resale_price' => 'integer',
             'is_featured' => 'boolean',

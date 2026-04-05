@@ -33,6 +33,7 @@ class PropertyResource extends JsonResource
             'address' => $this->whenHas('address', fn () => $property->address),
             'price' => $this->whenHas('price', fn () => $property->price),
             'resale_price' => $this->whenHas('resale_price', fn () => $property->resale_price),
+            'sale_type' => $this->whenHas('sale_type', fn () => $property->sale_type),
             'latitude' => $this->whenHas('latitude', fn () => $property->latitude),
             'longitude' => $this->whenHas('longitude', fn () => $property->longitude),
             'attributes' => AttributeResource::collection($this->whenLoaded('attributes')),
