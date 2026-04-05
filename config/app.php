@@ -122,5 +122,6 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
+    'api_private_key' => env('API_PRIVATE_KEY'),
+    'latest_api_private_key' => env('LATEST_API_PRIVATE_KEY'),
 ];

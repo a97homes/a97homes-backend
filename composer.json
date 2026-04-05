@@ -11,10 +11,22 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/octane": "^2.12",
+        "laravel/sanctum": "^4.0",
+        "laravel/telescope": "^5.14",
+        "laravel/tinker": "^2.10.1",
+        "propaganistas/laravel-phone": "^6.0",
+        "spatie/laravel-medialibrary": "^11.15",
+        "spatie/laravel-permission": "^6.21",
+        "spatie/laravel-query-builder": "^6.3",
+        "spatie/laravel-sluggable": "^3.8",
+        "spatie/laravel-translatable": "^6.11",
+        "spiral/roadrunner-cli": "^2.6.0",
+        "spiral/roadrunner-http": "^3.3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "laravel/boost": "^1.8",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
@@ -27,7 +39,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

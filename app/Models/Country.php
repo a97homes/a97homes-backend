@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use App\Filters\CreatedAtFilter;
+use App\Traits\HasArabicSearch;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Translatable\HasTranslations;
+
+class Country extends Model
+{
+    use CreatedAtFilter;
+    use HasArabicSearch;
+    use HasTranslations;
+
+    public array $translatable = ['name'];
+
+    protected $fillable = [
+        'name',
+        'code',
+        'phone_code',
+    ];
+
+    public function states(): HasMany
+    {
+        return $this->hasMany(State::class);
+    }
+}
