@@ -36,7 +36,6 @@ class PropertyFavoriteController extends Controller
             return $property;
         });
 
-
         return $this->ok(data: new PropertyCollection($properties));
     }
 

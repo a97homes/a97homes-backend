@@ -7,6 +7,7 @@ use App\Filters\NameFilter;
 use App\Filters\PriceRangeFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\EndUser\Compound\CompareCompoundsRequest;
+use App\Http\Resources\API\V1\Compound\AdminCompoundResource;
 use App\Http\Resources\API\V1\Compound\CompoundCollection;
 use App\Http\Resources\API\V1\Compound\CompoundCompareResource;
 use App\Http\Resources\API\V1\Compound\CompoundResource;
@@ -103,5 +104,12 @@ class CompoundController extends Controller
             ->get();
 
         return $this->ok(data: CompoundCompareResource::collection($compounds));
+    }
+
+    public function dropdown(): JsonResponse
+    {
+        $compounds = Compound::select('id', 'name')->get();
+
+        return $this->ok(data: AdminCompoundResource::collection($compounds));
     }
 }

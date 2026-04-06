@@ -18,6 +18,7 @@ class SellUnit extends Model
         'phone',
         'city_id',
         'property_type_id',
+        'compound_id',
         'bedrooms',
         'notes',
         'status',
@@ -36,5 +37,10 @@ class SellUnit extends Model
     public function propertyType(): BelongsTo
     {
         return $this->belongsTo(PropertyType::class);
+    }
+
+    public function compound(): BelongsTo
+    {
+        return $this->belongsTo(Compound::class);
     }
 }

@@ -8,12 +8,14 @@ use App\Http\Controllers\API\V1\EndUser\CompoundController;
 use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\CountryController;
 use App\Http\Controllers\API\V1\EndUser\DeveloperController;
+use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
 use App\Http\Controllers\API\V1\EndUser\RegisterController;
+use App\Http\Controllers\API\V1\EndUser\SellUnitController;
 use App\Http\Controllers\API\V1\EndUser\StateController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,8 +39,17 @@ Route::get('cities/popular', [CityController::class, 'popular']);
 // =========================Location==========================
 
 // =========================Dropdowns==========================
-Route::get('developers/dropdown', [DeveloperController::class, 'dropdown']);
-Route::get('property-types/dropdown', [PropertyTypeController::class, 'dropdown']);
+Route::prefix('dropdowns')->group(function () {
+    Route::get('developers', [DropdownController::class, 'developers']);
+    Route::get('compounds', [DropdownController::class, 'compounds']);
+    Route::get('property-types', [DropdownController::class, 'propertyTypes']);
+    Route::get('sale-types', [DropdownController::class, 'saleTypes']);
+    Route::get('price-range', [DropdownController::class, 'priceRange']);
+    Route::get('area-range', [DropdownController::class, 'areaRange']);
+    Route::get('delivery-dates', [DropdownController::class, 'deliveryDates']);
+    Route::get('payment-plans', [DropdownController::class, 'paymentPlans']);
+    Route::get('attributes', [DropdownController::class, 'attributes']);
+});
 // =========================Dropdowns==========================
 
 // =========================Developers==========================
@@ -67,6 +78,10 @@ Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 // =========================Contact==========================
 Route::post('contact', [ContactController::class, 'store']);
 // =========================Contact==========================
+
+// =========================Sell-Unit==========================
+Route::post('sell-units', [SellUnitController::class, 'store']);
+// =========================Sell-Unit==========================
 
 // =========================Company-Info==========================
 Route::get('company-info', [CompanyInfoController::class, 'show']);
