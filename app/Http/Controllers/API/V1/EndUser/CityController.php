@@ -24,4 +24,11 @@ class CityController extends Controller
 
         return $this->ok(data: CityResource::collection($cities));
     }
+
+    public function dropdown(): JsonResponse
+    {
+        $cities = City::select('id', 'name')->get();
+
+        return $this->ok(data: CityResource::collection($cities));
+    }
 }

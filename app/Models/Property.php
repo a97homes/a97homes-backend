@@ -7,6 +7,7 @@ use App\Enums\SaleTypeEnum;
 use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Observers\PropertyObserver;
+use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Spatie\Translatable\HasTranslations;
 class Property extends Model implements HasMedia
 {
     use CreatedAtFilter;
+    use HasArabicSearch;
     use HasTranslations;
     use InteractsWithMedia;
 

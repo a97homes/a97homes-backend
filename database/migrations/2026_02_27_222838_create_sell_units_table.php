@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('phone');
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
             $table->foreignId('property_type_id')->constrained('property_types')->cascadeOnDelete();
-            $table->unsignedTinyInteger('bedrooms')->nullable();
             $table->text('notes')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();

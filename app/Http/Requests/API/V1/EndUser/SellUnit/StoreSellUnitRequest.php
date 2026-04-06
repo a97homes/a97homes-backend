@@ -28,6 +28,7 @@ class StoreSellUnitRequest extends FormRequest
             'phone' => ['required', 'max:20', 'string', (new Phone)->international()],
             'city_id' => ['required', Rule::exists('cities', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
+            'compound_id' => ['nullable', Rule::exists('compounds', 'id')],
             'bedrooms' => ['nullable', 'integer', 'min:1', 'max:20'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ];

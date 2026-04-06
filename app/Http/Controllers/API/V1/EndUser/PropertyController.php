@@ -2,28 +2,17 @@
 
 namespace App\Http\Controllers\API\V1\EndUser;
 
-use App\Enums\CompletionStatusEnum;
-use App\Enums\SaleTypeEnum;
 use App\Filters\DeliveryDateFilter;
 use App\Filters\NameFilter;
 use App\Filters\PaymentPlanFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\EndUser\Property\ComparePropertiesRequest;
-use App\Http\Resources\API\V1\Attribute\FilterableAttributeResource;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyCompareResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
-use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
-use App\Models\Attribute;
-use App\Models\City;
-use App\Models\Developer;
-use App\Models\Offer;
 use App\Models\Property;
-use App\Models\PropertyType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -50,9 +39,11 @@ class PropertyController extends Controller
                 AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('property_type_id'),
                 AllowedFilter::exact('city_id'),
+                AllowedFilter::exact('city.state_id'),
                 AllowedFilter::exact('compound_id'),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('sale_type'),
+                AllowedFilter::exact('is_featured'),
                 AllowedFilter::exact('compound.developer_id'),
                 AllowedFilter::exact('compound.completion_status'),
                 AllowedFilter::custom('delivery_date', new DeliveryDateFilter),
@@ -76,10 +67,7 @@ class PropertyController extends Controller
 
         $properties = $query->macroPaginate();
 
-        $result = (new PropertyCollection($properties))->toArray($request);
-        $result['filters'] = $this->getFiltersData();
-
-        return $this->ok(data: $result);
+        return $this->ok(data: new PropertyCollection($properties));
     }
 
     public function show(Property $property): JsonResponse
@@ -94,6 +82,8 @@ class PropertyController extends Controller
             'compound',
             'compound.developer:id,name',
             'compound.developer.media',
+            'compound.activeOffers',
+            'compound.activeDiscount',
             'media',
         ]);
 
@@ -119,116 +109,6 @@ class PropertyController extends Controller
         return $this->ok(data: PropertyCompareResource::collection($properties));
     }
 
-    /**
-     * Return available filter options for the property search sidebar.
-     */
-    private function getFiltersData(): array
-    {
-        $cities = City::query()
-            ->select('id', 'name', 'state_id')
-            ->with('state:id,name')
-            ->withCount('properties')
-            ->whereHas('properties')
-            ->orderByDesc('properties_count')
-            ->get();
-
-        $developers = Developer::query()
-            ->select('id', 'name')
-            ->with('media')
-            ->withCount('compounds')
-            ->whereHas('compounds.properties')
-            ->orderByDesc('compounds_count')
-            ->get();
-
-        $propertyTypes = PropertyType::query()
-            ->select('id', 'name', 'slug')
-            ->withCount('properties')
-            ->whereHas('properties')
-            ->get();
-
-        $priceRange = Property::query()
-            ->selectRaw('MIN(price) as min_price, MAX(price) as max_price')
-            ->first();
-
-        $areaRange = DB::table('attribute_property')
-            ->join('attributes', 'attributes.id', '=', 'attribute_property.attribute_id')
-            ->where('attributes.name->en', 'Area')
-            ->selectRaw('MIN(CAST(attribute_property.value AS NUMERIC)) as min_area, MAX(CAST(attribute_property.value AS NUMERIC)) as max_area')
-            ->first();
-
-        $deliveryYears = DB::table('compounds')
-            ->whereNotNull('delivery_date')
-            ->selectRaw('DISTINCT EXTRACT(YEAR FROM delivery_date) as year')
-            ->orderBy('year')
-            ->pluck('year')
-            ->map(fn ($y) => (int) $y)
-            ->values();
-
-        $hasDelivered = DB::table('compounds')
-            ->where('completion_status', CompletionStatusEnum::Completed->value)
-            ->exists();
-
-        $installmentYears = Offer::query()
-            ->where('is_active', true)
-            ->distinct()
-            ->orderBy('installment_years')
-            ->pluck('installment_years');
-
-        $downPaymentRange = Offer::query()
-            ->where('is_active', true)
-            ->selectRaw('MIN(down_payment_percentage) as min_down_payment, MAX(down_payment_percentage) as max_down_payment')
-            ->first();
-
-        $monthlyPaymentRange = Offer::query()
-            ->where('is_active', true)
-            ->selectRaw('MIN(monthly_payment) as min_monthly_payment, MAX(monthly_payment) as max_monthly_payment')
-            ->first();
-
-        $filterableAttributes = Attribute::query()
-            ->where('is_filterable', true)
-            ->with(['unit', 'activeOptions'])
-            ->get();
-
-        return [
-            'cities' => CityResource::collection($cities),
-            'developers' => $developers->map(fn ($d) => [
-                'id' => $d->id,
-                'name' => $d->name,
-                'logo_url' => $d->logo_url,
-                'compounds_count' => $d->compounds_count,
-            ]),
-            'property_types' => PropertyTypeResource::collection($propertyTypes),
-            'sale_types' => array_map(fn ($e) => [
-                'value' => $e->value,
-                'label' => $e->name,
-            ], SaleTypeEnum::cases()),
-            'price_range' => [
-                'min' => (int) ($priceRange->min_price ?? 0),
-                'max' => (int) ($priceRange->max_price ?? 0),
-            ],
-            'area_range' => [
-                'min' => (int) ($areaRange->min_area ?? 0),
-                'max' => (int) ($areaRange->max_area ?? 0),
-            ],
-            'delivery_dates' => [
-                'has_delivered' => $hasDelivered,
-                'years' => $deliveryYears,
-            ],
-            'payment_plans' => [
-                'installment_years' => $installmentYears,
-                'down_payment_range' => [
-                    'min' => (float) ($downPaymentRange->min_down_payment ?? 0),
-                    'max' => (float) ($downPaymentRange->max_down_payment ?? 0),
-                ],
-                'monthly_payment_range' => [
-                    'min' => (int) ($monthlyPaymentRange->min_monthly_payment ?? 0),
-                    'max' => (int) ($monthlyPaymentRange->max_monthly_payment ?? 0),
-                ],
-            ],
-            'attributes' => FilterableAttributeResource::collection($filterableAttributes),
-        ];
-    }
-
     private function loadFavoritesForAuthUser(QueryBuilder $query): void
     {
         $userId = authUserId();
@@ -244,8 +124,8 @@ class PropertyController extends Controller
 
     private function applyAttributeFilters(QueryBuilder $query, Request $request): void
     {
-        // Filter by price range: ?price_min=1000000&price_max=5000000
-        $this->applyNumericAttributeRange($query, $request, 'price', 'Total Price');
+        // Filter by price range on the property price column: ?price_min=1000000&price_max=5000000
+        $this->applyDirectPriceRange($query, $request);
 
         // Filter by area range: ?area_min=100&area_max=300
         $this->applyNumericAttributeRange($query, $request, 'area', 'Area');
@@ -278,6 +158,20 @@ class PropertyController extends Controller
                         ->where('attribute_property.value', '1');
                 });
             }
+        }
+    }
+
+    private function applyDirectPriceRange(QueryBuilder $query, Request $request): void
+    {
+        $min = $request->input('price_min');
+        $max = $request->input('price_max');
+
+        if ($min !== null) {
+            $query->where('price', '>=', (int) $min);
+        }
+
+        if ($max !== null) {
+            $query->where('price', '<=', (int) $max);
         }
     }
 
