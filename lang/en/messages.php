@@ -68,5 +68,10 @@ return [
     'media_compound_deleted_successfully' => 'Compound media deleted successfully.',
     'company_info_updated_successfully' => 'Company info updated successfully.',
     'contact_deleted_successfully' => 'Contact deleted successfully.',
+    'consultant_created_successfully' => 'Consultant created successfully.',
+    'consultant_updated_successfully' => 'Consultant updated successfully.',
+    'consultant_deleted_successfully' => 'Consultant deleted successfully.',
+    'consultant_verified_successfully' => 'Consultant verified successfully.',
+    'consultant_not_found' => 'Consultant not found.',
 
 ];

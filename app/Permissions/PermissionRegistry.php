@@ -161,6 +161,18 @@ class PermissionRegistry
     public const ADMIN_COMPANY_INFO_UPDATE = 'admin.company_info.update';
     // ==================== CompanyInfo Permissions ====================
 
+    // ==================== Consultant Permissions ======================
+    public const ADMIN_CONSULTANTS_INDEX = 'admin.consultants.index';
+
+    public const ADMIN_CONSULTANTS_STORE = 'admin.consultants.store';
+
+    public const ADMIN_CONSULTANTS_SHOW = 'admin.consultants.show';
+
+    public const ADMIN_CONSULTANTS_UPDATE = 'admin.consultants.update';
+
+    public const ADMIN_CONSULTANTS_DESTROY = 'admin.consultants.destroy';
+    // ==================== Consultant Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

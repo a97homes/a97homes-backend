@@ -4,6 +4,7 @@ use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CompanyInfoController;
 use App\Http\Controllers\API\V1\Admin\CompoundController;
+use App\Http\Controllers\API\V1\Admin\ConsultantController;
 use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
@@ -97,6 +98,11 @@ Route::apiResource('compounds', CompoundController::class);
 Route::post('compounds/{compound}/media', [CompoundController::class, 'addMedia']);
 Route::delete('compounds/{compound}/media/{media}', [CompoundController::class, 'deleteMedia']);
 // ======================Compound Routes=================
+
+// ======================Consultant Routes==================
+Route::get('consultants/dropdown ', [ConsultantController::class, 'dropdown']);
+Route::apiResource('consultants', ConsultantController::class);
+// ======================Consultant Routes==================
 
 // ======================Contact Routes==================
 Route::apiResource('contacts', ContactController::class)->only(['index', 'show', 'destroy']);

@@ -5,6 +5,7 @@ use App\Http\Controllers\API\V1\EndUser\AttributeController;
 use App\Http\Controllers\API\V1\EndUser\CityController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
 use App\Http\Controllers\API\V1\EndUser\CompoundController;
+use App\Http\Controllers\API\V1\EndUser\ConsultantController;
 use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\CountryController;
 use App\Http\Controllers\API\V1\EndUser\DeveloperController;
@@ -74,6 +75,12 @@ Route::get('compounds', [CompoundController::class, 'index']);
 Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 // =========================Compounds==========================
+
+// =========================Consultants==========================
+Route::get('consultants', [ConsultantController::class, 'index']);
+Route::post('consultants/verify', [ConsultantController::class, 'verify']);
+Route::get('consultants/{consultant}', [ConsultantController::class, 'show']);
+// =========================Consultants==========================
 
 // =========================Contact==========================
 Route::post('contact', [ContactController::class, 'store']);
