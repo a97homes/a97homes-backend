@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call([OfferSeeder::class]);
         $this->call([BannerSeeder::class]);
         $this->call([FeaturedSeeder::class]);
+        $this->call([ConsultantSeeder::class]);
     }
 }
