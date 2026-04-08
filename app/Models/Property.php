@@ -27,7 +27,7 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
+    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'consultant_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
 
     public array $translatable = ['name'];
 
@@ -58,6 +58,11 @@ class Property extends Model implements HasMedia
     public function compound(): BelongsTo
     {
         return $this->belongsTo(Compound::class);
+    }
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(Consultant::class);
     }
 
     public function propertyFavorites(): HasMany

@@ -38,6 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call([BannerSeeder::class]);
         $this->call([FeaturedSeeder::class]);
         $this->call([ConsultantSeeder::class]);
-		
+        $this->call([ConsultantReviewSeeder::class]);
     }
 }

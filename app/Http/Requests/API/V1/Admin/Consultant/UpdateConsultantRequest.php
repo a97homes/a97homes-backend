@@ -21,6 +21,7 @@ class UpdateConsultantRequest extends FormRequest
             'job_title' => ['sometimes', 'string', 'max:255'],
             'sales_percentage' => ['sometimes', 'numeric', 'min:0', 'max:100'],
             'image' => ['nullable', 'string', 'max:2048'],
+            'cover_image' => ['nullable', 'string', 'max:2048'],
             'is_featured' => ['sometimes', 'boolean'],
             'phones' => ['sometimes', 'array', 'min:1'],
             'phones.*' => ['required', 'string', 'max:20'],

@@ -12,12 +12,17 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use CreatedAtFilter;
     use HasApiTokens;
+    use InteractsWithMedia;
+
+    public const MEDIA_COLLECTION_AVATAR = 'user_avatar';
 
     protected $guard_name = 'web';
 

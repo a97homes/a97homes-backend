@@ -80,6 +80,8 @@ Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 Route::get('consultants', [ConsultantController::class, 'index']);
 Route::post('consultants/verify', [ConsultantController::class, 'verify']);
 Route::get('consultants/{consultant}', [ConsultantController::class, 'show']);
+Route::get('consultants/{consultant}/properties', [ConsultantController::class, 'properties']);
+Route::get('consultants/{consultant}/reviews', [ConsultantController::class, 'reviews']);
 // =========================Consultants==========================
 
 // =========================Contact==========================
@@ -103,5 +105,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('property-favorites', [PropertyFavoriteController::class, 'index']);
     Route::post('property-favorites', [PropertyFavoriteController::class, 'store']);
     Route::delete('property-favorites/{property}', [PropertyFavoriteController::class, 'destroy']);
+
+    Route::post('consultants/{consultant}/reviews', [ConsultantController::class, 'storeReview']);
 });
 // =========================Favorites==========================

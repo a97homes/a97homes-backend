@@ -20,6 +20,7 @@ class Consultant extends Model
         'job_title',
         'sales_percentage',
         'image',
+        'cover_image',
         'is_featured',
     ];
 
@@ -34,6 +35,16 @@ class Consultant extends Model
     public function phones(): HasMany
     {
         return $this->hasMany(ConsultantPhone::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ConsultantReview::class);
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class);
     }
 
     /**

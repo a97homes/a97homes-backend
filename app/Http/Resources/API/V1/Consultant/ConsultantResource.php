@@ -22,8 +22,17 @@ class ConsultantResource extends JsonResource
             'job_title' => $this->whenHas('job_title', fn () => $consultant->job_title),
             'sales_percentage' => $this->whenHas('sales_percentage', fn () => $consultant->sales_percentage),
             'image' => $this->whenHas('image', fn () => $consultant->image),
+            'cover_image' => $this->whenHas('cover_image', fn () => $consultant->cover_image),
             'is_featured' => $this->whenHas('is_featured', fn () => $consultant->is_featured),
             'phones' => ConsultantPhoneResource::collection($this->whenLoaded('phones')),
+            'reviews_count' => $this->when($consultant->relationLoaded('reviews') || isset($consultant->reviews_count), fn () => $consultant->reviews_count ?? $consultant->reviews->count()),
+            'average_rating' => $this->when($consultant->relationLoaded('reviews') || isset($consultant->average_rating), fn () => $consultant->average_rating ?? round($consultant->reviews->avg('overall_rating'), 2)),
+            'rating_breakdown' => $this->when($consultant->relationLoaded('reviews') && $consultant->reviews->isNotEmpty(), fn () => [
+                'local_knowledge' => round($consultant->reviews->avg('local_knowledge_rating'), 2),
+                'process_expertise' => round($consultant->reviews->avg('process_expertise_rating'), 2),
+                'response_speed' => round($consultant->reviews->avg('response_speed_rating'), 2),
+                'negotiation_skills' => round($consultant->reviews->avg('negotiation_skills_rating'), 2),
+            ]),
             'created_at' => $this->whenHas('created_at', fn () => $consultant->created_at),
         ];
     }

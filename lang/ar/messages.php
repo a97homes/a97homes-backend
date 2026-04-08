@@ -73,5 +73,6 @@ return [
     'consultant_deleted_successfully' => 'تم حذف المستشار بنجاح.',
     'consultant_verified_successfully' => 'تم التحقق من المستشار بنجاح.',
     'consultant_not_found' => 'المستشار غير موجود.',
+    'review_created_successfully' => 'تم إرسال التقييم بنجاح.',
 
 ];

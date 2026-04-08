@@ -73,5 +73,6 @@ return [
     'consultant_deleted_successfully' => 'Consultant deleted successfully.',
     'consultant_verified_successfully' => 'Consultant verified successfully.',
     'consultant_not_found' => 'Consultant not found.',
+    'review_created_successfully' => 'Review submitted successfully.',
 
 ];
