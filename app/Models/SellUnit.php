@@ -19,7 +19,6 @@ class SellUnit extends Model
         'city_id',
         'property_type_id',
         'compound_id',
-        'bedrooms',
         'notes',
         'status',
     ];

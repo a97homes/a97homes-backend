@@ -24,7 +24,6 @@ class SellUnitFactory extends Factory
             'phone' => fake()->e164PhoneNumber(),
             'city_id' => City::inRandomOrder()->value('id') ?? 1,
             'property_type_id' => PropertyType::inRandomOrder()->value('id') ?? 1,
-            'bedrooms' => fake()->numberBetween(1, 6),
             'notes' => fake()->optional()->sentence(),
             'status' => SellUnitStatusEnum::PENDING,
         ];
