@@ -22,6 +22,13 @@ class Country extends Model
         'phone_code',
     ];
 
+    public function getFlagUrlAttribute(): ?string
+    {
+        $path = 'flags/'.strtolower($this->code).'.png';
+
+        return file_exists(public_path($path)) ? asset($path) : null;
+    }
+
     public function states(): HasMany
     {
         return $this->hasMany(State::class);

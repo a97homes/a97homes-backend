@@ -14,6 +14,7 @@ class CountrySeeder extends Seeder
     {
         $countries = [
             ['name' => ['en' => 'Egypt', 'ar' => 'مصر'], 'code' => 'EG', 'phone_code' => '+20'],
+            ['name' => ['en' => 'United States', 'ar' => 'الولايات المتحدة'], 'code' => 'US', 'phone_code' => '+1'],
             ['name' => ['en' => 'Saudi Arabia', 'ar' => 'السعودية'], 'code' => 'SA', 'phone_code' => '+966'],
             ['name' => ['en' => 'United Arab Emirates', 'ar' => 'الإمارات'], 'code' => 'AE', 'phone_code' => '+971'],
             ['name' => ['en' => 'Kuwait', 'ar' => 'الكويت'], 'code' => 'KW', 'phone_code' => '+965'],
@@ -30,8 +31,24 @@ class CountrySeeder extends Seeder
             ['name' => ['en' => 'Palestine', 'ar' => 'فلسطين'], 'code' => 'PS', 'phone_code' => '+970'],
         ];
 
-        foreach ($countries as $country) {
-            Country::create($country);
+        $flagsPath = public_path('flags');
+        if (! is_dir($flagsPath)) {
+            mkdir($flagsPath, 0755, true);
+        }
+
+        foreach ($countries as $countryData) {
+            Country::updateOrCreate(
+                ['code' => $countryData['code']],
+                $countryData
+            );
+
+            $code = strtolower($countryData['code']);
+            $filePath = $flagsPath."/{$code}.png";
+
+            if (! file_exists($filePath)) {
+                $image = file_get_contents("https://flagcdn.com/w320/{$code}.png");
+                file_put_contents($filePath, $image);
+            }
         }
     }
 }

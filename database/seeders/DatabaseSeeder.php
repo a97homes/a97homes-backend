@@ -39,5 +39,7 @@ class DatabaseSeeder extends Seeder
         $this->call([FeaturedSeeder::class]);
         $this->call([ConsultantSeeder::class]);
         $this->call([ConsultantReviewSeeder::class]);
-    }
+        $this->call([PropertyMediaSeeder::class]);
+    
+	}
 }
