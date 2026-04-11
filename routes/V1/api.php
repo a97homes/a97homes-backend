@@ -12,6 +12,7 @@ use App\Http\Controllers\API\V1\EndUser\DeveloperController;
 use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
+use App\Http\Controllers\API\V1\EndUser\PaymentPlanController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
@@ -75,6 +76,10 @@ Route::get('compounds', [CompoundController::class, 'index']);
 Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 // =========================Compounds==========================
+
+// =========================Payment Plans==========================
+Route::get('payment-plans', [PaymentPlanController::class, 'index']);
+// =========================Payment Plans==========================
 
 // =========================Consultants==========================
 Route::get('consultants', [ConsultantController::class, 'index']);

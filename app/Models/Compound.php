@@ -98,6 +98,16 @@ class Compound extends Model implements HasMedia
             ->latest('percentage');
     }
 
+    public function paymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class);
+    }
+
+    public function activePaymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class)->where('is_active', true);
+    }
+
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);

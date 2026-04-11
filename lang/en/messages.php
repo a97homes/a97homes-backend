@@ -78,5 +78,8 @@ return [
     'password_updated_successfully' => 'Password updated successfully.',
     'avatar_updated_successfully' => 'Avatar updated successfully.',
     'avatar_deleted_successfully' => 'Avatar deleted successfully.',
+    'payment_plan_created_successfully' => 'Payment plan created successfully.',
+    'payment_plan_updated_successfully' => 'Payment plan updated successfully.',
+    'payment_plan_deleted_successfully' => 'Payment plan deleted successfully.',
 
 ];

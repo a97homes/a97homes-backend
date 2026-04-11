@@ -78,5 +78,8 @@ return [
     'password_updated_successfully' => 'تم تحديث كلمة المرور بنجاح.',
     'avatar_updated_successfully' => 'تم تحديث الصورة الشخصية بنجاح.',
     'avatar_deleted_successfully' => 'تم حذف الصورة الشخصية بنجاح.',
+    'payment_plan_created_successfully' => 'تم إنشاء خطة السداد بنجاح.',
+    'payment_plan_updated_successfully' => 'تم تحديث خطة السداد بنجاح.',
+    'payment_plan_deleted_successfully' => 'تم حذف خطة السداد بنجاح.',
 
 ];

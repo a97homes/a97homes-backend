@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
+use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
@@ -112,3 +113,9 @@ Route::apiResource('contacts', ContactController::class)->only(['index', 'show',
 Route::get('company-info', [CompanyInfoController::class, 'show']);
 Route::put('company-info', [CompanyInfoController::class, 'update']);
 // ======================Company Info Routes==================
+
+// ======================Payment Plan Routes==================
+Route::apiResource('payment-plans', PaymentPlanController::class)->parameters([
+    'payment-plans' => 'paymentPlan',
+]);
+// ======================Payment Plan Routes==================

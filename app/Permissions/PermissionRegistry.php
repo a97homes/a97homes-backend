@@ -173,6 +173,18 @@ class PermissionRegistry
     public const ADMIN_CONSULTANTS_DESTROY = 'admin.consultants.destroy';
     // ==================== Consultant Permissions ======================
 
+    // ==================== PaymentPlan Permissions ======================
+    public const ADMIN_PAYMENT_PLANS_INDEX = 'admin.payment_plans.index';
+
+    public const ADMIN_PAYMENT_PLANS_STORE = 'admin.payment_plans.store';
+
+    public const ADMIN_PAYMENT_PLANS_SHOW = 'admin.payment_plans.show';
+
+    public const ADMIN_PAYMENT_PLANS_UPDATE = 'admin.payment_plans.update';
+
+    public const ADMIN_PAYMENT_PLANS_DESTROY = 'admin.payment_plans.destroy';
+    // ==================== PaymentPlan Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
