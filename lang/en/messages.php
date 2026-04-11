@@ -74,5 +74,9 @@ return [
     'consultant_verified_successfully' => 'Consultant verified successfully.',
     'consultant_not_found' => 'Consultant not found.',
     'review_created_successfully' => 'Review submitted successfully.',
+    'profile_updated_successfully' => 'Profile updated successfully.',
+    'password_updated_successfully' => 'Password updated successfully.',
+    'avatar_updated_successfully' => 'Avatar updated successfully.',
+    'avatar_deleted_successfully' => 'Avatar deleted successfully.',
 
 ];

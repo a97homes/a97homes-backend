@@ -74,5 +74,9 @@ return [
     'consultant_verified_successfully' => 'تم التحقق من المستشار بنجاح.',
     'consultant_not_found' => 'المستشار غير موجود.',
     'review_created_successfully' => 'تم إرسال التقييم بنجاح.',
+    'profile_updated_successfully' => 'تم تحديث الملف الشخصي بنجاح.',
+    'password_updated_successfully' => 'تم تحديث كلمة المرور بنجاح.',
+    'avatar_updated_successfully' => 'تم تحديث الصورة الشخصية بنجاح.',
+    'avatar_deleted_successfully' => 'تم حذف الصورة الشخصية بنجاح.',
 
 ];
