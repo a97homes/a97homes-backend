@@ -6,9 +6,13 @@ use App\Models\City;
 use App\Models\Compound;
 use App\Models\Property;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class FeaturedSeeder extends Seeder
 {
+    private const IMAGE_DIR = 'seeders/cities';
+
     public function run(): void
     {
         $this->markFeaturedCompounds();
@@ -50,15 +54,21 @@ class FeaturedSeeder extends Seeder
     private function addCityImages(): void
     {
         $cityImages = [
-            'New Cairo' => 'https://placehold.co/623x343/2c3e50/ffffff/png?text=New+Cairo',
-            '6th of October' => 'https://placehold.co/299x343/1a1a2e/ffffff/png?text=6th+of+October',
-            'Sheikh Zayed' => 'https://placehold.co/299x343/0a3d62/ffffff/png?text=Sheikh+Zayed',
-            'El Alamein' => 'https://placehold.co/623x343/16a085/ffffff/png?text=El+Alamein',
-            'Hurghada' => 'https://placehold.co/299x343/e74c3c/ffffff/png?text=Hurghada',
-            'Maadi' => 'https://placehold.co/299x343/8e44ad/ffffff/png?text=Maadi',
-            'Nasr City' => 'https://placehold.co/299x343/d35400/ffffff/png?text=Nasr+City',
-            'El Shorouk' => 'https://placehold.co/299x343/27ae60/ffffff/png?text=El+Shorouk',
+            'New Cairo' => 'https://images.unsplash.com/photo-1549918864-48ac978761a4?w=623&h=343&fit=crop&q=80',
+            '6th of October' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=299&h=343&fit=crop&q=80',
+            'Sheikh Zayed' => 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=299&h=343&fit=crop&q=80',
+            'El Alamein' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=623&h=343&fit=crop&q=80',
+            'Hurghada' => 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=299&h=343&fit=crop&q=80',
+            'Maadi' => 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=299&h=343&fit=crop&q=80',
+            'Nasr City' => 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=299&h=343&fit=crop&q=80',
+            'El Shorouk' => 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=299&h=343&fit=crop&q=80',
         ];
+
+        $localDir = public_path(self::IMAGE_DIR);
+
+        if (! File::isDirectory($localDir)) {
+            File::makeDirectory($localDir, 0755, true);
+        }
 
         foreach ($cityImages as $cityNameEn => $imageUrl) {
             $city = City::where('name->en', $cityNameEn)->first();
@@ -67,12 +77,35 @@ class FeaturedSeeder extends Seeder
                 continue;
             }
 
-            if ($city->getFirstMedia(City::MEDIA_COLLECTION_IMAGE) === null) {
-                $city
-                    ->addMediaFromUrl($imageUrl)
-                    ->usingFileName('city_'.str_replace(' ', '_', strtolower($cityNameEn)).'.png')
-                    ->toMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+            if ($city->getFirstMedia(City::MEDIA_COLLECTION_IMAGE) !== null) {
+                continue;
             }
+
+            $slug = str_replace(' ', '_', strtolower($cityNameEn));
+            $filename = "city_{$slug}.jpg";
+            $localPath = $localDir.'/'.$filename;
+
+            if (! File::exists($localPath)) {
+                try {
+                    $response = Http::timeout(30)
+                        ->withOptions(['allow_redirects' => true])
+                        ->get($imageUrl);
+
+                    if ($response->successful()) {
+                        File::put($localPath, $response->body());
+                    } else {
+                        continue;
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            $city
+                ->addMedia($localPath)
+                ->preservingOriginal()
+                ->usingFileName($filename)
+                ->toMediaCollection(City::MEDIA_COLLECTION_IMAGE);
         }
     }
 }

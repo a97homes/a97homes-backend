@@ -4,9 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\Banner;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class BannerSeeder extends Seeder
 {
+    private const IMAGE_DIR = 'seeders/banners';
+
     public function run(): void
     {
         $banners = [
@@ -22,7 +26,7 @@ class BannerSeeder extends Seeder
                 'link' => null,
                 'is_active' => true,
                 'sort_order' => 1,
-                'image' => 'https://placehold.co/1440x430/1a1a2e/ffffff/png?text=Grand+Coast+Resort',
+                'image' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1440&h=430&fit=crop&q=80',
             ],
             [
                 'title' => [
@@ -36,7 +40,7 @@ class BannerSeeder extends Seeder
                 'link' => null,
                 'is_active' => true,
                 'sort_order' => 2,
-                'image' => 'https://placehold.co/1440x430/0a3d62/ffffff/png?text=North+Coast+Summer',
+                'image' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1440&h=430&fit=crop&q=80',
             ],
             [
                 'title' => [
@@ -50,11 +54,17 @@ class BannerSeeder extends Seeder
                 'link' => null,
                 'is_active' => true,
                 'sort_order' => 3,
-                'image' => 'https://placehold.co/1440x430/2c3e50/ffffff/png?text=New+Capital+Launch',
+                'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1440&h=430&fit=crop&q=80',
             ],
         ];
 
-        foreach ($banners as $bannerData) {
+        $localDir = public_path(self::IMAGE_DIR);
+
+        if (! File::isDirectory($localDir)) {
+            File::makeDirectory($localDir, 0755, true);
+        }
+
+        foreach ($banners as $index => $bannerData) {
             $imageUrl = $bannerData['image'];
             unset($bannerData['image']);
 
@@ -63,12 +73,34 @@ class BannerSeeder extends Seeder
                 $bannerData,
             );
 
-            if ($banner->getFirstMedia(Banner::MEDIA_COLLECTION_IMAGE) === null) {
-                $banner
-                    ->addMediaFromUrl($imageUrl)
-                    ->usingFileName("banner_{$banner->id}.png")
-                    ->toMediaCollection(Banner::MEDIA_COLLECTION_IMAGE);
+            if ($banner->getFirstMedia(Banner::MEDIA_COLLECTION_IMAGE) !== null) {
+                continue;
             }
+
+            $filename = 'banner_'.($index + 1).'.jpg';
+            $localPath = $localDir.'/'.$filename;
+
+            if (! File::exists($localPath)) {
+                try {
+                    $response = Http::timeout(30)
+                        ->withOptions(['allow_redirects' => true])
+                        ->get($imageUrl);
+
+                    if ($response->successful()) {
+                        File::put($localPath, $response->body());
+                    } else {
+                        continue;
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            $banner
+                ->addMedia($localPath)
+                ->preservingOriginal()
+                ->usingFileName($filename)
+                ->toMediaCollection(Banner::MEDIA_COLLECTION_IMAGE);
         }
     }
 }
