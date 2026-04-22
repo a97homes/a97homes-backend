@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V1\Admin\ConsultantController;
 use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
+use App\Http\Controllers\API\V1\Admin\FaqController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
@@ -119,3 +120,7 @@ Route::apiResource('payment-plans', PaymentPlanController::class)->parameters([
     'payment-plans' => 'paymentPlan',
 ]);
 // ======================Payment Plan Routes==================
+
+// ======================Faq Routes==================
+Route::apiResource('faqs', FaqController::class);
+// ======================Faq Routes==================

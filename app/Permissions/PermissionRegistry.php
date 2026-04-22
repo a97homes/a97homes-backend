@@ -185,6 +185,18 @@ class PermissionRegistry
     public const ADMIN_PAYMENT_PLANS_DESTROY = 'admin.payment_plans.destroy';
     // ==================== PaymentPlan Permissions ======================
 
+    // ==================== Faq Permissions ======================
+    public const ADMIN_FAQS_INDEX = 'admin.faqs.index';
+
+    public const ADMIN_FAQS_STORE = 'admin.faqs.store';
+
+    public const ADMIN_FAQS_SHOW = 'admin.faqs.show';
+
+    public const ADMIN_FAQS_UPDATE = 'admin.faqs.update';
+
+    public const ADMIN_FAQS_DESTROY = 'admin.faqs.destroy';
+    // ==================== Faq Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

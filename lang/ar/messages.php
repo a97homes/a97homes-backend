@@ -81,5 +81,8 @@ return [
     'payment_plan_created_successfully' => 'تم إنشاء خطة السداد بنجاح.',
     'payment_plan_updated_successfully' => 'تم تحديث خطة السداد بنجاح.',
     'payment_plan_deleted_successfully' => 'تم حذف خطة السداد بنجاح.',
+    'faq_created_successfully' => 'تم إنشاء السؤال الشائع بنجاح.',
+    'faq_updated_successfully' => 'تم تحديث السؤال الشائع بنجاح.',
+    'faq_deleted_successfully' => 'تم حذف السؤال الشائع بنجاح.',
 
 ];

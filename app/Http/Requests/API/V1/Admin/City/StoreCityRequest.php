@@ -27,6 +27,11 @@ class StoreCityRequest extends FormRequest
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->en')],
             'state_id' => ['required', Rule::exists('states', 'id')],
+            'description' => ['nullable', 'array'],
+            'description.ar' => ['nullable', 'string'],
+            'description.en' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
         ];
     }
 }

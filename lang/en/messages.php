@@ -81,5 +81,8 @@ return [
     'payment_plan_created_successfully' => 'Payment plan created successfully.',
     'payment_plan_updated_successfully' => 'Payment plan updated successfully.',
     'payment_plan_deleted_successfully' => 'Payment plan deleted successfully.',
+    'faq_created_successfully' => 'FAQ created successfully.',
+    'faq_updated_successfully' => 'FAQ updated successfully.',
+    'faq_deleted_successfully' => 'FAQ deleted successfully.',
 
 ];

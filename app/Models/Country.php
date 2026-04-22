@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\CreatedAtFilter;
 use App\Traits\HasArabicSearch;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
@@ -12,6 +13,7 @@ class Country extends Model
 {
     use CreatedAtFilter;
     use HasArabicSearch;
+    use HasFactory;
     use HasTranslations;
 
     public array $translatable = ['name'];

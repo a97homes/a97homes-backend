@@ -23,6 +23,7 @@ class UpdateCompanyInfoRequest extends FormRequest
     {
         return [
             'phone' => ['nullable', 'string', 'max:20'],
+            'whatsapp_phone' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
             'working_hours' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:1000'],

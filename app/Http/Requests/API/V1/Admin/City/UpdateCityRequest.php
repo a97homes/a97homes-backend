@@ -24,9 +24,14 @@ class UpdateCityRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('countries', 'name->ar')->ignore($this->city->id)],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('countries', 'name->en')->ignore($this->city->id)],
+            'name.ar' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->ar')->ignore($this->city->id)],
+            'name.en' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->en')->ignore($this->city->id)],
             'state_id' => ['required', Rule::exists('states', 'id')],
+            'description' => ['nullable', 'array'],
+            'description.ar' => ['nullable', 'string'],
+            'description.en' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
         ];
     }
 }

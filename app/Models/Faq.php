@@ -1,42 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Spatie\Translatable\HasTranslations;
 
-class Offer extends Model
+class Faq extends Model
 {
+    /** @use HasFactory<\Database\Factories\FaqFactory> */
     use HasFactory;
+
     use HasTranslations;
 
-    public array $translatable = ['description'];
+    public array $translatable = ['question', 'answer'];
 
     protected $fillable = [
-        'compound_id',
-        'installment_years',
-        'down_payment_percentage',
-        'monthly_payment',
-        'description',
+        'faqable_id',
+        'faqable_type',
+        'question',
+        'answer',
+        'sort_order',
         'is_active',
     ];
 
     protected function casts(): array
     {
         return [
-            'down_payment_percentage' => 'decimal:2',
-            'monthly_payment' => 'integer',
-            'installment_years' => 'integer',
+            'sort_order' => 'integer',
             'is_active' => 'boolean',
         ];
     }
 
-    public function compound(): BelongsTo
+    public function faqable(): MorphTo
     {
-        return $this->belongsTo(Compound::class);
+        return $this->morphTo();
     }
 
     public function scopeActive(Builder $query): Builder

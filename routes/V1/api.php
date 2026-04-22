@@ -40,6 +40,13 @@ Route::get('states/{state}/cities', [StateController::class, 'cities']);
 Route::get('cities/popular', [CityController::class, 'popular']);
 // =========================Location==========================
 
+// =========================City (area) detail page==========================
+Route::get('cities/{city}', [CityController::class, 'show']);
+Route::get('cities/{city}/offers', [CityController::class, 'offers']);
+Route::get('cities/{city}/compounds', [CityController::class, 'compounds']);
+Route::get('cities/{city}/faqs', [CityController::class, 'faqs']);
+// =========================City (area) detail page==========================
+
 // =========================Dropdowns==========================
 Route::prefix('dropdowns')->group(function () {
     Route::get('developers', [DropdownController::class, 'developers']);
