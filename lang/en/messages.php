@@ -100,5 +100,9 @@ return [
     'notification_marked_read' => 'Notification marked as read.',
     'notifications_all_marked_read' => 'All notifications have been marked as read.',
     'notification_deleted' => 'Notification deleted.',
+    'saved_search_created' => 'Search saved successfully.',
+    'saved_search_updated' => 'Saved search updated.',
+    'saved_search_deleted' => 'Saved search deleted.',
+    'saved_search_not_found' => 'Saved search not found.',
 
 ];

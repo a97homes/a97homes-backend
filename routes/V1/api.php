@@ -23,6 +23,7 @@ use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
 use App\Http\Controllers\API\V1\EndUser\RegisterController;
+use App\Http\Controllers\API\V1\EndUser\SavedSearchController;
 use App\Http\Controllers\API\V1\EndUser\SearchController;
 use App\Http\Controllers\API\V1\EndUser\SellUnitController;
 use App\Http\Controllers\API\V1\EndUser\StateController;
@@ -159,5 +160,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
     Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
     Route::delete('notifications/{id}', [NotificationController::class, 'destroy']);
+
+    Route::post('saved-searches/{savedSearch}/run', [SavedSearchController::class, 'run']);
+    Route::apiResource('saved-searches', SavedSearchController::class)->parameters([
+        'saved-searches' => 'savedSearch',
+    ]);
 });
 // =========================Favorites==========================

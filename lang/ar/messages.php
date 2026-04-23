@@ -100,5 +100,9 @@ return [
     'notification_marked_read' => 'تم تعليم الإشعار كمقروء.',
     'notifications_all_marked_read' => 'تم تعليم جميع الإشعارات كمقروءة.',
     'notification_deleted' => 'تم حذف الإشعار.',
+    'saved_search_created' => 'تم حفظ البحث بنجاح.',
+    'saved_search_updated' => 'تم تحديث البحث المحفوظ.',
+    'saved_search_deleted' => 'تم حذف البحث المحفوظ.',
+    'saved_search_not_found' => 'البحث المحفوظ غير موجود.',
 
 ];
