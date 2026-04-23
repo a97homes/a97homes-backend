@@ -96,5 +96,9 @@ return [
     'newsletter_subscriber_not_found' => 'لم يتم العثور على اشتراك لهذا البريد الإلكتروني.',
     'newsletter_invalid_token' => 'رابط إلغاء الاشتراك غير صالح أو منتهي الصلاحية.',
     'newsletter_subscriber_deleted' => 'تم حذف المشترك بنجاح.',
+    'notification_not_found' => 'الإشعار غير موجود.',
+    'notification_marked_read' => 'تم تعليم الإشعار كمقروء.',
+    'notifications_all_marked_read' => 'تم تعليم جميع الإشعارات كمقروءة.',
+    'notification_deleted' => 'تم حذف الإشعار.',
 
 ];

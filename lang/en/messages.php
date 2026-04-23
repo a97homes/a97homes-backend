@@ -96,5 +96,9 @@ return [
     'newsletter_subscriber_not_found' => 'No newsletter subscription was found for this email.',
     'newsletter_invalid_token' => 'The unsubscribe link is invalid or has expired.',
     'newsletter_subscriber_deleted' => 'Newsletter subscriber deleted successfully.',
+    'notification_not_found' => 'Notification not found.',
+    'notification_marked_read' => 'Notification marked as read.',
+    'notifications_all_marked_read' => 'All notifications have been marked as read.',
+    'notification_deleted' => 'Notification deleted.',
 
 ];

@@ -17,6 +17,7 @@ use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
 use App\Http\Controllers\API\V1\EndUser\NewsletterController;
+use App\Http\Controllers\API\V1\EndUser\NotificationController;
 use App\Http\Controllers\API\V1\EndUser\PaymentPlanController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
@@ -152,5 +153,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('consultants/{consultant}/reviews', [ConsultantController::class, 'storeReview']);
     Route::post('compounds/{compound}/reviews', [CompoundController::class, 'storeReview']);
+
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+    Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::delete('notifications/{id}', [NotificationController::class, 'destroy']);
 });
 // =========================Favorites==========================
