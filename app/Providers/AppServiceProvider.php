@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Chatbot\ChatbotResponder;
+use App\Services\Chatbot\RuleBasedChatbotResponder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+
+        $this->app->bind(ChatbotResponder::class, RuleBasedChatbotResponder::class);
     }
 
     /**

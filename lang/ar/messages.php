@@ -108,5 +108,6 @@ return [
     'page_updated_successfully' => 'تم تحديث الصفحة بنجاح.',
     'page_deleted_successfully' => 'تم حذف الصفحة بنجاح.',
     'mortgage_years_required' => 'عدد السنوات يجب أن يكون على الأقل 1.',
+    'chatbot_conversation_not_found' => 'المحادثة غير موجودة.',
 
 ];

@@ -6,6 +6,7 @@ use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\V1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\V1\EndUser\ArticleController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
+use App\Http\Controllers\API\V1\EndUser\ChatbotController;
 use App\Http\Controllers\API\V1\EndUser\CityController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
 use App\Http\Controllers\API\V1\EndUser\CompoundController;
@@ -153,6 +154,10 @@ Route::get('pages/{slug}', [PageController::class, 'show']);
 Route::post('mortgage/calculate', [MortgageController::class, 'calculate']);
 // =========================Mortgage Calculator==========================
 
+// =========================Chatbot==========================
+Route::post('chatbot/messages', [ChatbotController::class, 'send']);
+// =========================Chatbot==========================
+
 // =========================Favorites==========================
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('favorites', [FavoriteController::class, 'index']);
@@ -176,5 +181,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('saved-searches', SavedSearchController::class)->parameters([
         'saved-searches' => 'savedSearch',
     ]);
+
+    Route::get('chatbot/conversations', [ChatbotController::class, 'conversations']);
+    Route::get('chatbot/conversations/{chatbotConversation}', [ChatbotController::class, 'showConversation']);
 });
 // =========================Favorites==========================
