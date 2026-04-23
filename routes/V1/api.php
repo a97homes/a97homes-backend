@@ -102,6 +102,7 @@ Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 Route::get('compounds/{compound}/reviews', [CompoundController::class, 'reviews']);
 Route::get('compounds/{compound}/similar', [CompoundController::class, 'similar']);
+Route::get('compounds/{compound}/phases', [\App\Http\Controllers\API\V1\EndUser\PhaseController::class, 'byCompound']);
 // =========================Compounds==========================
 
 // =========================Payment Plans==========================

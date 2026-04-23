@@ -108,5 +108,9 @@ return [
     'page_updated_successfully' => 'Page updated successfully.',
     'page_deleted_successfully' => 'Page deleted successfully.',
     'mortgage_years_required' => 'Years must be at least 1.',
+    'chatbot_conversation_not_found' => 'Conversation not found.',
+    'phase_created_successfully' => 'Phase created successfully.',
+    'phase_updated_successfully' => 'Phase updated successfully.',
+    'phase_deleted_successfully' => 'Phase deleted successfully.',
 
 ];

@@ -229,6 +229,18 @@ class PermissionRegistry
     public const ADMIN_PAGES_DESTROY = 'admin.pages.destroy';
     // ==================== Page Permissions ======================
 
+    // ==================== Phase Permissions ======================
+    public const ADMIN_PHASES_INDEX = 'admin.phases.index';
+
+    public const ADMIN_PHASES_STORE = 'admin.phases.store';
+
+    public const ADMIN_PHASES_SHOW = 'admin.phases.show';
+
+    public const ADMIN_PHASES_UPDATE = 'admin.phases.update';
+
+    public const ADMIN_PHASES_DESTROY = 'admin.phases.destroy';
+    // ==================== Phase Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);

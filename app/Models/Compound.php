@@ -115,6 +115,11 @@ class Compound extends Model implements HasMedia
         return $this->hasMany(PaymentPlan::class)->where('is_active', true);
     }
 
+    public function phases(): HasMany
+    {
+        return $this->hasMany(Phase::class)->orderBy('sort_order');
+    }
+
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);

@@ -15,6 +15,7 @@ use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PageController;
 use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
+use App\Http\Controllers\API\V1\Admin\PhaseController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
@@ -71,7 +72,7 @@ Route::delete('properties/{property}/media/{media}', [PropertyController::class,
 // =========================property=========================
 
 // ========================permission=====================
-Route::get('permissions/dropdown ', [PermissionController::class, 'dropdown']);
+Route::get('permissions/dropdown', [PermissionController::class, 'dropdown']);
 Route::apiResource('permissions', PermissionController::class);
 // ========================permission=====================
 
@@ -93,19 +94,19 @@ Route::apiResource('socials', SocialController::class)->except(['update']);
 // ===============social====================
 
 // =====================Developer Routes============
-Route::get('developers/dropdown ', [DeveloperController::class, 'dropdown']);
+Route::get('developers/dropdown', [DeveloperController::class, 'dropdown']);
 Route::apiResource('developers', DeveloperController::class);
 // =====================Developer Routes============
 
 // ======================Compound Routes=================
-Route::get('compounds/dropdown ', [CompoundController::class, 'dropdown']);
+Route::get('compounds/dropdown', [CompoundController::class, 'dropdown']);
 Route::apiResource('compounds', CompoundController::class);
 Route::post('compounds/{compound}/media', [CompoundController::class, 'addMedia']);
 Route::delete('compounds/{compound}/media/{media}', [CompoundController::class, 'deleteMedia']);
 // ======================Compound Routes=================
 
 // ======================Consultant Routes==================
-Route::get('consultants/dropdown ', [ConsultantController::class, 'dropdown']);
+Route::get('consultants/dropdown', [ConsultantController::class, 'dropdown']);
 Route::apiResource('consultants', ConsultantController::class);
 // ======================Consultant Routes==================
 
@@ -142,3 +143,8 @@ Route::apiResource('newsletter-subscribers', NewsletterSubscriberController::cla
 // ======================Static Pages Routes==================
 Route::apiResource('pages', PageController::class);
 // ======================Static Pages Routes==================
+
+// ======================Phase Routes==================
+Route::get('phases/dropdown', [PhaseController::class, 'dropdown']);
+Route::apiResource('phases', PhaseController::class);
+// ======================Phase Routes==================
