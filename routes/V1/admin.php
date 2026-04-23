@@ -12,6 +12,7 @@ use App\Http\Controllers\API\V1\Admin\DeveloperController;
 use App\Http\Controllers\API\V1\Admin\FaqController;
 use App\Http\Controllers\API\V1\Admin\NewsletterSubscriberController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
+use App\Http\Controllers\API\V1\Admin\PageController;
 use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
@@ -137,3 +138,7 @@ Route::apiResource('newsletter-subscribers', NewsletterSubscriberController::cla
     'newsletter-subscribers' => 'newsletterSubscriber',
 ]);
 // ======================Newsletter Subscriber Routes==================
+
+// ======================Static Pages Routes==================
+Route::apiResource('pages', PageController::class);
+// ======================Static Pages Routes==================

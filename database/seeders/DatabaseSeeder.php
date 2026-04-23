@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
         $this->call([PaymentPlanSeeder::class]);
         $this->call([CityAreaDetailsSeeder::class]);
         $this->call([FaqSeeder::class]);
+        $this->call([PageSeeder::class]);
 
     }
 }

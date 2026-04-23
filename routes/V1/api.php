@@ -16,8 +16,10 @@ use App\Http\Controllers\API\V1\EndUser\DeveloperController;
 use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
+use App\Http\Controllers\API\V1\EndUser\MortgageController;
 use App\Http\Controllers\API\V1\EndUser\NewsletterController;
 use App\Http\Controllers\API\V1\EndUser\NotificationController;
+use App\Http\Controllers\API\V1\EndUser\PageController;
 use App\Http\Controllers\API\V1\EndUser\PaymentPlanController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
@@ -141,6 +143,15 @@ Route::post('sell-units', [SellUnitController::class, 'store']);
 // =========================Company-Info==========================
 Route::get('company-info', [CompanyInfoController::class, 'show']);
 // =========================Company-Info==========================
+
+// =========================Static Pages==========================
+Route::get('pages', [PageController::class, 'index']);
+Route::get('pages/{slug}', [PageController::class, 'show']);
+// =========================Static Pages==========================
+
+// =========================Mortgage Calculator==========================
+Route::post('mortgage/calculate', [MortgageController::class, 'calculate']);
+// =========================Mortgage Calculator==========================
 
 // =========================Favorites==========================
 Route::middleware('auth:sanctum')->group(function () {

@@ -104,5 +104,9 @@ return [
     'saved_search_updated' => 'تم تحديث البحث المحفوظ.',
     'saved_search_deleted' => 'تم حذف البحث المحفوظ.',
     'saved_search_not_found' => 'البحث المحفوظ غير موجود.',
+    'page_created_successfully' => 'تم إنشاء الصفحة بنجاح.',
+    'page_updated_successfully' => 'تم تحديث الصفحة بنجاح.',
+    'page_deleted_successfully' => 'تم حذف الصفحة بنجاح.',
+    'mortgage_years_required' => 'عدد السنوات يجب أن يكون على الأقل 1.',
 
 ];

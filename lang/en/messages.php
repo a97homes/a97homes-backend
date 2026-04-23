@@ -104,5 +104,9 @@ return [
     'saved_search_updated' => 'Saved search updated.',
     'saved_search_deleted' => 'Saved search deleted.',
     'saved_search_not_found' => 'Saved search not found.',
+    'page_created_successfully' => 'Page created successfully.',
+    'page_updated_successfully' => 'Page updated successfully.',
+    'page_deleted_successfully' => 'Page deleted successfully.',
+    'mortgage_years_required' => 'Years must be at least 1.',
 
 ];

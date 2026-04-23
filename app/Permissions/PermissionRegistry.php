@@ -217,6 +217,18 @@ class PermissionRegistry
     public const ADMIN_NEWSLETTER_DESTROY = 'admin.newsletter.destroy';
     // ==================== Newsletter Permissions ======================
 
+    // ==================== Page Permissions ======================
+    public const ADMIN_PAGES_INDEX = 'admin.pages.index';
+
+    public const ADMIN_PAGES_STORE = 'admin.pages.store';
+
+    public const ADMIN_PAGES_SHOW = 'admin.pages.show';
+
+    public const ADMIN_PAGES_UPDATE = 'admin.pages.update';
+
+    public const ADMIN_PAGES_DESTROY = 'admin.pages.destroy';
+    // ==================== Page Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
