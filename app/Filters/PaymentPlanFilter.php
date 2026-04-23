@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Builder;
 class PaymentPlanFilter
 {
     /**
-     * Apply payment plan filters on a property query via compound.activeOffers.
+     * Apply payment plan filters through the given related offers relation.
+     *
+     * Defaults to `compound.activeOffers` for property queries. Pass
+     * `activeOffers` when applying directly to a compound query.
      *
      * Supported params:
      * - down_payment_min / down_payment_max (percentage, e.g. 10 = 10%)
      * - monthly_payment_min / monthly_payment_max (integer amount)
      * - installment_years (exact match or array)
      */
-    public static function apply(Builder $query, array $params): void
+    public static function apply(Builder $query, array $params, string $relation = 'compound.activeOffers'): void
     {
         $downMin = $params['down_payment_min'] ?? null;
         $downMax = $params['down_payment_max'] ?? null;
@@ -30,7 +33,7 @@ class PaymentPlanFilter
             return;
         }
 
-        $query->whereHas('compound.activeOffers', function (Builder $q) use (
+        $query->whereHas($relation, function (Builder $q) use (
             $downMin, $downMax, $monthlyMin, $monthlyMax, $installmentYears
         ) {
             if ($downMin !== null) {

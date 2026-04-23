@@ -6,6 +6,8 @@ namespace App\Models\User;
 use App\Enums\User\TokenAbilityEnum;
 use App\Filters\CreatedAtFilter;
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,8 +28,13 @@ class User extends Authenticatable implements HasMedia
 
     protected $guard_name = 'web';
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
 
     use HasRoles;
     use Notifiable;

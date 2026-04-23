@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\Admin\ArticleController;
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CompanyInfoController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
 use App\Http\Controllers\API\V1\Admin\FaqController;
+use App\Http\Controllers\API\V1\Admin\NewsletterSubscriberController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
 use App\Http\Controllers\API\V1\Admin\PermissionController;
@@ -124,3 +126,14 @@ Route::apiResource('payment-plans', PaymentPlanController::class)->parameters([
 // ======================Faq Routes==================
 Route::apiResource('faqs', FaqController::class);
 // ======================Faq Routes==================
+
+// ======================Article Routes==================
+Route::patch('articles/{article}/toggle-publish', [ArticleController::class, 'togglePublish']);
+Route::apiResource('articles', ArticleController::class);
+// ======================Article Routes==================
+
+// ======================Newsletter Subscriber Routes==================
+Route::apiResource('newsletter-subscribers', NewsletterSubscriberController::class)->only(['index', 'show', 'destroy'])->parameters([
+    'newsletter-subscribers' => 'newsletterSubscriber',
+]);
+// ======================Newsletter Subscriber Routes==================

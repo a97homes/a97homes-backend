@@ -84,5 +84,17 @@ return [
     'faq_created_successfully' => 'FAQ created successfully.',
     'faq_updated_successfully' => 'FAQ updated successfully.',
     'faq_deleted_successfully' => 'FAQ deleted successfully.',
+    'invalid_search_type' => 'Invalid search type. Must be one of: compound, property, developer, city.',
+    'search_query_too_short' => 'Search query must be at least 2 characters long.',
+    'article_created_successfully' => 'Article created successfully.',
+    'article_updated_successfully' => 'Article updated successfully.',
+    'article_deleted_successfully' => 'Article deleted successfully.',
+    'article_published' => 'Article published successfully.',
+    'article_unpublished' => 'Article unpublished successfully.',
+    'newsletter_subscribed' => 'Thank you! You have been subscribed to our newsletter.',
+    'newsletter_unsubscribed' => 'You have been unsubscribed from our newsletter.',
+    'newsletter_subscriber_not_found' => 'No newsletter subscription was found for this email.',
+    'newsletter_invalid_token' => 'The unsubscribe link is invalid or has expired.',
+    'newsletter_subscriber_deleted' => 'Newsletter subscriber deleted successfully.',
 
 ];

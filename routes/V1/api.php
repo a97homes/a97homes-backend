@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\V1\Authentication\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Authentication\LoginController;
+use App\Http\Controllers\API\V1\Authentication\LogoutController;
+use App\Http\Controllers\API\V1\Authentication\ResetPasswordController;
+use App\Http\Controllers\API\V1\EndUser\ArticleController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
 use App\Http\Controllers\API\V1\EndUser\CityController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
@@ -12,17 +16,26 @@ use App\Http\Controllers\API\V1\EndUser\DeveloperController;
 use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
+use App\Http\Controllers\API\V1\EndUser\NewsletterController;
 use App\Http\Controllers\API\V1\EndUser\PaymentPlanController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
 use App\Http\Controllers\API\V1\EndUser\RegisterController;
+use App\Http\Controllers\API\V1\EndUser\SearchController;
 use App\Http\Controllers\API\V1\EndUser\SellUnitController;
 use App\Http\Controllers\API\V1\EndUser\StateController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
+
+// =========================Password Reset==========================
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp']);
+Route::post('reset-password', [ResetPasswordController::class, 'reset']);
+// =========================Password Reset==========================
+
+Route::middleware('auth:sanctum')->post('logout', [LogoutController::class, 'logout']);
 
 // =========================Homepage==========================
 Route::get('offers', [HomeController::class, 'offers']);
@@ -82,6 +95,8 @@ Route::get('properties/{property}', [PropertyController::class, 'show']);
 Route::get('compounds', [CompoundController::class, 'index']);
 Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
+Route::get('compounds/{compound}/reviews', [CompoundController::class, 'reviews']);
+Route::get('compounds/{compound}/similar', [CompoundController::class, 'similar']);
 // =========================Compounds==========================
 
 // =========================Payment Plans==========================
@@ -99,6 +114,23 @@ Route::get('consultants/{consultant}/reviews', [ConsultantController::class, 're
 // =========================Contact==========================
 Route::post('contact', [ContactController::class, 'store']);
 // =========================Contact==========================
+
+// =========================Global Search==========================
+Route::get('search/suggest', [SearchController::class, 'suggest']);
+Route::get('search', [SearchController::class, 'search']);
+// =========================Global Search==========================
+
+// =========================Articles (Blog / Media / News)==========================
+Route::get('articles/featured', [ArticleController::class, 'featured']);
+Route::get('articles/types', [ArticleController::class, 'types']);
+Route::get('articles', [ArticleController::class, 'index']);
+Route::get('articles/{slug}', [ArticleController::class, 'show']);
+// =========================Articles (Blog / Media / News)==========================
+
+// =========================Newsletter==========================
+Route::post('newsletter/subscribe', [NewsletterController::class, 'subscribe']);
+Route::post('newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe']);
+// =========================Newsletter==========================
 
 // =========================Sell-Unit==========================
 Route::post('sell-units', [SellUnitController::class, 'store']);
@@ -119,5 +151,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('property-favorites/{property}', [PropertyFavoriteController::class, 'destroy']);
 
     Route::post('consultants/{consultant}/reviews', [ConsultantController::class, 'storeReview']);
+    Route::post('compounds/{compound}/reviews', [CompoundController::class, 'storeReview']);
 });
 // =========================Favorites==========================

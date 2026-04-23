@@ -35,6 +35,11 @@ class Developer extends Model implements HasMedia
                 $q->whereRaw("REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(name, '[أإآ]', 'ا', 'g'), '[ة]', 'ه', 'g'), '[ي]', 'ى', 'g'), '[ؤ]', 'و', 'g'), '[ئ]', 'ي', 'g'), '[ء]', '', 'g'), '[ـ]', '', 'g') ILIKE ?", ["%{$normalizedValue}%"])
                     ->orWhere('name', 'ILIKE', "%{$value}%");
             });
+        } elseif ($driver === 'sqlite') {
+            $query->where(function ($q) use ($normalizedValue, $value) {
+                $q->where('name', 'LIKE', "%{$value}%")
+                    ->orWhere('name', 'LIKE', "%{$normalizedValue}%");
+            });
         } else {
             $query->where(function ($q) use ($normalizedValue, $value) {
                 $q->whereRaw("REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(name, '[أإآ]', 'ا'), '[ة]', 'ه'), '[ي]', 'ى'), '[ؤ]', 'و'), '[ئ]', 'ي'), '[ء]', ''), '[ـ]', '') LIKE ?", ["%{$normalizedValue}%"])

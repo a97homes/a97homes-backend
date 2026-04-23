@@ -11,6 +11,7 @@ use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyCompareResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -47,6 +48,16 @@ class PropertyController extends Controller
                 AllowedFilter::exact('compound.developer_id'),
                 AllowedFilter::exact('compound.completion_status'),
                 AllowedFilter::custom('delivery_date', new DeliveryDateFilter),
+                AllowedFilter::callback('finishing_type', function (Builder $query, $value): void {
+                    $values = array_values(array_filter(is_array($value) ? $value : [$value], fn ($v) => $v !== null && $v !== ''));
+                    if ($values === []) {
+                        return;
+                    }
+                    $query->whereHas('selectedOptions', function (Builder $q) use ($values): void {
+                        $q->whereIn('attribute_options.id', $values)
+                            ->whereHas('attribute', fn (Builder $attr) => $attr->where('slug', 'finishing-type'));
+                    });
+                }),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
@@ -84,6 +95,8 @@ class PropertyController extends Controller
             'compound.developer.media',
             'compound.activeOffers',
             'compound.activeDiscount',
+            'compound.activePaymentPlans',
+            'compound.media',
             'media',
         ]);
 

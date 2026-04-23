@@ -28,6 +28,10 @@ class Compound extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_IMAGE = 'compound_image';
 
+    public const MEDIA_COLLECTION_PROJECT_PLAN = 'compound_project_plan';
+
+    public const MEDIA_COLLECTION_FLOOR_PLAN = 'compound_floor_plan';
+
     protected $fillable = [
         'name',
         'developer_id',
@@ -114,6 +118,11 @@ class Compound extends Model implements HasMedia
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(CompoundReview::class);
     }
 
     public function faqs(): MorphMany

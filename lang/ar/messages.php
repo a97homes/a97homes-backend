@@ -84,5 +84,17 @@ return [
     'faq_created_successfully' => 'تم إنشاء السؤال الشائع بنجاح.',
     'faq_updated_successfully' => 'تم تحديث السؤال الشائع بنجاح.',
     'faq_deleted_successfully' => 'تم حذف السؤال الشائع بنجاح.',
+    'invalid_search_type' => 'نوع البحث غير صالح. يجب أن يكون أحد: compound, property, developer, city.',
+    'search_query_too_short' => 'يجب أن يكون نص البحث على الأقل حرفين.',
+    'article_created_successfully' => 'تم إنشاء المقال بنجاح.',
+    'article_updated_successfully' => 'تم تحديث المقال بنجاح.',
+    'article_deleted_successfully' => 'تم حذف المقال بنجاح.',
+    'article_published' => 'تم نشر المقال بنجاح.',
+    'article_unpublished' => 'تم إلغاء نشر المقال بنجاح.',
+    'newsletter_subscribed' => 'شكراً لك! تم اشتراكك في النشرة البريدية.',
+    'newsletter_unsubscribed' => 'تم إلغاء اشتراكك في النشرة البريدية.',
+    'newsletter_subscriber_not_found' => 'لم يتم العثور على اشتراك لهذا البريد الإلكتروني.',
+    'newsletter_invalid_token' => 'رابط إلغاء الاشتراك غير صالح أو منتهي الصلاحية.',
+    'newsletter_subscriber_deleted' => 'تم حذف المشترك بنجاح.',
 
 ];

@@ -20,6 +20,13 @@ trait HasArabicSearch
                 $q->whereRaw("REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(name->>'ar', '[أإآ]', 'ا', 'g'), '[ة]', 'ه', 'g'), '[ي]', 'ى', 'g'), '[ؤ]', 'و', 'g'), '[ئ]', 'ي', 'g') ILIKE ?", ["%{$normalizedValue}%"])
                     ->orWhereRaw("name->>'en' ILIKE ?", ["%{$value}%"]);
             });
+        } elseif ($driver === 'sqlite') {
+            // SQLite (tests): no REGEXP_REPLACE; rely on PHP-normalized value + plain LIKE.
+            $query->where(function ($q) use ($normalizedValue, $value) {
+                $q->whereRaw("json_extract(name, '$.ar') LIKE ?", ["%{$value}%"])
+                    ->orWhereRaw("json_extract(name, '$.ar') LIKE ?", ["%{$normalizedValue}%"])
+                    ->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$value}%"]);
+            });
         } else {
             // MySQL: Search with normalization
             $query->where(function ($q) use ($normalizedValue, $value) {

@@ -197,6 +197,26 @@ class PermissionRegistry
     public const ADMIN_FAQS_DESTROY = 'admin.faqs.destroy';
     // ==================== Faq Permissions ======================
 
+    // ==================== Article Permissions ======================
+    public const ADMIN_ARTICLES_INDEX = 'admin.articles.index';
+
+    public const ADMIN_ARTICLES_STORE = 'admin.articles.store';
+
+    public const ADMIN_ARTICLES_SHOW = 'admin.articles.show';
+
+    public const ADMIN_ARTICLES_UPDATE = 'admin.articles.update';
+
+    public const ADMIN_ARTICLES_DESTROY = 'admin.articles.destroy';
+    // ==================== Article Permissions ======================
+
+    // ==================== Newsletter Permissions ======================
+    public const ADMIN_NEWSLETTER_INDEX = 'admin.newsletter.index';
+
+    public const ADMIN_NEWSLETTER_SHOW = 'admin.newsletter.show';
+
+    public const ADMIN_NEWSLETTER_DESTROY = 'admin.newsletter.destroy';
+    // ==================== Newsletter Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
