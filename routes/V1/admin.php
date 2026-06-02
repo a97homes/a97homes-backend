@@ -2,15 +2,24 @@
 
 use App\Http\Controllers\API\V1\Admin\ArticleController;
 use App\Http\Controllers\API\V1\Admin\AttributeController;
+use App\Http\Controllers\API\V1\Admin\BannerController;
+use App\Http\Controllers\API\V1\Admin\ChatbotConversationController;
 use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CompanyInfoController;
 use App\Http\Controllers\API\V1\Admin\CompoundController;
+use App\Http\Controllers\API\V1\Admin\CompoundReviewController;
 use App\Http\Controllers\API\V1\Admin\ConsultantController;
+use App\Http\Controllers\API\V1\Admin\ConsultantReviewController;
 use App\Http\Controllers\API\V1\Admin\ContactController;
 use App\Http\Controllers\API\V1\Admin\CountryController;
+use App\Http\Controllers\API\V1\Admin\DashboardController;
 use App\Http\Controllers\API\V1\Admin\DeveloperController;
+use App\Http\Controllers\API\V1\Admin\DiscountController;
 use App\Http\Controllers\API\V1\Admin\FaqController;
+use App\Http\Controllers\API\V1\Admin\NewsletterCampaignController;
 use App\Http\Controllers\API\V1\Admin\NewsletterSubscriberController;
+use App\Http\Controllers\API\V1\Admin\NotificationBroadcastController;
+use App\Http\Controllers\API\V1\Admin\OfferController;
 use App\Http\Controllers\API\V1\Admin\OrderController;
 use App\Http\Controllers\API\V1\Admin\PageController;
 use App\Http\Controllers\API\V1\Admin\PaymentPlanController;
@@ -19,6 +28,7 @@ use App\Http\Controllers\API\V1\Admin\PhaseController;
 use App\Http\Controllers\API\V1\Admin\PropertyController;
 use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
+use App\Http\Controllers\API\V1\Admin\SellUnitController;
 use App\Http\Controllers\API\V1\Admin\SocialController;
 use App\Http\Controllers\API\V1\Admin\StateController;
 use App\Http\Controllers\API\V1\Admin\UnitController;
@@ -44,6 +54,8 @@ Route::apiResource('states', StateController::class);
 // ==========================city=========================
 Route::get('cities/dropdown', [CityController::class, 'dropdown']);
 Route::apiResource('cities', CityController::class);
+Route::post('cities/{city}/media', [CityController::class, 'updateMedia']);
+Route::delete('cities/{city}/media', [CityController::class, 'deleteMedia']);
 // ==========================city=========================
 
 // ==========================property-type=========================
@@ -67,6 +79,7 @@ Route::apiResource('units', UnitController::class);
 Route::apiResource('properties', PropertyController::class);
 Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
 Route::patch('properties/{property}/status', [PropertyController::class, 'updateStatus']);
+Route::patch('properties/{property}/feature', [PropertyController::class, 'toggleFeature']);
 Route::post('properties/{property}/media', [PropertyController::class, 'addMedia']);
 Route::delete('properties/{property}/media/{media}', [PropertyController::class, 'deleteMediaAction']);
 // =========================property=========================
@@ -103,6 +116,7 @@ Route::get('compounds/dropdown', [CompoundController::class, 'dropdown']);
 Route::apiResource('compounds', CompoundController::class);
 Route::post('compounds/{compound}/media', [CompoundController::class, 'addMedia']);
 Route::delete('compounds/{compound}/media/{media}', [CompoundController::class, 'deleteMedia']);
+Route::patch('compounds/{compound}/feature', [CompoundController::class, 'toggleFeature']);
 // ======================Compound Routes=================
 
 // ======================Consultant Routes==================
@@ -148,3 +162,53 @@ Route::apiResource('pages', PageController::class);
 Route::get('phases/dropdown', [PhaseController::class, 'dropdown']);
 Route::apiResource('phases', PhaseController::class);
 // ======================Phase Routes==================
+
+// ======================Banner Routes==================
+Route::apiResource('banners', BannerController::class);
+// ======================Banner Routes==================
+
+// ======================Offer Routes==================
+Route::apiResource('offers', OfferController::class);
+// ======================Offer Routes==================
+
+// ======================Sell-Unit Routes==================
+Route::patch('sell-units/{sellUnit}/approve', [SellUnitController::class, 'approve']);
+Route::patch('sell-units/{sellUnit}/reject', [SellUnitController::class, 'reject']);
+Route::apiResource('sell-units', SellUnitController::class)->only(['index', 'show', 'destroy'])->parameters([
+    'sell-units' => 'sellUnit',
+]);
+// ======================Sell-Unit Routes==================
+
+// ======================Compound Reviews Routes==================
+Route::apiResource('compound-reviews', CompoundReviewController::class)->only(['index', 'show', 'destroy'])->parameters([
+    'compound-reviews' => 'compoundReview',
+]);
+// ======================Compound Reviews Routes==================
+
+// ======================Consultant Reviews Routes==================
+Route::apiResource('consultant-reviews', ConsultantReviewController::class)->only(['index', 'show', 'destroy'])->parameters([
+    'consultant-reviews' => 'consultantReview',
+]);
+// ======================Consultant Reviews Routes==================
+
+// ======================Chatbot Conversations Routes==================
+Route::apiResource('chatbot-conversations', ChatbotConversationController::class)->only(['index', 'show', 'destroy'])->parameters([
+    'chatbot-conversations' => 'chatbotConversation',
+]);
+// ======================Chatbot Conversations Routes==================
+
+// ======================Dashboard Routes==================
+Route::get('dashboard', [DashboardController::class, 'show']);
+// ======================Dashboard Routes==================
+
+// ======================Newsletter Campaign Routes==================
+Route::post('newsletter/campaigns', [NewsletterCampaignController::class, 'send']);
+// ======================Newsletter Campaign Routes==================
+
+// ======================Notifications Broadcast Routes==================
+Route::post('notifications/broadcast', [NotificationBroadcastController::class, 'broadcast']);
+// ======================Notifications Broadcast Routes==================
+
+// ======================Discount Routes==================
+Route::apiResource('discounts', DiscountController::class);
+// ======================Discount Routes==================

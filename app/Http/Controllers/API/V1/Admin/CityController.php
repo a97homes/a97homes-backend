@@ -9,6 +9,7 @@ use App\Enums\Role\UserRoleEnum;
 use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\City\StoreCityRequest;
+use App\Http\Requests\API\V1\Admin\City\UpdateCityMediaRequest;
 use App\Http\Requests\API\V1\Admin\City\UpdateCityRequest;
 use App\Http\Resources\City\CityCollection;
 use App\Http\Resources\City\CityResource;
@@ -32,6 +33,8 @@ class CityController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_SHOW]), only: ['show']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_UPDATE]), only: ['update']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_MEDIA_UPDATE]), only: ['updateMedia']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_MEDIA_DESTROY]), only: ['deleteMedia']),
         ];
     }
 
@@ -89,5 +92,23 @@ class CityController extends Controller implements HasMiddleware
         $cities = City::select('id', 'name')->get();
 
         return $this->ok(data: CityResource::collection($cities));
+    }
+
+    public function updateMedia(UpdateCityMediaRequest $request, City $city): JsonResponse
+    {
+        $city->clearMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+        $city->addMedia($request->file('image'))->toMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+
+        return $this->ok(
+            message: __('messages.city_image_updated_successfully'),
+            data: CityResource::make($city->load('media')),
+        );
+    }
+
+    public function deleteMedia(City $city): JsonResponse
+    {
+        $city->clearMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+
+        return $this->ok(message: __('messages.city_image_deleted_successfully'));
     }
 }

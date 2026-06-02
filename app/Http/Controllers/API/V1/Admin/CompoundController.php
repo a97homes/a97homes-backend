@@ -33,7 +33,7 @@ class CompoundController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_INDEX]), only: ['index']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_UPDATE]), only: ['update', 'toggleFeature']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUNDS_DESTROY]), only: ['destroy']),
         ];
     }
@@ -99,5 +99,15 @@ class CompoundController extends Controller implements HasMiddleware
         $action->execute($compound, $media->id);
 
         return $this->ok(message: __('messages.media_compound_deleted_successfully'));
+    }
+
+    public function toggleFeature(Compound $compound): JsonResponse
+    {
+        $compound->update(['is_featured' => ! $compound->is_featured]);
+
+        return $this->ok(
+            message: __($compound->is_featured ? 'messages.compound_featured' : 'messages.compound_unfeatured'),
+            data: AdminCompoundResource::make($compound->refresh()),
+        );
     }
 }

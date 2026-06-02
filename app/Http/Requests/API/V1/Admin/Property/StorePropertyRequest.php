@@ -34,7 +34,7 @@ class StorePropertyRequest extends FormRequest
             'compound_id' => ['required', 'integer', Rule::exists('compounds', 'id')],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
-
+            'is_featured' => ['nullable', 'boolean'],
         ];
     }
 }

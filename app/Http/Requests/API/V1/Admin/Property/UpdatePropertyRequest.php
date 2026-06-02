@@ -34,7 +34,7 @@ class UpdatePropertyRequest extends FormRequest
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'address' => ['required', 'string', 'max:255'],
-
+            'is_featured' => ['nullable', 'boolean'],
         ];
     }
 }

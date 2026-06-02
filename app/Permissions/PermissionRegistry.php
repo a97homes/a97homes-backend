@@ -241,6 +241,92 @@ class PermissionRegistry
     public const ADMIN_PHASES_DESTROY = 'admin.phases.destroy';
     // ==================== Phase Permissions ======================
 
+    // ==================== Banner Permissions ======================
+    public const ADMIN_BANNERS_INDEX = 'admin.banners.index';
+
+    public const ADMIN_BANNERS_STORE = 'admin.banners.store';
+
+    public const ADMIN_BANNERS_SHOW = 'admin.banners.show';
+
+    public const ADMIN_BANNERS_UPDATE = 'admin.banners.update';
+
+    public const ADMIN_BANNERS_DESTROY = 'admin.banners.destroy';
+    // ==================== Banner Permissions ======================
+
+    // ==================== Offer Permissions ======================
+    public const ADMIN_OFFERS_INDEX = 'admin.offers.index';
+
+    public const ADMIN_OFFERS_STORE = 'admin.offers.store';
+
+    public const ADMIN_OFFERS_SHOW = 'admin.offers.show';
+
+    public const ADMIN_OFFERS_UPDATE = 'admin.offers.update';
+
+    public const ADMIN_OFFERS_DESTROY = 'admin.offers.destroy';
+    // ==================== Offer Permissions ======================
+
+    // ==================== SellUnit Permissions ======================
+    public const ADMIN_SELL_UNITS_INDEX = 'admin.sell_units.index';
+
+    public const ADMIN_SELL_UNITS_SHOW = 'admin.sell_units.show';
+
+    public const ADMIN_SELL_UNITS_UPDATE = 'admin.sell_units.update';
+
+    public const ADMIN_SELL_UNITS_DESTROY = 'admin.sell_units.destroy';
+    // ==================== SellUnit Permissions ======================
+
+    // ==================== CompoundReview Permissions ======================
+    public const ADMIN_COMPOUND_REVIEWS_INDEX = 'admin.compound_reviews.index';
+
+    public const ADMIN_COMPOUND_REVIEWS_SHOW = 'admin.compound_reviews.show';
+
+    public const ADMIN_COMPOUND_REVIEWS_DESTROY = 'admin.compound_reviews.destroy';
+    // ==================== CompoundReview Permissions ======================
+
+    // ==================== ConsultantReview Permissions ======================
+    public const ADMIN_CONSULTANT_REVIEWS_INDEX = 'admin.consultant_reviews.index';
+
+    public const ADMIN_CONSULTANT_REVIEWS_SHOW = 'admin.consultant_reviews.show';
+
+    public const ADMIN_CONSULTANT_REVIEWS_DESTROY = 'admin.consultant_reviews.destroy';
+    // ==================== ConsultantReview Permissions ======================
+
+    // ==================== Chatbot Permissions ======================
+    public const ADMIN_CHATBOT_INDEX = 'admin.chatbot.index';
+
+    public const ADMIN_CHATBOT_SHOW = 'admin.chatbot.show';
+
+    public const ADMIN_CHATBOT_DESTROY = 'admin.chatbot.destroy';
+    // ==================== Chatbot Permissions ======================
+
+    // ==================== Dashboard Permissions ======================
+    public const ADMIN_DASHBOARD_SHOW = 'admin.dashboard.show';
+    // ==================== Dashboard Permissions ======================
+
+    // ==================== Communication Permissions ======================
+    public const ADMIN_NEWSLETTER_SEND = 'admin.newsletter.send';
+
+    public const ADMIN_NOTIFICATIONS_BROADCAST = 'admin.notifications.broadcast';
+    // ==================== Communication Permissions ======================
+
+    // ==================== Discount Permissions ======================
+    public const ADMIN_DISCOUNTS_INDEX = 'admin.discounts.index';
+
+    public const ADMIN_DISCOUNTS_STORE = 'admin.discounts.store';
+
+    public const ADMIN_DISCOUNTS_SHOW = 'admin.discounts.show';
+
+    public const ADMIN_DISCOUNTS_UPDATE = 'admin.discounts.update';
+
+    public const ADMIN_DISCOUNTS_DESTROY = 'admin.discounts.destroy';
+    // ==================== Discount Permissions ======================
+
+    // ==================== City Media Permissions ======================
+    public const ADMIN_CITIES_MEDIA_UPDATE = 'admin.cities.media.update';
+
+    public const ADMIN_CITIES_MEDIA_DESTROY = 'admin.cities.media.destroy';
+    // ==================== City Media Permissions ======================
+
     public static function all(): array
     {
         $reflection = new ReflectionClass(__CLASS__);
