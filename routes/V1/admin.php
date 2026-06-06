@@ -86,7 +86,7 @@ Route::delete('properties/{property}/media/{media}', [PropertyController::class,
 
 // ========================permission=====================
 Route::get('permissions/dropdown', [PermissionController::class, 'dropdown']);
-Route::apiResource('permissions', PermissionController::class);
+Route::apiResource('permissions', PermissionController::class)->only(['index', 'show', 'destroy']);
 // ========================permission=====================
 
 // ========================Order=====================
@@ -99,7 +99,7 @@ Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
 // ================User====================
 Route::put('users/{user}/update-roles', [UserController::class, 'updateRoles']);
 Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles']);
-Route::apiResource('users', UserController::class);
+Route::apiResource('users', UserController::class)->except(['store']);
 // ================User====================
 
 // ===============social====================

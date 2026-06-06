@@ -11,6 +11,7 @@ use App\Actions\Property\UpdatePropertyStatusAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
+use App\Http\Requests\API\V1\Admin\Property\StorePropertyRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyStatusRequest;
 use App\Http\Resources\API\V1\Media\MediaResource;
@@ -32,10 +33,10 @@ class PropertyController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_UPDATE]), only: ['update', 'toggleFeature']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_UPDATE]), only: ['update', 'toggleFeature', 'updateStatus', 'addMedia', 'deleteMediaAction']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_DESTROY]), only: ['destroy']),
         ];
     }
@@ -70,17 +71,17 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(data: new PropertyCollection($properties));
     }
 
-    public function store(StorePropertyAction $action): JsonResponse
+    public function store(StorePropertyRequest $request, StorePropertyAction $action): JsonResponse
     {
-        $property = $action->execute();
+        $property = $action->execute($request->validated());
 
         return $this->ok(message: __('messages.property_created_successfully'), data: PropertyResource::make($property));
     }
 
     public function update(UpdatePropertyRequest $request, Property $property, UpdatePropertyAction $action): JsonResponse
     {
-        $property->load('attributes:name,id');
         $action->execute($property, $request->validated());
+        $property->load('attributes:name,id');
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
     }
@@ -121,7 +122,7 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }
 
-    public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action)
+    public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action): JsonResponse
     {
         $property = $action->execute($property, $request->validated('status'));
 

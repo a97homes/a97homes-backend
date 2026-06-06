@@ -2,17 +2,19 @@
 
 namespace App\Actions\Property;
 
-use App\Enums\PropertyStatusEnum;
 use App\Models\Property;
 
 class UpdatePropertyAction
 {
+    public function __construct(public SyncPropertyAttributesAction $syncPropertyAttributesAction) {}
+
     public function execute(Property $property, array $data): Property
     {
         $data = collect($data);
-        $data->push('status', PropertyStatusEnum::ACTIVE);
-        $property->update($data->except(['attributes_ids'])->toArray());
-        $property->attributes()->sync($data->get('attributes_ids'));
+
+        $property->update($data->except(['attributes_ids', 'attribute_values', 'option_ids'])->toArray());
+
+        $this->syncPropertyAttributesAction->execute($property, $data);
 
         return $property;
     }

@@ -37,7 +37,7 @@ class DeletePermissionRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            $permission = $this->route('permission')->withCount(['roles', 'users']);
+            $permission = $this->route('permission')->loadCount(['roles', 'users']);
 
             if ($permission->roles_count > 0) {
                 $validator->errors()->add('permission', __('messages.permission_has_associated_roles'));

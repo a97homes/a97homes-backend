@@ -16,7 +16,33 @@ class PermissionRegistry
     const ADMIN_ROLES_UPDATE = 'roles.update';
 
     const ADMIN_ROLES_DESTROY = 'roles.destroy';
+
+    const ADMIN_ROLES_ASSIGN_PERMISSIONS = 'roles.assign_permissions';
     // =========================role Permissions========================
+
+    // =========================user Permissions=========================
+    public const ADMIN_USERS_INDEX = 'admin.users.index';
+
+    public const ADMIN_USERS_SHOW = 'admin.users.show';
+
+    public const ADMIN_USERS_UPDATE = 'admin.users.update';
+
+    public const ADMIN_USERS_DESTROY = 'admin.users.destroy';
+
+    public const ADMIN_USERS_ASSIGN_ROLES = 'admin.users.assign_roles';
+
+    public const ADMIN_USERS_UPDATE_ROLES = 'admin.users.update_roles';
+    // =========================user Permissions=========================
+
+    // =========================social Permissions=========================
+    public const ADMIN_SOCIALS_INDEX = 'admin.socials.index';
+
+    public const ADMIN_SOCIALS_STORE = 'admin.socials.store';
+
+    public const ADMIN_SOCIALS_SHOW = 'admin.socials.show';
+
+    public const ADMIN_SOCIALS_DESTROY = 'admin.socials.destroy';
+    // =========================social Permissions=========================
 
     // =========================permission========================
     const ADMIN_PERMISSIONS_INDEX = 'permissions.index';

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 
 class UserRoleSeeder extends Seeder
 {
+    // php artisan db:seed --class=UserRoleSeeder
     public function run(): void
     {
         $roles = UserRoleEnum::cases();
