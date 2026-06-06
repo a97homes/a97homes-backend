@@ -21,7 +21,7 @@ class FaqFactory extends Factory
     public function definition(): array
     {
         return [
-            'faqable_type' => City::class,
+            'faqable_type' => (new City)->getMorphClass(),
             'faqable_id' => City::factory(),
             'question' => [
                 'en' => $this->faker->sentence().'?',

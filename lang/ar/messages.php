@@ -39,6 +39,7 @@ return [
     'you_are_not_authorized_to_access_this_resource' => 'غير مصرح لك بالوصول إلى هذا المورد.',
     'uniqe_property_order' => 'طلب عقار مكرر.',
     'not_found' => 'غير موجود.',
+    'database_error' => 'تعذر معالجة الطلب. يرجى التحقق من البيانات المرسلة والمحاولة مرة أخرى.',
     'message_created_successfully' => 'تم إرسال الرسالة بنجاح.',
     'method_not_allowed' => 'الطريقة غير مسموح بها.',
     'invalid_date_format' => 'صيغة التاريخ غير صالحة.',

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\API\V1\Admin\Faq;
 
-use App\Models\City;
-use App\Models\Compound;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -37,11 +35,7 @@ class StoreFaqRequest extends FormRequest
 
     public function resolvedFaqableType(): string
     {
-        return match ($this->input('faqable_type')) {
-            'city' => City::class,
-            'compound' => Compound::class,
-            default => City::class,
-        };
+        return $this->input('faqable_type', 'city');
     }
 
     private function faqableExistsRule(): object

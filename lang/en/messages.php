@@ -39,6 +39,7 @@ return [
     'you_are_not_authorized_to_access_this_resource' => 'you are not authorized to access this resource',
     'uniqe_property_order' => 'uniqe property order',
     'not_found' => 'not found',
+    'database_error' => 'The request could not be processed. Please check the submitted data and try again.',
     'message_created_successfully' => 'message created successfully',
     'method_not_allowed' => 'method not allowed',
     'invalid_date_format' => 'invalid date format',

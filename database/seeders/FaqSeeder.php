@@ -69,7 +69,7 @@ class FaqSeeder extends Seeder
             foreach ($samples as $index => $item) {
                 Faq::updateOrCreate(
                     [
-                        'faqable_type' => City::class,
+                        'faqable_type' => (new City)->getMorphClass(),
                         'faqable_id' => $city->id,
                         'sort_order' => $index,
                     ],

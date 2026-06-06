@@ -132,7 +132,7 @@ class NotificationControllerTest extends TestCase
         DB::table('notifications')->insert([
             'id' => $id,
             'type' => 'App\\Notifications\\TestNotification',
-            'notifiable_type' => $user::class,
+            'notifiable_type' => $user->getMorphClass(),
             'notifiable_id' => $user->id,
             'data' => json_encode(['title' => $title]),
             'read_at' => $readAt,

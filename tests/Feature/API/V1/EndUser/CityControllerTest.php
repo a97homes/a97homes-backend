@@ -82,17 +82,17 @@ class CityControllerTest extends TestCase
         $city = City::factory()->create();
 
         $secondFaq = Faq::factory()->create([
-            'faqable_type' => City::class,
+            'faqable_type' => (new City)->getMorphClass(),
             'faqable_id' => $city->id,
             'sort_order' => 2,
         ]);
         $firstFaq = Faq::factory()->create([
-            'faqable_type' => City::class,
+            'faqable_type' => (new City)->getMorphClass(),
             'faqable_id' => $city->id,
             'sort_order' => 1,
         ]);
         Faq::factory()->inactive()->create([
-            'faqable_type' => City::class,
+            'faqable_type' => (new City)->getMorphClass(),
             'faqable_id' => $city->id,
             'sort_order' => 3,
         ]);

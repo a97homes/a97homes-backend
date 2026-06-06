@@ -27,7 +27,7 @@ class StoreCountryRequest extends FormRequest
             'name.ar' => ['required', 'string', 'max:255', Rule::unique('countries', 'name->ar')],
             'name.en' => ['required', 'string', 'max:255', Rule::unique('countries', 'name->en')],
             'code' => ['required',  'string', 'max:2', Rule::unique('countries', 'code')],
-
+            'flag' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,svg', 'max:'.config('media-library.max_file_size')],
         ];
     }
 }
