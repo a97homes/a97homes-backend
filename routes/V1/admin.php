@@ -76,8 +76,8 @@ Route::apiResource('units', UnitController::class);
 // =========================unit=========================
 
 // =========================property=========================
-Route::apiResource('properties', PropertyController::class);
 Route::get('properties/dropdown', [PropertyController::class, 'dropdown']);
+Route::apiResource('properties', PropertyController::class);
 Route::patch('properties/{property}/status', [PropertyController::class, 'updateStatus']);
 Route::patch('properties/{property}/feature', [PropertyController::class, 'toggleFeature']);
 Route::post('properties/{property}/media', [PropertyController::class, 'addMedia']);
