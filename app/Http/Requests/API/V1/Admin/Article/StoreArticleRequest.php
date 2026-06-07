@@ -34,7 +34,6 @@ class StoreArticleRequest extends FormRequest
             'body.ar' => ['required', 'string'],
             'body.en' => ['required', 'string'],
             'author' => ['nullable', 'string', 'max:255'],
-            'published_at' => ['nullable', 'date'],
             'is_featured' => ['nullable', 'boolean'],
             'cover' => ['nullable', 'image', 'max:5120'],
         ];

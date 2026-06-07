@@ -21,7 +21,6 @@ class ConsultantFactory extends Factory
             'name' => fake()->name(),
             'job_title' => fake()->jobTitle(),
             'sales_percentage' => fake()->randomFloat(2, 0, 100),
-            'image' => fake()->imageUrl(400, 400, 'people'),
             'is_featured' => fake()->boolean(30),
         ];
     }

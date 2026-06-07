@@ -52,7 +52,7 @@ class SocialController extends Controller implements HasMiddleware
 
     public function show(Social $social): JsonResponse
     {
-        return $this->ok(data: SocialResource::make($social->load('media')));
+        return $this->ok(data: SocialResource::make($social));
     }
 
     public function destroy(Social $social, DeleteSocialAction $action): JsonResponse

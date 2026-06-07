@@ -144,6 +144,9 @@ Route::apiResource('faqs', FaqController::class);
 // ======================Faq Routes==================
 
 // ======================Article Routes==================
+Route::bind('article', fn ($value) => \App\Models\Article::query()
+    ->where(is_numeric($value) ? 'id' : 'slug', $value)
+    ->firstOrFail());
 Route::patch('articles/{article}/toggle-publish', [ArticleController::class, 'togglePublish']);
 Route::apiResource('articles', ArticleController::class);
 // ======================Article Routes==================

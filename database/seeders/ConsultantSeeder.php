@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Consultant;
 use Illuminate\Database\Seeder;
+use Throwable;
 
 class ConsultantSeeder extends Seeder
 {
@@ -104,12 +105,26 @@ class ConsultantSeeder extends Seeder
 
         foreach ($consultants as $data) {
             $phones = $data['phones'];
-            unset($data['phones']);
+            $image = $data['image'] ?? null;
+            $coverImage = $data['cover_image'] ?? null;
+            unset($data['phones'], $data['image'], $data['cover_image']);
 
             $consultant = Consultant::create($data);
 
             foreach ($phones as $phone) {
                 $consultant->phones()->create(['phone' => $phone]);
+            }
+
+            try {
+                if ($image !== null) {
+                    $consultant->addMediaFromUrl($image)->toMediaCollection(Consultant::MEDIA_COLLECTION_IMAGE);
+                }
+
+                if ($coverImage !== null) {
+                    $consultant->addMediaFromUrl($coverImage)->toMediaCollection(Consultant::MEDIA_COLLECTION_COVER);
+                }
+            } catch (Throwable) {
+                // Remote seed images are best-effort; skip when unreachable.
             }
         }
     }

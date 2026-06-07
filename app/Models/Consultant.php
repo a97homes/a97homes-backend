@@ -8,21 +8,32 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Consultant extends Model
+class Consultant extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
     use HasFactory;
+    use InteractsWithMedia;
+
+    public const MEDIA_COLLECTION_IMAGE = 'consultant_image';
+
+    public const MEDIA_COLLECTION_COVER = 'consultant_cover';
 
     protected $fillable = [
         'name',
         'job_title',
         'sales_percentage',
-        'image',
-        'cover_image',
         'is_featured',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::MEDIA_COLLECTION_IMAGE)->singleFile();
+        $this->addMediaCollection(self::MEDIA_COLLECTION_COVER)->singleFile();
+    }
 
     protected function casts(): array
     {

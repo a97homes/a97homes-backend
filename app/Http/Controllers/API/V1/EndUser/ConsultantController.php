@@ -26,7 +26,7 @@ class ConsultantController extends Controller
     public function index(): JsonResponse
     {
         $consultants = QueryBuilder::for(Consultant::class)
-            ->with(['phones'])
+            ->with(['phones', 'media'])
             ->allowedFilters([
                 AllowedFilter::custom('search', new ConsultantSearchFilter),
                 AllowedFilter::exact('is_featured'),
@@ -44,7 +44,7 @@ class ConsultantController extends Controller
 
     public function show(Consultant $consultant): JsonResponse
     {
-        $consultant->load(['phones', 'reviews']);
+        $consultant->load(['phones', 'reviews', 'media']);
 
         return $this->ok(data: ConsultantResource::make($consultant));
     }
@@ -101,7 +101,7 @@ class ConsultantController extends Controller
             return $this->notFound(message: __('messages.consultant_not_found'));
         }
 
-        $consultant = $phone->consultant()->with('phones')->first();
+        $consultant = $phone->consultant()->with(['phones', 'media'])->first();
 
         return $this->ok(
             message: __('messages.consultant_verified_successfully'),

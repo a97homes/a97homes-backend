@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
             'banner' => \App\Models\Banner::class,
             'city' => \App\Models\City::class,
             'compound' => \App\Models\Compound::class,
+            'consultant' => \App\Models\Consultant::class,
             'country' => \App\Models\Country::class,
             'developer' => \App\Models\Developer::class,
             'property' => \App\Models\Property::class,

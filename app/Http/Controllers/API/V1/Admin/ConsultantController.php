@@ -38,7 +38,7 @@ class ConsultantController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $consultants = QueryBuilder::for(Consultant::class)
-            ->with(['phones'])
+            ->with(['phones', 'media'])
             ->allowedFilters([
                 AllowedFilter::custom('search', new ConsultantSearchFilter),
                 AllowedFilter::exact('is_featured'),
@@ -58,21 +58,21 @@ class ConsultantController extends Controller implements HasMiddleware
 
     public function store(StoreConsultantRequest $request, StoreConsultantAction $action): JsonResponse
     {
-        $consultant = $action->execute($request->validated());
+        $consultant = $action->execute($request->validated(), $request->file('image'), $request->file('cover_image'));
 
         return $this->ok(message: __('messages.consultant_created_successfully'), data: ConsultantResource::make($consultant));
     }
 
     public function show(Consultant $consultant): JsonResponse
     {
-        $consultant->load(['phones']);
+        $consultant->load(['phones', 'media']);
 
         return $this->ok(data: ConsultantResource::make($consultant));
     }
 
     public function update(UpdateConsultantRequest $request, Consultant $consultant, UpdateConsultantAction $action): JsonResponse
     {
-        $action->execute($consultant, $request->validated());
+        $action->execute($consultant, $request->validated(), $request->file('image'), $request->file('cover_image'));
 
         return $this->ok(message: __('messages.consultant_updated_successfully'), data: ConsultantResource::make($consultant));
     }
