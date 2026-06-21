@@ -37,6 +37,7 @@ class FaqController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $faqs = QueryBuilder::for(Faq::class)
+            ->with('faqable')
             ->allowedFilters([
                 AllowedFilter::exact('faqable_id'),
                 AllowedFilter::exact('faqable_type'),
@@ -61,7 +62,7 @@ class FaqController extends Controller implements HasMiddleware
 
     public function show(Faq $faq): JsonResponse
     {
-        return $this->ok(data: FaqResource::make($faq));
+        return $this->ok(data: FaqResource::make($faq->load('faqable')));
     }
 
     public function update(UpdateFaqRequest $request, Faq $faq, UpdateFaqAction $action): JsonResponse
