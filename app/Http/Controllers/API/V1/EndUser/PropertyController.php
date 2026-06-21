@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\EndUser\Property\ComparePropertiesRequest;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyCompareResource;
+use App\Http\Resources\API\V1\Property\PropertyMapResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +23,7 @@ class PropertyController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = QueryBuilder::for(Property::class)
+        $query = $this->filteredQuery($request)
             ->with([
                 'city:id,name,state_id',
                 'city.state:id,name',
@@ -35,7 +36,42 @@ class PropertyController extends Controller
                 'attributes' => fn ($q) => $q->with('unit'),
                 'selectedOptions',
                 'media',
+            ]);
+
+        $this->loadFavoritesForAuthUser($query);
+
+        $properties = $query->macroPaginate();
+
+        return $this->ok(data: new PropertyCollection($properties));
+    }
+
+    /**
+     * Non-paginated, lightweight list for map rendering. Same filters as the
+     * index; only properties that have coordinates are returned.
+     */
+    public function map(Request $request): JsonResponse
+    {
+        $query = $this->filteredQuery($request)
+            ->with([
+                'city:id,name,state_id',
+                'propertyType:id,name',
+                'compound:id,name,developer_id',
+                'compound.developer:id,name',
+                'media',
             ])
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude');
+
+        $this->loadFavoritesForAuthUser($query);
+
+        $properties = $query->get();
+
+        return $this->ok(data: PropertyMapResource::collection($properties));
+    }
+
+    private function filteredQuery(Request $request): QueryBuilder
+    {
+        $query = QueryBuilder::for(Property::class)
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('property_type_id'),
@@ -74,11 +110,8 @@ class PropertyController extends Controller
             'monthly_payment_min', 'monthly_payment_max',
             'installment_years',
         ]));
-        $this->loadFavoritesForAuthUser($query);
 
-        $properties = $query->macroPaginate();
-
-        return $this->ok(data: new PropertyCollection($properties));
+        return $query;
     }
 
     public function show(Property $property): JsonResponse

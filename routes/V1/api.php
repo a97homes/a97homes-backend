@@ -92,12 +92,14 @@ Route::get('property-types/{propertyType}/attributes', [PropertyTypeController::
 
 // =========================Properties==========================
 Route::get('properties', [PropertyController::class, 'index']);
+Route::get('properties/map', [PropertyController::class, 'map']);
 Route::get('properties/compare', [PropertyController::class, 'compare']);
 Route::get('properties/{property}', [PropertyController::class, 'show']);
 // =========================Properties==========================
 
 // =========================Compounds==========================
 Route::get('compounds', [CompoundController::class, 'index']);
+Route::get('compounds/map', [CompoundController::class, 'map']);
 Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
 Route::get('compounds/{compound}/reviews', [CompoundController::class, 'reviews']);

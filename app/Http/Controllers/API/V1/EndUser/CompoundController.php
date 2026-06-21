@@ -13,6 +13,7 @@ use App\Http\Requests\API\V1\EndUser\Compound\StoreCompoundReviewRequest;
 use App\Http\Resources\API\V1\Compound\AdminCompoundResource;
 use App\Http\Resources\API\V1\Compound\CompoundCollection;
 use App\Http\Resources\API\V1\Compound\CompoundCompareResource;
+use App\Http\Resources\API\V1\Compound\CompoundMapResource;
 use App\Http\Resources\API\V1\Compound\CompoundResource;
 use App\Http\Resources\API\V1\CompoundReview\CompoundReviewCollection;
 use App\Http\Resources\API\V1\CompoundReview\CompoundReviewResource;
@@ -29,7 +30,7 @@ class CompoundController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = QueryBuilder::for(Compound::class)
+        $query = $this->filteredQuery($request)
             ->with([
                 'developer:id,name,is_active',
                 'developer.media',
@@ -42,7 +43,39 @@ class CompoundController extends Controller
             ])
             ->withMin('properties', 'price')
             ->withMin('properties', 'resale_price')
+            ->withMax('properties', 'price');
+
+        $query->withFavoritesForUser(authUserId());
+
+        $compounds = $query->macroPaginate();
+
+        return $this->ok(data: new CompoundCollection($compounds));
+    }
+
+    /**
+     * Non-paginated, lightweight list for map rendering. Same filters as the
+     * index; only compounds whose city has coordinates are returned.
+     */
+    public function map(Request $request): JsonResponse
+    {
+        $compounds = $this->filteredQuery($request)
+            ->with([
+                'city:id,name,state_id,latitude,longitude',
+                'developer:id,name,is_active',
+                'developer.media',
+                'media',
+            ])
+            ->withMin('properties', 'price')
             ->withMax('properties', 'price')
+            ->whereHas('city', fn (Builder $q) => $q->whereNotNull('latitude')->whereNotNull('longitude'))
+            ->get();
+
+        return $this->ok(data: CompoundMapResource::collection($compounds));
+    }
+
+    private function filteredQuery(Request $request): QueryBuilder
+    {
+        $query = QueryBuilder::for(Compound::class)
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('city_id'),
@@ -106,11 +139,7 @@ class CompoundController extends Controller
             'activeOffers',
         );
 
-        $query->withFavoritesForUser(authUserId());
-
-        $compounds = $query->macroPaginate();
-
-        return $this->ok(data: new CompoundCollection($compounds));
+        return $query;
     }
 
     public function show(Compound $compound): JsonResponse
