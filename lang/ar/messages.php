@@ -61,6 +61,8 @@ return [
     'developer_created_successfully' => 'تم إنشاء المطور بنجاح.',
     'developer_updated_successfully' => 'تم تحديث المطور بنجاح.',
     'developer_deleted_successfully' => 'تم حذف المطور بنجاح.',
+    'developer_activated' => 'تم تفعيل المطور بنجاح.',
+    'developer_deactivated' => 'تم إلغاء تفعيل المطور بنجاح.',
     'sell_unit_created_successfully' => 'تم إنشاء طلب بيع الوحدة بنجاح.',
     'favorite_added_successfully' => 'تمت الإضافة إلى المفضلة بنجاح.',
     'favorite_removed_successfully' => 'تمت الإزالة من المفضلة بنجاح.',

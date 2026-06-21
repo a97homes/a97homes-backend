@@ -2,14 +2,12 @@
 
 namespace App\Http\Resources\API\V1\Compound;
 
-use App\Http\Resources\API\V1\Attribute\AttributeResource;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
 use App\Http\Resources\API\V1\Offer\OfferResource;
 use App\Http\Resources\API\V1\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Http\Resources\City\CityResource;
-use App\Models\Attribute;
 use App\Models\Compound;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -31,7 +29,10 @@ class CompoundResource extends JsonResource
             'id' => $compound->id,
             'name' => $this->whenHas('name', fn () => $compound->name),
             'description' => $this->whenHas('description', fn () => $compound->description),
-            'developer' => DeveloperResource::make($this->whenLoaded('developer')),
+            'developer' => $this->when(
+                $compound->relationLoaded('developer') && optional($compound->developer)->is_active,
+                fn () => DeveloperResource::make($compound->developer),
+            ),
             'city' => CityResource::make($this->whenLoaded('city')),
             'starting_price' => $this->whenHas('properties_min_price', fn () => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null),
             'resale_price' => $this->whenHas('properties_min_resale_price', fn () => $compound->isCompleted()

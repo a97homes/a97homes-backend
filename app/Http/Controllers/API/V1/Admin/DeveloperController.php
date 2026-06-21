@@ -29,7 +29,7 @@ class DeveloperController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update', 'toggleActive']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_DESTROY]), only: ['destroy']),
         ];
     }
@@ -73,6 +73,16 @@ class DeveloperController extends Controller implements HasMiddleware
         $action->execute($developer);
 
         return $this->ok(message: __('messages.developer_deleted_successfully'));
+    }
+
+    public function toggleActive(Developer $developer): JsonResponse
+    {
+        $developer->update(['is_active' => ! $developer->is_active]);
+
+        return $this->ok(
+            message: __($developer->is_active ? 'messages.developer_activated' : 'messages.developer_deactivated'),
+            data: DeveloperResource::make($developer->refresh()),
+        );
     }
 
     public function dropdown(): JsonResponse

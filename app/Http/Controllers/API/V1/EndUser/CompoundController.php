@@ -31,7 +31,7 @@ class CompoundController extends Controller
     {
         $query = QueryBuilder::for(Compound::class)
             ->with([
-                'developer:id,name',
+                'developer:id,name,is_active',
                 'developer.media',
                 'city:id,name,state_id',
                 'city.state:id,name',
@@ -214,7 +214,7 @@ class CompoundController extends Controller
     public function similar(Compound $compound): JsonResponse
     {
         $compounds = Compound::query()
-            ->with(['developer:id,name', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
+            ->with(['developer:id,name,is_active', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
             ->withMin('properties', 'price')
             ->withMax('properties', 'price')
             ->where('id', '!=', $compound->id)

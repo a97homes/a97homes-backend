@@ -24,6 +24,7 @@ class UpdateDeveloperRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string', 'max:255'],
             'about' => ['sometimes', 'string', 'max:10000'],
+            'is_active' => ['sometimes', 'boolean'],
             'logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:'.config('media-library.max_file_size')],
         ];
     }

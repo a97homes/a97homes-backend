@@ -20,7 +20,22 @@ class Developer extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_LOGO = 'developer_logo';
 
-    protected $fillable = ['name', 'about'];
+    protected $fillable = ['name', 'about', 'is_active'];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
+    }
 
     /**
      * Override the Arabic search scope since `name` is a plain string, not JSON.

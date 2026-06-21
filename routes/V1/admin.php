@@ -108,6 +108,7 @@ Route::apiResource('socials', SocialController::class)->except(['update']);
 
 // =====================Developer Routes============
 Route::get('developers/dropdown', [DeveloperController::class, 'dropdown']);
+Route::patch('developers/{developer}/toggle-active', [DeveloperController::class, 'toggleActive']);
 Route::apiResource('developers', DeveloperController::class);
 // =====================Developer Routes============
 

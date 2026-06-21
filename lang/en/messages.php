@@ -61,6 +61,8 @@ return [
     'developer_created_successfully' => 'Developer created successfully.',
     'developer_updated_successfully' => 'Developer updated successfully.',
     'developer_deleted_successfully' => 'Developer deleted successfully.',
+    'developer_activated' => 'Developer activated successfully.',
+    'developer_deactivated' => 'Developer deactivated successfully.',
     'sell_unit_created_successfully' => 'sell unit created successfully',
     'favorite_added_successfully' => 'Favorite added successfully.',
     'favorite_removed_successfully' => 'Favorite removed successfully.',

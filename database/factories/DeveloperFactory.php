@@ -20,6 +20,14 @@ class DeveloperFactory extends Factory
         return [
             'name' => fake()->company(),
             'about' => fake()->paragraph(3),
+            'is_active' => true,
         ];
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'is_active' => false,
+        ]);
     }
 }

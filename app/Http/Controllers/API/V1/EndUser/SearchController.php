@@ -106,7 +106,7 @@ class SearchController extends Controller
         return match ($type) {
             'compound' => $this->ok(data: new CompoundCollection(
                 Compound::query()
-                    ->with(['developer:id,name', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
+                    ->with(['developer:id,name,is_active', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
                     ->searchByName($queryString)
                     ->latest()
                     ->macroPaginate()
@@ -121,6 +121,7 @@ class SearchController extends Controller
             )),
             'developer' => $this->ok(data: new DeveloperCollection(
                 Developer::query()
+                    ->active()
                     ->with(['media'])
                     ->searchByName($queryString)
                     ->latest()
@@ -167,6 +168,7 @@ class SearchController extends Controller
     private function searchDevelopers(string $value, int $limit): Collection
     {
         return Developer::query()
+            ->active()
             ->with(['media'])
             ->searchByName($value)
             ->limit($limit)

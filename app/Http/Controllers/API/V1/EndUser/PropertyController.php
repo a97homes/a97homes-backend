@@ -28,7 +28,7 @@ class PropertyController extends Controller
                 'city.state:id,name',
                 'propertyType:id,name',
                 'compound:id,name,developer_id,delivery_date,completion_status',
-                'compound.developer:id,name',
+                'compound.developer:id,name,is_active',
                 'compound.developer.media',
                 'compound.activeOffers',
                 'compound.activeDiscount',
