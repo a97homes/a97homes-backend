@@ -84,8 +84,14 @@ class CompoundController extends Controller
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('created_at'),
+                AllowedSort::callback('created_at', function (Builder $q, bool $descending): void {
+                    $direction = $descending ? 'desc' : 'asc';
+                    $q->orderBy('created_at', $direction)->orderBy('id', $direction);
+                }),
                 AllowedSort::field('name'),
+                AllowedSort::field('price', 'properties_min_price'),
+                AllowedSort::field('min_price', 'properties_min_price'),
+                AllowedSort::field('max_price', 'properties_max_price'),
             ]);
 
         $this->applyAttributeFilters($query, $request);
