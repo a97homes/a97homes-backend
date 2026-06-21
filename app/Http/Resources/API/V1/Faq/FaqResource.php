@@ -45,24 +45,60 @@ class FaqResource extends JsonResource
             return null;
         }
 
-        return [
-            'type' => $faq->faqable_type,
-            'id' => $faqable->getKey(),
-            'name' => $this->resolveFaqableName($faqable),
-        ];
+        return array_merge(
+            $this->idNamePayload($faqable, ['type' => $faq->faqable_type]),
+            $this->faqableContext($faqable),
+        );
+    }
+
+    /**
+     * Parent breadcrumb for the owner: a compound exposes its developer and
+     * area (city + state); a city (area) exposes its state.
+     *
+     * @return array<string, mixed>
+     */
+    private function faqableContext(Model $faqable): array
+    {
+        $context = [];
+
+        if ($faqable->relationLoaded('developer')) {
+            $context['developer'] = $faqable->developer ? $this->idNamePayload($faqable->developer) : null;
+        }
+
+        if ($faqable->relationLoaded('city')) {
+            $context['area'] = $faqable->city ? $this->idNamePayload($faqable->city) : null;
+            $state = $faqable->city?->relationLoaded('state') ? $faqable->city->state : null;
+            $context['state'] = $state ? $this->idNamePayload($state) : null;
+        } elseif ($faqable->relationLoaded('state')) {
+            $context['state'] = $faqable->state ? $this->idNamePayload($faqable->state) : null;
+        }
+
+        return $context;
+    }
+
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return array<string, mixed>
+     */
+    private function idNamePayload(Model $model, array $extra = []): array
+    {
+        return array_merge($extra, [
+            'id' => $model->getKey(),
+            'name' => $this->resolveName($model),
+        ]);
     }
 
     /**
      * @return mixed
      */
-    private function resolveFaqableName(Model $faqable)
+    private function resolveName(Model $model)
     {
-        $translatable = property_exists($faqable, 'translatable') ? $faqable->translatable : [];
+        $translatable = property_exists($model, 'translatable') ? $model->translatable : [];
 
         if (in_array('name', $translatable, true)) {
-            return $this->getTranslatableField($faqable, 'name');
+            return $this->getTranslatableField($model, 'name');
         }
 
-        return $faqable->name;
+        return $model->name;
     }
 }

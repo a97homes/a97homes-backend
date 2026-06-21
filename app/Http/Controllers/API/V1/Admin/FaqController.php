@@ -12,8 +12,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Faq\StoreFaqRequest;
 use App\Http\Requests\API\V1\Admin\Faq\UpdateFaqRequest;
 use App\Http\Resources\API\V1\Faq\FaqResource;
+use App\Models\City;
+use App\Models\Compound;
 use App\Models\Faq;
 use App\Permissions\PermissionRegistry;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -37,7 +40,7 @@ class FaqController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $faqs = QueryBuilder::for(Faq::class)
-            ->with('faqable')
+            ->with(['faqable' => fn (MorphTo $morphTo) => $morphTo->morphWith($this->faqableEagerLoads())])
             ->allowedFilters([
                 AllowedFilter::exact('faqable_id'),
                 AllowedFilter::exact('faqable_type'),
@@ -62,7 +65,22 @@ class FaqController extends Controller implements HasMiddleware
 
     public function show(Faq $faq): JsonResponse
     {
-        return $this->ok(data: FaqResource::make($faq->load('faqable')));
+        $faq->load(['faqable' => fn (MorphTo $morphTo) => $morphTo->morphWith($this->faqableEagerLoads())]);
+
+        return $this->ok(data: FaqResource::make($faq));
+    }
+
+    /**
+     * Per-type eager loads for the polymorphic faqable owner.
+     *
+     * @return array<class-string, array<int, string>>
+     */
+    private function faqableEagerLoads(): array
+    {
+        return [
+            Compound::class => ['developer:id,name', 'city:id,name,state_id', 'city.state:id,name'],
+            City::class => ['state:id,name'],
+        ];
     }
 
     public function update(UpdateFaqRequest $request, Faq $faq, UpdateFaqAction $action): JsonResponse
