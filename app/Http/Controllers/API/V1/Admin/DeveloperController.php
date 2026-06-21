@@ -12,6 +12,7 @@ use App\Http\Requests\API\V1\Admin\Developer\StoreDeveloperRequest;
 use App\Http\Requests\API\V1\Admin\Developer\UpdateDeveloperRequest;
 use App\Http\Resources\API\V1\Developer\DeveloperCollection;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
+use App\Models\Compound;
 use App\Models\Developer;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DeveloperController extends Controller implements HasMiddleware
@@ -37,13 +39,31 @@ class DeveloperController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::class)
+            ->withCount([
+                'compounds',
+                'properties as units_count',
+            ])
+            ->addSelect([
+                'areas_count' => Compound::query()
+                    ->selectRaw('COUNT(DISTINCT city_id)')
+                    ->whereColumn('developer_id', 'developers.id'),
+            ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter), // use partial for search
+                AllowedFilter::exact('is_active'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
-            ->allowedSorts(['id'])
+            ->allowedSorts([
+                'id',
+                'name',
+                'created_at',
+                'is_active',
+                AllowedSort::field('compounds_count'),
+                AllowedSort::field('units_count'),
+                AllowedSort::field('areas_count'),
+            ])
             ->macroPaginate();
 
         return $this->ok(data: new DeveloperCollection($developers));

@@ -29,6 +29,8 @@ class DeveloperResource extends JsonResource
             'is_active' => $this->whenHas('is_active', fn () => $developer->is_active),
             'logo_url' => $developer->logo_url,
             'compounds_count' => $this->whenHas('compounds_count', fn () => $developer->compounds_count),
+            'units_count' => $this->whenHas('units_count', fn () => (int) $developer->units_count),
+            'areas_count' => $this->whenHas('areas_count', fn () => (int) $developer->areas_count),
             'compounds' => CompoundResource::collection($this->whenLoaded('compounds')),
             'created_at' => $this->whenHas('created_at', fn () => $developer->created_at),
         ];
