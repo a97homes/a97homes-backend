@@ -78,6 +78,18 @@ class DeveloperController extends Controller implements HasMiddleware
 
     public function show(Developer $developer): JsonResponse
     {
+        $developer->load([
+            'media',
+            'areas',
+            'offers',
+            'faqs',
+        ]);
+
+        $developer->loadCount([
+            'compounds',
+            'properties as units_count',
+        ]);
+
         return $this->ok(data: DeveloperResource::make($developer));
     }
 

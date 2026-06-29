@@ -38,6 +38,9 @@ class DeveloperController extends Controller
 
         $developer->load([
             'media',
+            'areas',
+            'activeOffers',
+            'activeFaqs',
         ]);
 
         $developer->loadCount('compounds');

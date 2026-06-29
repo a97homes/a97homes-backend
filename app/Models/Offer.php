@@ -17,6 +17,7 @@ class Offer extends Model
 
     protected $fillable = [
         'compound_id',
+        'developer_id',
         'installment_years',
         'down_payment_percentage',
         'monthly_payment',
@@ -37,6 +38,11 @@ class Offer extends Model
     public function compound(): BelongsTo
     {
         return $this->belongsTo(Compound::class);
+    }
+
+    public function developer(): BelongsTo
+    {
+        return $this->belongsTo(Developer::class);
     }
 
     public function scopeActive(Builder $query): Builder

@@ -20,7 +20,8 @@ class StoreOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'compound_id' => ['required', Rule::exists('compounds', 'id')],
+            'compound_id' => ['required_without:developer_id', 'nullable', 'prohibits:developer_id', Rule::exists('compounds', 'id')],
+            'developer_id' => ['required_without:compound_id', 'nullable', Rule::exists('developers', 'id')],
             'installment_years' => ['nullable', 'integer', 'min:1', 'max:50'],
             'down_payment_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'monthly_payment' => ['nullable', 'integer', 'min:0'],

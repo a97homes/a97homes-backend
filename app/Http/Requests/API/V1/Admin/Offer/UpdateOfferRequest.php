@@ -20,7 +20,8 @@ class UpdateOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'compound_id' => ['sometimes', Rule::exists('compounds', 'id')],
+            'compound_id' => ['sometimes', 'nullable', 'prohibits:developer_id', Rule::exists('compounds', 'id')],
+            'developer_id' => ['sometimes', 'nullable', Rule::exists('developers', 'id')],
             'installment_years' => ['nullable', 'integer', 'min:1', 'max:50'],
             'down_payment_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'monthly_payment' => ['nullable', 'integer', 'min:0'],

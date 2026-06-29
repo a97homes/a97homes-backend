@@ -85,7 +85,7 @@ class FaqIndexFaqableTest extends TestCase
             ->assertJsonPath('data.0.faqable.id', $compound->id)
             ->assertJsonPath('data.0.faqable.name', 'Palm Hills')
             ->assertJsonPath('data.0.faqable.developer.id', $developer->id)
-            ->assertJsonPath('data.0.faqable.developer.name', 'SODIC')
+            ->assertJsonPath('data.0.faqable.developer.name.en', 'SODIC')
             ->assertJsonPath('data.0.faqable.area.id', $city->id)
             ->assertJsonPath('data.0.faqable.area.name.en', 'Sheikh Zayed')
             ->assertJsonPath('data.0.faqable.state.id', $state->id)

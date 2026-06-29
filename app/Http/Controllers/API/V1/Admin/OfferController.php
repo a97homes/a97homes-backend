@@ -38,6 +38,7 @@ class OfferController extends Controller implements HasMiddleware
         $offers = QueryBuilder::for(Offer::class)
             ->allowedFilters([
                 AllowedFilter::exact('compound_id'),
+                AllowedFilter::exact('developer_id'),
                 AllowedFilter::exact('is_active'),
             ])
             ->defaultSort('-id')
@@ -46,7 +47,7 @@ class OfferController extends Controller implements HasMiddleware
                 AllowedSort::field('monthly_payment'),
                 AllowedSort::field('created_at'),
             ])
-            ->with('compound:id,name')
+            ->with(['compound:id,name', 'developer:id,name'])
             ->macroPaginate();
 
         return $this->ok(data: new OfferCollection($offers));
@@ -58,13 +59,13 @@ class OfferController extends Controller implements HasMiddleware
 
         return $this->ok(
             message: __('messages.offer_created_successfully'),
-            data: OfferResource::make($offer->load('compound:id,name')),
+            data: OfferResource::make($offer->load(['compound:id,name', 'developer:id,name'])),
         );
     }
 
     public function show(Offer $offer): JsonResponse
     {
-        return $this->ok(data: OfferResource::make($offer->load('compound:id,name')));
+        return $this->ok(data: OfferResource::make($offer->load(['compound:id,name', 'developer:id,name'])));
     }
 
     public function update(UpdateOfferRequest $request, Offer $offer): JsonResponse
@@ -73,7 +74,7 @@ class OfferController extends Controller implements HasMiddleware
 
         return $this->ok(
             message: __('messages.offer_updated_successfully'),
-            data: OfferResource::make($offer->refresh()->load('compound:id,name')),
+            data: OfferResource::make($offer->refresh()->load(['compound:id,name', 'developer:id,name'])),
         );
     }
 

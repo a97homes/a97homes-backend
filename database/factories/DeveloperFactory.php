@@ -18,8 +18,16 @@ class DeveloperFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
-            'about' => fake()->paragraph(3),
+            'name' => [
+                'en' => fake()->company(),
+                'ar' => 'شركة '.fake()->word(),
+            ],
+            'about' => [
+                'en' => fake()->paragraph(3),
+                'ar' => 'نبذة '.fake()->sentence(),
+            ],
+            'whatsapp' => fake()->e164PhoneNumber(),
+            'phone' => fake()->e164PhoneNumber(),
             'is_active' => true,
         ];
     }

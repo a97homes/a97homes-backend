@@ -14,6 +14,7 @@ use App\Http\Requests\API\V1\Admin\Faq\UpdateFaqRequest;
 use App\Http\Resources\API\V1\Faq\FaqResource;
 use App\Models\City;
 use App\Models\Compound;
+use App\Models\Developer;
 use App\Models\Faq;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -80,6 +81,7 @@ class FaqController extends Controller implements HasMiddleware
         return [
             Compound::class => ['developer:id,name', 'city:id,name,state_id', 'city.state:id,name'],
             City::class => ['state:id,name'],
+            Developer::class => [],
         ];
     }
 

@@ -7,21 +7,29 @@ use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Translatable\HasTranslations;
 
 class Developer extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
     use HasFactory;
+    use HasTranslations;
     use InteractsWithMedia;
 
     public const MEDIA_COLLECTION_LOGO = 'developer_logo';
 
-    protected $fillable = ['name', 'about', 'is_active'];
+    public const MEDIA_COLLECTION_BANNER = 'developer_banner';
+
+    public array $translatable = ['name', 'about'];
+
+    protected $fillable = ['name', 'about', 'whatsapp', 'phone', 'is_active'];
 
     /**
      * @return array<string, string>
@@ -38,32 +46,6 @@ class Developer extends Model implements HasMedia
         $query->where('is_active', true);
     }
 
-    /**
-     * Override the Arabic search scope since `name` is a plain string, not JSON.
-     */
-    public function scopeSearchByName(Builder $query, string $value): void
-    {
-        $normalizedValue = $this->normalizeArabicText($value);
-        $driver = $query->getConnection()->getDriverName();
-
-        if ($driver === 'pgsql') {
-            $query->where(function ($q) use ($normalizedValue, $value) {
-                $q->whereRaw("REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(name, '[أإآ]', 'ا', 'g'), '[ة]', 'ه', 'g'), '[ي]', 'ى', 'g'), '[ؤ]', 'و', 'g'), '[ئ]', 'ي', 'g'), '[ء]', '', 'g'), '[ـ]', '', 'g') ILIKE ?", ["%{$normalizedValue}%"])
-                    ->orWhere('name', 'ILIKE', "%{$value}%");
-            });
-        } elseif ($driver === 'sqlite') {
-            $query->where(function ($q) use ($normalizedValue, $value) {
-                $q->where('name', 'LIKE', "%{$value}%")
-                    ->orWhere('name', 'LIKE', "%{$normalizedValue}%");
-            });
-        } else {
-            $query->where(function ($q) use ($normalizedValue, $value) {
-                $q->whereRaw("REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(name, '[أإآ]', 'ا'), '[ة]', 'ه'), '[ي]', 'ى'), '[ؤ]', 'و'), '[ئ]', 'ي'), '[ء]', ''), '[ـ]', '') LIKE ?", ["%{$normalizedValue}%"])
-                    ->orWhere('name', 'LIKE', "%{$value}%");
-            });
-        }
-    }
-
     public function compounds(): HasMany
     {
         return $this->hasMany(Compound::class);
@@ -74,8 +56,43 @@ class Developer extends Model implements HasMedia
         return $this->hasManyThrough(Property::class, Compound::class);
     }
 
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
+
+    public function activeOffers(): HasMany
+    {
+        return $this->hasMany(Offer::class)->where('is_active', true);
+    }
+
+    public function faqs(): MorphMany
+    {
+        return $this->morphMany(Faq::class, 'faqable');
+    }
+
+    public function activeFaqs(): MorphMany
+    {
+        return $this->morphMany(Faq::class, 'faqable')
+            ->where('is_active', true)
+            ->orderBy('sort_order');
+    }
+
+    /**
+     * Areas the developer operates in: the distinct cities of its compounds.
+     */
+    public function areas(): BelongsToMany
+    {
+        return $this->belongsToMany(City::class, 'compounds', 'developer_id', 'city_id')->distinct();
+    }
+
     public function getLogoUrlAttribute(): ?string
     {
         return $this->getFirstMediaUrl(self::MEDIA_COLLECTION_LOGO) ?: null;
+    }
+
+    public function getBannerUrlAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl(self::MEDIA_COLLECTION_BANNER) ?: null;
     }
 }
