@@ -79,11 +79,14 @@ class Developer extends Model implements HasMedia
     }
 
     /**
-     * Areas the developer operates in: the distinct cities of its compounds.
+     * Areas the developer operates in: the cities of its compounds.
+     *
+     * Not distinct at the SQL level: PostgreSQL cannot `SELECT DISTINCT` over
+     * the city's json columns. De-duplicate by id when presenting.
      */
     public function areas(): BelongsToMany
     {
-        return $this->belongsToMany(City::class, 'compounds', 'developer_id', 'city_id')->distinct();
+        return $this->belongsToMany(City::class, 'compounds', 'developer_id', 'city_id');
     }
 
     public function getLogoUrlAttribute(): ?string

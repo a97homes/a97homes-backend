@@ -39,7 +39,7 @@ class DeveloperResource extends JsonResource
             'areas_count' => $this->whenHas('areas_count', fn () => (int) $developer->areas_count),
             'areas' => $this->when(
                 $developer->relationLoaded('areas'),
-                fn () => $developer->areas->map(fn (City $city) => [
+                fn () => $developer->areas->unique('id')->values()->map(fn (City $city) => [
                     'id' => $city->id,
                     'name' => $this->getTranslatableField($city, 'name'),
                 ]),

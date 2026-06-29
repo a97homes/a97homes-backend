@@ -17,7 +17,7 @@ class SocialResource extends JsonResource
             'id' => $this->whenHas('id', fn () => $social->id),
             'link' => $this->whenHas('link', fn () => $social->link),
             'type' => $this->whenHas('type', fn () => $social->type),
-            'icon' => $this->whenHas('icon', fn () => $social->icon),
+            'icon' => $social->icon_url,
             'created_at' => $this->whenHas('created_at', fn () => $social->created_at),
         ];
     }

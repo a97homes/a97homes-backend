@@ -54,6 +54,22 @@ class DeveloperShowFieldsTest extends TestCase
             ->assertJsonPath('data.areas.0.id', $city->id);
     }
 
+    public function test_show_deduplicates_areas_across_compounds(): void
+    {
+        $developer = Developer::factory()->create();
+        $city = City::factory()->create();
+
+        Compound::factory()->count(3)->create([
+            'developer_id' => $developer->id,
+            'city_id' => $city->id,
+        ]);
+
+        $this->getJson("/api/V1/developers/{$developer->id}")
+            ->assertOk()
+            ->assertJsonCount(1, 'data.areas')
+            ->assertJsonPath('data.areas.0.id', $city->id);
+    }
+
     public function test_show_hides_inactive_offers_and_faqs(): void
     {
         $developer = Developer::factory()->create();

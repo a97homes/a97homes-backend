@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
             'country' => \App\Models\Country::class,
             'developer' => \App\Models\Developer::class,
             'property' => \App\Models\Property::class,
+            'social' => \App\Models\Social::class,
             'user' => \App\Models\User\User::class,
         ]);
 
