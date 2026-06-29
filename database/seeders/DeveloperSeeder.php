@@ -77,8 +77,11 @@ class DeveloperSeeder extends Seeder
 
         foreach ($developers as $index => $developerData) {
             $developer = Developer::firstOrCreate(
-                ['name' => $developerData['name']],
-                $developerData
+                ['name->ar' => $developerData['name']],
+                [
+                    'name' => ['ar' => $developerData['name']],
+                    'about' => ['ar' => $developerData['about']],
+                ]
             );
 
             if ($developer->getFirstMedia(Developer::MEDIA_COLLECTION_LOGO) !== null) {

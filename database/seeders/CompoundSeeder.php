@@ -17,9 +17,11 @@ class CompoundSeeder extends Seeder
     {
         // Reset PostgreSQL sequence to avoid conflicts with manually-inserted IDs
         $maxId = DB::table('compounds')->max('id') ?? 0;
-        DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        }
 
-        $developers = Developer::all()->keyBy('name');
+        $developers = Developer::all()->keyBy(fn (Developer $developer) => $developer->getTranslation('name', 'ar'));
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
 
         $cities = [
