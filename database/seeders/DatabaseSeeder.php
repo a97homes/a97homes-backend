@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call([DeveloperSeeder::class]);
         $this->call([PropertySeeder::class]);
         $this->call([CompoundSeeder::class]);
+        $this->call([PropertyCreatedAtSeeder::class]);
         $this->call([DiscountSeeder::class]);
         $this->call([FavoriteSeeder::class]);
         $this->call([PropertyFavoriteSeeder::class]);
