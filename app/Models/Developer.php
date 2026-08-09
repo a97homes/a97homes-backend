@@ -46,6 +46,24 @@ class Developer extends Model implements HasMedia
         $query->where('is_active', true);
     }
 
+    /**
+     * @param  int|string|array<int, int|string>  $value
+     */
+    public function scopeAreaId(Builder $query, int|string|array $value): void
+    {
+        $query->whereHas('compounds', fn (Builder $compounds) => $compounds->whereIn('city_id', (array) $value));
+    }
+
+    public function scopeMinCompounds(Builder $query, int|string $value): void
+    {
+        $query->has('compounds', '>=', (int) $value);
+    }
+
+    public function scopeMinUnits(Builder $query, int|string $value): void
+    {
+        $query->has('properties', '>=', (int) $value);
+    }
+
     public function compounds(): HasMany
     {
         return $this->hasMany(Compound::class);

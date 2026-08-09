@@ -39,6 +39,7 @@ class DeveloperController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::class)
+            ->with('areas')
             ->withCount([
                 'compounds',
                 'properties as units_count',
@@ -50,7 +51,11 @@ class DeveloperController extends Controller implements HasMiddleware
             ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter), // use partial for search
+                AllowedFilter::exact('id'),
                 AllowedFilter::exact('is_active'),
+                AllowedFilter::scope('area_id'),
+                AllowedFilter::scope('min_compounds'),
+                AllowedFilter::scope('min_units'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])

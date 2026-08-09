@@ -9,6 +9,7 @@ use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Faq;
 use App\Models\Offer;
+use App\Models\Property;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -52,6 +53,33 @@ class DeveloperShowFieldsTest extends TestCase
             ->assertJsonPath('data.offers.0.id', $offer->id)
             ->assertJsonPath('data.faqs.0.id', $faq->id)
             ->assertJsonPath('data.areas.0.id', $city->id);
+    }
+
+    public function test_show_returns_compounds_and_units_counts(): void
+    {
+        $developer = Developer::factory()->create();
+        $city = City::factory()->create();
+
+        $compounds = Compound::factory()->count(2)->create([
+            'developer_id' => $developer->id,
+            'city_id' => $city->id,
+        ]);
+
+        foreach ($compounds as $compound) {
+            Property::query()->create([
+                'compound_id' => $compound->id,
+                'address' => 'Test address',
+            ]);
+            Property::query()->create([
+                'compound_id' => $compound->id,
+                'address' => 'Test address',
+            ]);
+        }
+
+        $this->getJson("/api/V1/developers/{$developer->id}")
+            ->assertOk()
+            ->assertJsonPath('data.compounds_count', 2)
+            ->assertJsonPath('data.units_count', 4);
     }
 
     public function test_show_deduplicates_areas_across_compounds(): void

@@ -18,7 +18,10 @@ class DeveloperController extends Controller
     {
         $developers = QueryBuilder::for(Developer::query()->active())
             ->with(['media'])
-            ->withCount('compounds')
+            ->withCount([
+                'compounds',
+                'properties as units_count',
+            ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
             ])
@@ -43,7 +46,10 @@ class DeveloperController extends Controller
             'activeFaqs',
         ]);
 
-        $developer->loadCount('compounds');
+        $developer->loadCount([
+            'compounds',
+            'properties as units_count',
+        ]);
 
         return $this->ok(data: DeveloperResource::make($developer));
     }

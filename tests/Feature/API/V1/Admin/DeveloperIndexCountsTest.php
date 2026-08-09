@@ -81,6 +81,53 @@ class DeveloperIndexCountsTest extends TestCase
             ->assertJsonPath('data.data.0.id', $active->id);
     }
 
+    public function test_index_returns_the_developer_areas(): void
+    {
+        $this->actingAsAdmin();
+        $developer = $this->seedDeveloperWith(compounds: 3, unitsPerCompound: 1, distinctCities: 2);
+
+        $response = $this->getJson('/api/admin/V1/developers')->assertOk();
+
+        $areas = $response->json('data.data.0.areas');
+
+        $this->assertCount(2, $areas);
+        $this->assertEqualsCanonicalizing(
+            $developer->compounds()->pluck('city_id')->unique()->values()->all(),
+            array_column($areas, 'id'),
+        );
+    }
+
+    public function test_index_filters_by_area_id(): void
+    {
+        $this->actingAsAdmin();
+        $developer = $this->seedDeveloperWith(compounds: 1, unitsPerCompound: 1, distinctCities: 1);
+        $this->seedDeveloperWith(compounds: 1, unitsPerCompound: 1, distinctCities: 1);
+
+        $cityId = $developer->compounds()->value('city_id');
+
+        $this->getJson("/api/admin/V1/developers?filter[area_id]={$cityId}")
+            ->assertOk()
+            ->assertJsonCount(1, 'data.data')
+            ->assertJsonPath('data.data.0.id', $developer->id);
+    }
+
+    public function test_index_filters_by_min_compounds_and_min_units(): void
+    {
+        $this->actingAsAdmin();
+        $this->seedDeveloperWith(compounds: 1, unitsPerCompound: 1, distinctCities: 1);
+        $big = $this->seedDeveloperWith(compounds: 3, unitsPerCompound: 4, distinctCities: 1);
+
+        $this->getJson('/api/admin/V1/developers?filter[min_compounds]=2')
+            ->assertOk()
+            ->assertJsonCount(1, 'data.data')
+            ->assertJsonPath('data.data.0.id', $big->id);
+
+        $this->getJson('/api/admin/V1/developers?filter[min_units]=5')
+            ->assertOk()
+            ->assertJsonCount(1, 'data.data')
+            ->assertJsonPath('data.data.0.id', $big->id);
+    }
+
     public function test_index_sorts_by_units_count_desc(): void
     {
         $this->actingAsAdmin();
