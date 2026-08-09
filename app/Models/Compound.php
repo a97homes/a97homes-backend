@@ -7,11 +7,13 @@ use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
@@ -20,10 +22,15 @@ class Compound extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
+    use HasFactory;
     use HasTranslations;
     use InteractsWithMedia;
 
     public const MEDIA_COLLECTION_IMAGE = 'compound_image';
+
+    public const MEDIA_COLLECTION_PROJECT_PLAN = 'compound_project_plan';
+
+    public const MEDIA_COLLECTION_FLOOR_PLAN = 'compound_floor_plan';
 
     protected $fillable = [
         'name',
@@ -98,9 +105,41 @@ class Compound extends Model implements HasMedia
             ->latest('percentage');
     }
 
+    public function paymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class);
+    }
+
+    public function activePaymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class)->where('is_active', true);
+    }
+
+    public function phases(): HasMany
+    {
+        return $this->hasMany(Phase::class)->orderBy('sort_order');
+    }
+
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(CompoundReview::class);
+    }
+
+    public function faqs(): MorphMany
+    {
+        return $this->morphMany(Faq::class, 'faqable');
+    }
+
+    public function activeFaqs(): MorphMany
+    {
+        return $this->morphMany(Faq::class, 'faqable')
+            ->where('is_active', true)
+            ->orderBy('sort_order');
     }
 
     public function favoritedByUsers(): BelongsToMany

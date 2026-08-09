@@ -17,9 +17,11 @@ class CompoundSeeder extends Seeder
     {
         // Reset PostgreSQL sequence to avoid conflicts with manually-inserted IDs
         $maxId = DB::table('compounds')->max('id') ?? 0;
-        DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        }
 
-        $developers = Developer::all()->keyBy('name');
+        $developers = Developer::all()->keyBy(fn (Developer $developer) => $developer->getTranslation('name', 'ar'));
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
 
         $cities = [
@@ -270,6 +272,10 @@ class CompoundSeeder extends Seeder
             ],
         ];
 
+        $totalUnits = array_sum(array_map(fn (array $compoundData): int => count($compoundData['units']), $compounds));
+        $propertyCreatedAt = now()->startOfSecond()->subSeconds($totalUnits);
+        $propertyCreatedAtOffset = 0;
+
         foreach ($compounds as $compoundData) {
             $developer = $developers->get($compoundData['developer']);
 
@@ -296,7 +302,7 @@ class CompoundSeeder extends Seeder
                     continue;
                 }
 
-                Property::updateOrCreate(
+                $property = Property::updateOrCreate(
                     [
                         'compound_id' => $compound->id,
                         'property_type_id' => $propertyType->id,
@@ -313,6 +319,12 @@ class CompoundSeeder extends Seeder
                         'city_id' => $cityId,
                     ],
                 );
+
+                $propertyTimestamp = $propertyCreatedAt->copy()->addSeconds($propertyCreatedAtOffset++);
+                $property->forceFill([
+                    'created_at' => $propertyTimestamp,
+                    'updated_at' => $propertyTimestamp,
+                ])->saveQuietly();
             }
         }
     }

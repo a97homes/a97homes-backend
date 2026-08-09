@@ -12,6 +12,7 @@ use App\Http\Requests\API\V1\Admin\Developer\StoreDeveloperRequest;
 use App\Http\Requests\API\V1\Admin\Developer\UpdateDeveloperRequest;
 use App\Http\Resources\API\V1\Developer\DeveloperCollection;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
+use App\Models\Compound;
 use App\Models\Developer;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class DeveloperController extends Controller implements HasMiddleware
@@ -26,10 +28,10 @@ class DeveloperController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update', 'toggleActive']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_DESTROY]), only: ['destroy']),
         ];
     }
@@ -37,13 +39,36 @@ class DeveloperController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::class)
+            ->with('areas')
+            ->withCount([
+                'compounds',
+                'properties as units_count',
+            ])
+            ->addSelect([
+                'areas_count' => Compound::query()
+                    ->selectRaw('COUNT(DISTINCT city_id)')
+                    ->whereColumn('developer_id', 'developers.id'),
+            ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter), // use partial for search
+                AllowedFilter::exact('id'),
+                AllowedFilter::exact('is_active'),
+                AllowedFilter::scope('area_id'),
+                AllowedFilter::scope('min_compounds'),
+                AllowedFilter::scope('min_units'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
-            ->allowedSorts(['id'])
+            ->allowedSorts([
+                'id',
+                'name',
+                'created_at',
+                'is_active',
+                AllowedSort::field('compounds_count'),
+                AllowedSort::field('units_count'),
+                AllowedSort::field('areas_count'),
+            ])
             ->macroPaginate();
 
         return $this->ok(data: new DeveloperCollection($developers));
@@ -58,6 +83,18 @@ class DeveloperController extends Controller implements HasMiddleware
 
     public function show(Developer $developer): JsonResponse
     {
+        $developer->load([
+            'media',
+            'areas',
+            'offers',
+            'faqs',
+        ]);
+
+        $developer->loadCount([
+            'compounds',
+            'properties as units_count',
+        ]);
+
         return $this->ok(data: DeveloperResource::make($developer));
     }
 
@@ -73,6 +110,16 @@ class DeveloperController extends Controller implements HasMiddleware
         $action->execute($developer);
 
         return $this->ok(message: __('messages.developer_deleted_successfully'));
+    }
+
+    public function toggleActive(Developer $developer): JsonResponse
+    {
+        $developer->update(['is_active' => ! $developer->is_active]);
+
+        return $this->ok(
+            message: __($developer->is_active ? 'messages.developer_activated' : 'messages.developer_deactivated'),
+            data: DeveloperResource::make($developer->refresh()),
+        );
     }
 
     public function dropdown(): JsonResponse

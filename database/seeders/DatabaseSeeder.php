@@ -37,5 +37,13 @@ class DatabaseSeeder extends Seeder
         $this->call([OfferSeeder::class]);
         $this->call([BannerSeeder::class]);
         $this->call([FeaturedSeeder::class]);
+        $this->call([ConsultantSeeder::class]);
+        $this->call([ConsultantReviewSeeder::class]);
+        $this->call([PropertyMediaSeeder::class]);
+        $this->call([PaymentPlanSeeder::class]);
+        $this->call([CityAreaDetailsSeeder::class]);
+        $this->call([FaqSeeder::class]);
+        $this->call([PageSeeder::class]);
+
     }
 }

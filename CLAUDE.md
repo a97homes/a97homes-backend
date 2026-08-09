@@ -260,6 +260,11 @@ protected function isAccessible(User $user, ?string $path = null): bool
    + @import "tailwindcss";
 </code-snippet>
 
+## Response Language
+
+- Always respond in English, regardless of the language of the incoming message.
+- If the user writes in Arabic, translate mentally and answer only in English.
+- Use clear, professional language. No bilingual replies, no mirroring.
 
 ### Replaced Utilities
 - Tailwind v4 removed deprecated utilities. Do not use the deprecated option - use the replacement.

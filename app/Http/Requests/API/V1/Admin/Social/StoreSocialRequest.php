@@ -24,7 +24,7 @@ class StoreSocialRequest extends FormRequest
         return [
             'type' => ['required', 'string', 'max:255'],
             'link' => ['required', 'url', 'max:255'],
-            'icon' => ['max:255', 'required', 'string'],
+            'icon' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,svg', 'max:'.config('media-library.max_file_size')],
         ];
     }
 }

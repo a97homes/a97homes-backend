@@ -6,8 +6,20 @@ use App\Models\Social;
 
 class StoreSocialAction
 {
-    public function execute(array $data)
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function execute(array $data): Social
     {
-        return Social::create($data);
+        $icon = $data['icon'] ?? null;
+        unset($data['icon']);
+
+        $social = Social::create($data);
+
+        if ($icon) {
+            $social->addMedia($icon)->toMediaCollection(Social::MEDIA_COLLECTION_ICON);
+        }
+
+        return $social;
     }
 }

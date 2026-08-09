@@ -22,9 +22,17 @@ class StoreDeveloperRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'about' => ['required', 'string', 'max:10000'],
+            'name' => ['required', 'array'],
+            'name.ar' => ['required', 'string', 'max:255'],
+            'name.en' => ['nullable', 'string', 'max:255'],
+            'about' => ['required', 'array'],
+            'about.ar' => ['required', 'string', 'max:10000'],
+            'about.en' => ['nullable', 'string', 'max:10000'],
+            'whatsapp' => ['nullable', 'string', 'max:30'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'is_active' => ['sometimes', 'boolean'],
             'logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:'.config('media-library.max_file_size')],
+            'banner' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:'.config('media-library.max_file_size')],
         ];
     }
 }

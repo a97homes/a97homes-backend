@@ -30,7 +30,7 @@ class PropertyCompareResource extends JsonResource
             'compound' => $this->whenLoaded('compound', fn () => [
                 'id' => $property->compound->id,
                 'name' => $property->compound->name,
-                'developer' => $property->compound->relationLoaded('developer') ? [
+                'developer' => ($property->compound->relationLoaded('developer') && optional($property->compound->developer)->is_active) ? [
                     'name' => $property->compound->developer->name,
                     'logo' => $property->compound->developer->logo_url,
                 ] : null,

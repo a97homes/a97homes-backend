@@ -22,7 +22,7 @@ class DropdownController extends Controller
 {
     public function developers(): JsonResponse
     {
-        $developers = Developer::query()->select('id', 'name')->get();
+        $developers = Developer::query()->active()->select('id', 'name')->get();
 
         return $this->ok(data: DeveloperResource::collection($developers));
     }

@@ -16,9 +16,12 @@ class DeveloperController extends Controller
 {
     public function index(): JsonResponse
     {
-        $developers = QueryBuilder::for(Developer::class)
+        $developers = QueryBuilder::for(Developer::query()->active())
             ->with(['media'])
-            ->withCount('compounds')
+            ->withCount([
+                'compounds',
+                'properties as units_count',
+            ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
             ])
@@ -34,18 +37,26 @@ class DeveloperController extends Controller
 
     public function show(Developer $developer): JsonResponse
     {
+        abort_unless($developer->is_active, 404);
+
         $developer->load([
             'media',
+            'areas',
+            'activeOffers',
+            'activeFaqs',
         ]);
 
-        $developer->loadCount('compounds');
+        $developer->loadCount([
+            'compounds',
+            'properties as units_count',
+        ]);
 
         return $this->ok(data: DeveloperResource::make($developer));
     }
 
     public function dropdown(): JsonResponse
     {
-        $developers = Developer::select('id', 'name')->get();
+        $developers = Developer::query()->active()->select('id', 'name')->get();
 
         return $this->ok(data: DeveloperResource::collection($developers));
     }

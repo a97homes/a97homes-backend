@@ -19,6 +19,7 @@ class CompanyInfoResource extends JsonResource
         return [
             'id' => $companyInfo->id,
             'phone' => $companyInfo->phone,
+            'whatsapp_phone' => $companyInfo->whatsapp_phone,
             'email' => $companyInfo->email,
             'working_hours' => $companyInfo->working_hours,
             'address' => $companyInfo->address,

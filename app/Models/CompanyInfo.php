@@ -10,6 +10,7 @@ class CompanyInfo extends Model
 
     protected $fillable = [
         'phone',
+        'whatsapp_phone',
         'email',
         'working_hours',
         'address',
@@ -22,6 +23,7 @@ class CompanyInfo extends Model
     {
         return self::firstOrCreate([], [
             'phone' => null,
+            'whatsapp_phone' => null,
             'email' => null,
             'working_hours' => null,
             'address' => null,

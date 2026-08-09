@@ -9,8 +9,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\EndUser\Property\ComparePropertiesRequest;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyCompareResource;
+use App\Http\Resources\API\V1\Property\PropertyMapResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -21,20 +23,55 @@ class PropertyController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = QueryBuilder::for(Property::class)
+        $query = $this->filteredQuery($request)
             ->with([
                 'city:id,name,state_id',
                 'city.state:id,name',
                 'propertyType:id,name',
                 'compound:id,name,developer_id,delivery_date,completion_status',
-                'compound.developer:id,name',
+                'compound.developer:id,name,is_active',
                 'compound.developer.media',
                 'compound.activeOffers',
                 'compound.activeDiscount',
                 'attributes' => fn ($q) => $q->with('unit'),
                 'selectedOptions',
                 'media',
+            ]);
+
+        $this->loadFavoritesForAuthUser($query);
+
+        $properties = $query->macroPaginate();
+
+        return $this->ok(data: new PropertyCollection($properties));
+    }
+
+    /**
+     * Non-paginated, lightweight list for map rendering. Same filters as the
+     * index; only properties that have coordinates are returned.
+     */
+    public function map(Request $request): JsonResponse
+    {
+        $query = $this->filteredQuery($request)
+            ->with([
+                'city:id,name,state_id',
+                'propertyType:id,name',
+                'compound:id,name,developer_id',
+                'compound.developer:id,name',
+                'media',
             ])
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude');
+
+        $this->loadFavoritesForAuthUser($query);
+
+        $properties = $query->get();
+
+        return $this->ok(data: PropertyMapResource::collection($properties));
+    }
+
+    private function filteredQuery(Request $request): QueryBuilder
+    {
+        $query = QueryBuilder::for(Property::class)
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('property_type_id'),
@@ -47,13 +84,26 @@ class PropertyController extends Controller
                 AllowedFilter::exact('compound.developer_id'),
                 AllowedFilter::exact('compound.completion_status'),
                 AllowedFilter::custom('delivery_date', new DeliveryDateFilter),
+                AllowedFilter::callback('finishing_type', function (Builder $query, $value): void {
+                    $values = array_values(array_filter(is_array($value) ? $value : [$value], fn ($v) => $v !== null && $v !== ''));
+                    if ($values === []) {
+                        return;
+                    }
+                    $query->whereHas('selectedOptions', function (Builder $q) use ($values): void {
+                        $q->whereIn('attribute_options.id', $values)
+                            ->whereHas('attribute', fn (Builder $attr) => $attr->where('slug', 'finishing-type'));
+                    });
+                }),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
-                AllowedSort::field('created_at'),
+                AllowedSort::callback('created_at', function (Builder $q, bool $descending): void {
+                    $direction = $descending ? 'desc' : 'asc';
+                    $q->orderBy('created_at', $direction)->orderBy('id', $direction);
+                }),
                 AllowedSort::field('price'),
             ]);
 
@@ -63,11 +113,8 @@ class PropertyController extends Controller
             'monthly_payment_min', 'monthly_payment_max',
             'installment_years',
         ]));
-        $this->loadFavoritesForAuthUser($query);
 
-        $properties = $query->macroPaginate();
-
-        return $this->ok(data: new PropertyCollection($properties));
+        return $query;
     }
 
     public function show(Property $property): JsonResponse
@@ -84,6 +131,8 @@ class PropertyController extends Controller
             'compound.developer.media',
             'compound.activeOffers',
             'compound.activeDiscount',
+            'compound.activePaymentPlans',
+            'compound.media',
             'media',
         ]);
 

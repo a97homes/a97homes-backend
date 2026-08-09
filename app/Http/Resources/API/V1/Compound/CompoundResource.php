@@ -4,6 +4,8 @@ namespace App\Http\Resources\API\V1\Compound;
 
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
 use App\Http\Resources\API\V1\Offer\OfferResource;
+use App\Http\Resources\API\V1\PaymentPlan\PaymentPlanResource;
+use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Http\Resources\City\CityResource;
 use App\Models\Compound;
@@ -27,7 +29,10 @@ class CompoundResource extends JsonResource
             'id' => $compound->id,
             'name' => $this->whenHas('name', fn () => $compound->name),
             'description' => $this->whenHas('description', fn () => $compound->description),
-            'developer' => DeveloperResource::make($this->whenLoaded('developer')),
+            'developer' => $this->when(
+                $compound->relationLoaded('developer') && optional($compound->developer)->is_active,
+                fn () => DeveloperResource::make($compound->developer),
+            ),
             'city' => CityResource::make($this->whenLoaded('city')),
             'starting_price' => $this->whenHas('properties_min_price', fn () => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null),
             'resale_price' => $this->whenHas('properties_min_resale_price', fn () => $compound->isCompleted()
@@ -44,28 +49,35 @@ class CompoundResource extends JsonResource
                 ->unique('id')
                 ->values())),
             'total_units' => $this->whenHas('properties_count', fn () => $compound->properties_count),
-            'properties' => $this->whenLoaded('properties', fn () => $compound->properties->map(fn ($p) => [
-                'id' => $p->id,
-                'price' => $p->price,
-                'resale_price' => $p->resale_price,
-                'property_type' => $p->relationLoaded('propertyType') && $p->propertyType
-                    ? PropertyTypeResource::make($p->propertyType)
-                    : null,
-                'media' => $p->relationLoaded('media')
-                    ? $p->media->map(fn ($m) => [
-                        'id' => $m->id,
-                        'url' => $m->getFullUrl(),
-                        'type' => $m->mime_type,
-                    ])
-                    : [],
-            ])),
-            'media' => $this->whenLoaded('media', fn () => $compound->media->map(fn ($m) => [
-                'id' => $m->id,
-                'url' => $m->getFullUrl(),
-                'type' => $m->mime_type,
-            ])),
+            'properties' => PropertyResource::collection($this->whenLoaded('properties')),
+            'payment_plans' => PaymentPlanResource::collection($this->whenLoaded('activePaymentPlans')),
+            'media' => $this->whenLoaded('media', fn () => $compound->media
+                ->where('collection_name', Compound::MEDIA_COLLECTION_IMAGE)
+                ->map(fn ($m) => [
+                    'id' => $m->id,
+                    'url' => $m->getFullUrl(),
+                    'type' => $m->mime_type,
+                ])->values()),
+            'project_plan' => $this->whenLoaded('media', fn () => $compound->media
+                ->where('collection_name', Compound::MEDIA_COLLECTION_PROJECT_PLAN)
+                ->map(fn ($m) => [
+                    'id' => $m->id,
+                    'url' => $m->getFullUrl(),
+                    'type' => $m->mime_type,
+                ])->values()),
+            'floor_plan' => $this->whenLoaded('media', fn () => $compound->media
+                ->where('collection_name', Compound::MEDIA_COLLECTION_FLOOR_PLAN)
+                ->map(fn ($m) => [
+                    'id' => $m->id,
+                    'url' => $m->getFullUrl(),
+                    'type' => $m->mime_type,
+                ])->values()),
             'offers' => OfferResource::collection($this->whenLoaded('activeOffers')),
             'is_favorited' => (bool) ($compound->is_favorited ?? $compound->favorites_count ?? false),
+            'reviews_count' => $this->whenHas('reviews_count', fn () => (int) $compound->reviews_count),
+            'average_rating' => $this->whenHas('reviews_avg_overall_rating', fn () => $compound->reviews_avg_overall_rating !== null
+                ? round((float) $compound->reviews_avg_overall_rating, 2)
+                : null),
         ];
     }
 }

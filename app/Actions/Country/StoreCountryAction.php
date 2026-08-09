@@ -6,8 +6,20 @@ use App\Models\Country;
 
 class StoreCountryAction
 {
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public function execute(array $data): Country
     {
-        return Country::create($data);
+        $flag = $data['flag'] ?? null;
+        unset($data['flag']);
+
+        $country = Country::create($data);
+
+        if ($flag) {
+            $country->addMedia($flag)->toMediaCollection(Country::MEDIA_COLLECTION_FLAG);
+        }
+
+        return $country;
     }
 }

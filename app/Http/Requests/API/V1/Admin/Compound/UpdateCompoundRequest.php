@@ -27,6 +27,7 @@ class UpdateCompoundRequest extends FormRequest
             'description.en' => ['nullable', 'string'],
             'description.ar' => ['nullable', 'string'],
             'delivery_date' => ['nullable', 'date'],
+            'is_featured' => ['sometimes', 'boolean'],
         ];
     }
 }
