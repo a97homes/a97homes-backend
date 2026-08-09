@@ -272,6 +272,10 @@ class CompoundSeeder extends Seeder
             ],
         ];
 
+        $totalUnits = array_sum(array_map(fn (array $compoundData): int => count($compoundData['units']), $compounds));
+        $propertyCreatedAt = now()->startOfSecond()->subSeconds($totalUnits);
+        $propertyCreatedAtOffset = 0;
+
         foreach ($compounds as $compoundData) {
             $developer = $developers->get($compoundData['developer']);
 
@@ -298,7 +302,7 @@ class CompoundSeeder extends Seeder
                     continue;
                 }
 
-                Property::updateOrCreate(
+                $property = Property::updateOrCreate(
                     [
                         'compound_id' => $compound->id,
                         'property_type_id' => $propertyType->id,
@@ -315,6 +319,12 @@ class CompoundSeeder extends Seeder
                         'city_id' => $cityId,
                     ],
                 );
+
+                $propertyTimestamp = $propertyCreatedAt->copy()->addSeconds($propertyCreatedAtOffset++);
+                $property->forceFill([
+                    'created_at' => $propertyTimestamp,
+                    'updated_at' => $propertyTimestamp,
+                ])->saveQuietly();
             }
         }
     }

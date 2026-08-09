@@ -405,11 +405,19 @@ class PropertySeeder extends Seeder
             ],
         ];
 
-        foreach ($properties as $propertyData) {
+        $createdAt = now()->startOfSecond()->subSeconds(count($properties));
+
+        foreach ($properties as $index => $propertyData) {
             $property = Property::updateOrCreate(
                 ['name->en' => $propertyData['data']['name']['en']],
                 $propertyData['data'],
             );
+
+            $propertyTimestamp = $createdAt->copy()->addSeconds($index);
+            $property->forceFill([
+                'created_at' => $propertyTimestamp,
+                'updated_at' => $propertyTimestamp,
+            ])->saveQuietly();
 
             $this->attachScalarAttributes($property, $propertyData['scalar_values'] ?? []);
             $this->attachBooleanAttributes($property, $propertyData['boolean_true'] ?? []);
