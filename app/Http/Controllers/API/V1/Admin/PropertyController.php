@@ -19,6 +19,7 @@ use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
 use App\Permissions\PermissionRegistry;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -65,6 +66,10 @@ class PropertyController extends Controller implements HasMiddleware
             ->allowedSorts([
                 AllowedSort::field('id'),
                 AllowedSort::field('name'),
+                AllowedSort::callback('created_at', function (Builder $query, bool $descending): void {
+                    $direction = $descending ? 'desc' : 'asc';
+                    $query->orderBy('created_at', $direction)->orderBy('id', $direction);
+                }),
             ])
             ->macroPaginate();
 

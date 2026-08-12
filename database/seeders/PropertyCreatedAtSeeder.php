@@ -8,17 +8,33 @@ use Illuminate\Support\Facades\DB;
 
 class PropertyCreatedAtSeeder extends Seeder
 {
+    private const PROPERTIES_PER_DAY = 2;
+
+    private const FIRST_HOUR_OF_DAY = 9;
+
     public function run(): void
     {
-        $baseCreatedAt = now()->startOfSecond()->subSeconds(Property::query()->count());
+        $propertiesCount = Property::query()->count();
+
+        if ($propertiesCount === 0) {
+            return;
+        }
+
+        $daysSpan = (int) ceil($propertiesCount / self::PROPERTIES_PER_DAY);
         $offset = 0;
 
         Property::query()
             ->select('id')
             ->orderBy('id')
-            ->chunkById(100, function ($properties) use ($baseCreatedAt, &$offset): void {
+            ->chunkById(100, function ($properties) use ($daysSpan, &$offset): void {
                 foreach ($properties as $property) {
-                    $propertyTimestamp = $baseCreatedAt->copy()->addSeconds($offset++);
+                    $daysAgo = $daysSpan - 1 - intdiv($offset, self::PROPERTIES_PER_DAY);
+                    $hourWithinDay = self::FIRST_HOUR_OF_DAY + ($offset % self::PROPERTIES_PER_DAY);
+
+                    $propertyTimestamp = now()
+                        ->startOfDay()
+                        ->subDays($daysAgo)
+                        ->addHours($hourWithinDay);
 
                     DB::table('properties')
                         ->where('id', $property->id)
@@ -26,6 +42,8 @@ class PropertyCreatedAtSeeder extends Seeder
                             'created_at' => $propertyTimestamp,
                             'updated_at' => $propertyTimestamp,
                         ]);
+
+                    $offset++;
                 }
             });
     }
