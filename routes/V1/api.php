@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\API\V1\Authentication\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Authentication\LoginController;
-use App\Http\Controllers\API\V1\Authentication\LogoutController;
 use App\Http\Controllers\API\V1\Authentication\ResetPasswordController;
+use App\Http\Controllers\API\V1\Authentication\UserLogoutController;
 use App\Http\Controllers\API\V1\EndUser\ArticleController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
 use App\Http\Controllers\API\V1\EndUser\ChatbotController;
@@ -40,7 +40,7 @@ Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp']);
 Route::post('reset-password', [ResetPasswordController::class, 'reset']);
 // =========================Password Reset==========================
 
-Route::middleware('auth:sanctum')->post('logout', [LogoutController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('logout', [UserLogoutController::class, 'logout']);
 
 // =========================Homepage==========================
 Route::get('offers', [HomeController::class, 'offers']);

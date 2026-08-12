@@ -9,7 +9,7 @@ use App\Models\User\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class LogoutController extends Controller
+abstract class LogoutController extends Controller
 {
     /**
      * Revoke every Sanctum token belonging to the authenticated user,
@@ -24,8 +24,16 @@ class LogoutController extends Controller
             return $this->unauthorized(__('auth.unauthorized'));
         }
 
+        if (! $this->allowsPanelAccess($user)) {
+            return $this->forbidden(__($this->accessDeniedMessageKey()));
+        }
+
         $user->tokens()->delete();
 
         return $this->ok(__('auth.logged_out'));
     }
+
+    abstract protected function allowsPanelAccess(User $user): bool;
+
+    abstract protected function accessDeniedMessageKey(): string;
 }

@@ -33,7 +33,14 @@ use App\Http\Controllers\API\V1\Admin\SocialController;
 use App\Http\Controllers\API\V1\Admin\StateController;
 use App\Http\Controllers\API\V1\Admin\UnitController;
 use App\Http\Controllers\API\V1\Admin\UserController;
+use App\Http\Controllers\API\V1\Authentication\AdminLoginController;
+use App\Http\Controllers\API\V1\Authentication\AdminLogoutController;
 use Illuminate\Support\Facades\Route;
+
+// ==========================Authentication==========================
+Route::post('login', [AdminLoginController::class, 'login'])->withoutMiddleware('auth:sanctum');
+Route::post('logout', [AdminLogoutController::class, 'logout']);
+// ==========================Authentication==========================
 
 // ==========================Role==========================
 Route::post('roles/{role}/assign-permissions', [RoleController::class, 'assignPermissions']);

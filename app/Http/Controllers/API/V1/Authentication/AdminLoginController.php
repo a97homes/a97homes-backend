@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\API\V1\Authentication;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Authentication\UserLoginRequest;
+use App\Http\Requests\API\V1\Authentication\AdminLoginRequest;
 use App\Http\Resources\API\V1\Authentication\AuthenticationResource;
 use Illuminate\Http\JsonResponse;
 
-class LoginController extends Controller
+class AdminLoginController extends Controller
 {
-    public function login(UserLoginRequest $request): JsonResponse
+    public function login(AdminLoginRequest $request): JsonResponse
     {
         $user = $request->resolveUser();
 

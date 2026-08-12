@@ -4,12 +4,9 @@ namespace App\Http\Resources\API\V1\Property;
 
 use App\Http\Resources\API\V1\Attribute\AttributeOptionResource;
 use App\Http\Resources\API\V1\Attribute\AttributeResource;
-use App\Http\Resources\API\V1\Compound\AdminCompoundResource;
 use App\Http\Resources\API\V1\Compound\CompoundResource;
-use App\Http\Resources\API\V1\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Http\Resources\City\CityResource;
-use App\Models\Attribute;
 use App\Models\Compound;
 use App\Models\Property;
 use App\Traits\HasTranslatableFields;
