@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Actions\Developer\BulkDeleteDevelopersAction;
+use App\Actions\Developer\BulkUpdateDeveloperStatusAction;
 use App\Actions\Developer\DeleteDeveloperAction;
 use App\Actions\Developer\StoreDeveloperAction;
 use App\Actions\Developer\UpdateDeveloperAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\Admin\Developer\BulkDeleteDeveloperRequest;
+use App\Http\Requests\API\V1\Admin\Developer\BulkUpdateDeveloperStatusRequest;
 use App\Http\Requests\API\V1\Admin\Developer\StoreDeveloperRequest;
 use App\Http\Requests\API\V1\Admin\Developer\UpdateDeveloperRequest;
 use App\Http\Resources\API\V1\Developer\DeveloperCollection;
@@ -34,8 +38,8 @@ class DeveloperController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update', 'toggleActive']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_UPDATE]), only: ['update', 'toggleActive', 'bulkUpdateStatus']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_DEVELOPERS_DESTROY]), only: ['destroy', 'bulkDestroy']),
         ];
     }
 
@@ -170,6 +174,33 @@ class DeveloperController extends Controller implements HasMiddleware
         $action->execute($developer);
 
         return $this->ok(message: __('messages.developer_deleted_successfully'));
+    }
+
+    /**
+     * Delete several developers in one request.
+     */
+    public function bulkDestroy(BulkDeleteDeveloperRequest $request, BulkDeleteDevelopersAction $action): JsonResponse
+    {
+        $deletedCount = $action->execute($request->developerIds());
+
+        return $this->ok(
+            message: __('messages.developers_deleted_successfully', ['count' => $deletedCount]),
+            data: ['deleted_count' => $deletedCount],
+        );
+    }
+
+    /**
+     * Activate or deactivate several developers in one request.
+     */
+    public function bulkUpdateStatus(BulkUpdateDeveloperStatusRequest $request, BulkUpdateDeveloperStatusAction $action): JsonResponse
+    {
+        $isActive = $request->isActive();
+        $updatedCount = $action->execute($request->developerIds(), $isActive);
+
+        return $this->ok(
+            message: __($isActive ? 'messages.developers_activated' : 'messages.developers_deactivated', ['count' => $updatedCount]),
+            data: ['updated_count' => $updatedCount],
+        );
     }
 
     public function toggleActive(Developer $developer): JsonResponse

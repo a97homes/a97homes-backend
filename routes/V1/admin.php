@@ -115,6 +115,8 @@ Route::apiResource('socials', SocialController::class)->except(['update']);
 
 // =====================Developer Routes============
 Route::get('developers/dropdown', [DeveloperController::class, 'dropdown']);
+Route::delete('developers/bulk', [DeveloperController::class, 'bulkDestroy']);
+Route::patch('developers/bulk/status', [DeveloperController::class, 'bulkUpdateStatus']);
 Route::patch('developers/{developer}/toggle-active', [DeveloperController::class, 'toggleActive']);
 Route::apiResource('developers', DeveloperController::class);
 // =====================Developer Routes============
