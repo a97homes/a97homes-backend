@@ -68,4 +68,40 @@ class DeveloperStoreFieldsTest extends TestCase
         $this->assertArrayHasKey('name.ar', $errors);
         $this->assertArrayHasKey('about.ar', $errors);
     }
+
+    public function test_store_accepts_long_arabic_and_english_about_text(): void
+    {
+        $this->actingAsAdmin();
+
+        $longArabicAbout = str_repeat('a', 12000);
+        $longEnglishAbout = str_repeat('e', 12000);
+
+        $response = $this->postJson('/api/admin/V1/developers', [
+            'name' => ['ar' => 'Ù…Ø·ÙˆØ±', 'en' => 'Developer One'],
+            'about' => ['ar' => $longArabicAbout, 'en' => $longEnglishAbout],
+        ])->assertOk();
+
+        $developer = Developer::findOrFail($response->json('data.id'));
+
+        $this->assertSame($longArabicAbout, $developer->getTranslation('about', 'ar'));
+        $this->assertSame($longEnglishAbout, $developer->getTranslation('about', 'en'));
+    }
+
+    public function test_update_accepts_long_arabic_and_english_about_text(): void
+    {
+        $this->actingAsAdmin();
+
+        $developer = Developer::factory()->create();
+        $longArabicAbout = str_repeat('a', 12000);
+        $longEnglishAbout = str_repeat('e', 12000);
+
+        $this->patchJson("/api/admin/V1/developers/{$developer->id}", [
+            'about' => ['ar' => $longArabicAbout, 'en' => $longEnglishAbout],
+        ])->assertOk();
+
+        $developer->refresh();
+
+        $this->assertSame($longArabicAbout, $developer->getTranslation('about', 'ar'));
+        $this->assertSame($longEnglishAbout, $developer->getTranslation('about', 'en'));
+    }
 }

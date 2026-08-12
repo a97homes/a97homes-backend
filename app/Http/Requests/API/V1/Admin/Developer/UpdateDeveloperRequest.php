@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDeveloperRequest extends FormRequest
 {
+    private const ABOUT_MAX_LENGTH = 50000;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -26,8 +28,8 @@ class UpdateDeveloperRequest extends FormRequest
             'name.ar' => ['required_with:name', 'string', 'max:255'],
             'name.en' => ['nullable', 'string', 'max:255'],
             'about' => ['sometimes', 'array'],
-            'about.ar' => ['required_with:about', 'string', 'max:10000'],
-            'about.en' => ['nullable', 'string', 'max:10000'],
+            'about.ar' => ['required_with:about', 'string', 'max:'.self::ABOUT_MAX_LENGTH],
+            'about.en' => ['nullable', 'string', 'max:'.self::ABOUT_MAX_LENGTH],
             'whatsapp' => ['nullable', 'string', 'max:30'],
             'phone' => ['nullable', 'string', 'max:30'],
             'is_active' => ['sometimes', 'boolean'],

@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDeveloperRequest extends FormRequest
 {
+    private const ABOUT_MAX_LENGTH = 50000;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -26,8 +28,8 @@ class StoreDeveloperRequest extends FormRequest
             'name.ar' => ['required', 'string', 'max:255'],
             'name.en' => ['nullable', 'string', 'max:255'],
             'about' => ['required', 'array'],
-            'about.ar' => ['required', 'string', 'max:10000'],
-            'about.en' => ['nullable', 'string', 'max:10000'],
+            'about.ar' => ['required', 'string', 'max:'.self::ABOUT_MAX_LENGTH],
+            'about.en' => ['nullable', 'string', 'max:'.self::ABOUT_MAX_LENGTH],
             'whatsapp' => ['nullable', 'string', 'max:30'],
             'phone' => ['nullable', 'string', 'max:30'],
             'is_active' => ['sometimes', 'boolean'],
