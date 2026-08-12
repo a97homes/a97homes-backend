@@ -42,6 +42,12 @@ class DeveloperResource extends JsonResource
                 fn () => $developer->areas->unique('id')->values()->map(fn (City $city) => [
                     'id' => $city->id,
                     'name' => $this->getTranslatableField($city, 'name'),
+                    'state' => $city->relationLoaded('state') && $city->state ? [
+                        'id' => $city->state->id,
+                        'name' => $this->getTranslatableField($city->state, 'name'),
+                    ] : null,
+                    'compounds_count' => (int) ($city->developer_compounds_count ?? 0),
+                    'units_count' => (int) ($city->developer_units_count ?? 0),
                 ]),
             ),
             'offers' => $this->when(

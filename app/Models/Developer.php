@@ -54,14 +54,74 @@ class Developer extends Model implements HasMedia
         $query->whereHas('compounds', fn (Builder $compounds) => $compounds->whereIn('city_id', (array) $value));
     }
 
+    /**
+     * @param  int|string|array<int, int|string>  $value
+     */
+    public function scopeCityId(Builder $query, int|string|array $value): void
+    {
+        $this->scopeAreaId($query, $value);
+    }
+
+    /**
+     * @param  int|string|array<int, int|string>  $value
+     */
+    public function scopeStateId(Builder $query, int|string|array $value): void
+    {
+        $query->whereHas('compounds.city', fn (Builder $cities) => $cities->whereIn('state_id', (array) $value));
+    }
+
+    /**
+     * @param  int|string|array<int, int|string>  $value
+     */
+    public function scopePropertyTypeId(Builder $query, int|string|array $value): void
+    {
+        $query->whereHas('properties', fn (Builder $properties) => $properties->whereIn('property_type_id', (array) $value));
+    }
+
+    /**
+     * @param  string|array<int, string>  $value
+     */
+    public function scopeSaleType(Builder $query, string|array $value): void
+    {
+        $query->whereHas('properties', fn (Builder $properties) => $properties->whereIn('sale_type', (array) $value));
+    }
+
+    /**
+     * @param  string|array<int, string>  $value
+     */
+    public function scopeCompletionStatus(Builder $query, string|array $value): void
+    {
+        $query->whereHas('compounds', fn (Builder $compounds) => $compounds->whereIn('completion_status', (array) $value));
+    }
+
     public function scopeMinCompounds(Builder $query, int|string $value): void
     {
         $query->has('compounds', '>=', (int) $value);
     }
 
+    public function scopeMaxCompounds(Builder $query, int|string $value): void
+    {
+        $query->has('compounds', '<=', (int) $value);
+    }
+
     public function scopeMinUnits(Builder $query, int|string $value): void
     {
         $query->has('properties', '>=', (int) $value);
+    }
+
+    public function scopeMaxUnits(Builder $query, int|string $value): void
+    {
+        $query->has('properties', '<=', (int) $value);
+    }
+
+    public function scopeMinAreas(Builder $query, int|string $value): void
+    {
+        $query->whereRaw('(select count(distinct city_id) from compounds where compounds.developer_id = developers.id) >= ?', [(int) $value]);
+    }
+
+    public function scopeMaxAreas(Builder $query, int|string $value): void
+    {
+        $query->whereRaw('(select count(distinct city_id) from compounds where compounds.developer_id = developers.id) <= ?', [(int) $value]);
     }
 
     public function compounds(): HasMany
