@@ -4,11 +4,14 @@ namespace App\Http\Requests\API\V1\Admin\Property;
 
 use App\Enums\PropertyStatusEnum;
 use App\Enums\SaleTypeEnum;
+use App\Http\Requests\Concerns\ValidatesContactMethods;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class StorePropertyRequest extends FormRequest
 {
+    use ValidatesContactMethods;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -47,6 +50,12 @@ class StorePropertyRequest extends FormRequest
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'is_featured' => ['nullable', 'boolean'],
+            ...$this->contactMethodRules(),
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->prepareContactMethodsForValidation();
     }
 }

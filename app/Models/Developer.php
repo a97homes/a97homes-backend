@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\CreatedAtFilter;
 use App\Traits\HasArabicSearch;
+use App\Traits\HasContactMethods;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ class Developer extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
+    use HasContactMethods;
     use HasFactory;
     use HasTranslations;
     use InteractsWithMedia;

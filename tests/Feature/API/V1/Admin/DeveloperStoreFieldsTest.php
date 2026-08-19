@@ -50,8 +50,20 @@ class DeveloperStoreFieldsTest extends TestCase
         $this->assertSame('Developer One', $developer->getTranslation('name', 'en'));
         $this->assertSame('مطور', $developer->getTranslation('name', 'ar'));
         $this->assertSame('About', $developer->getTranslation('about', 'en'));
-        $this->assertSame('+201000000000', $developer->whatsapp);
-        $this->assertSame('+201111111111', $developer->phone);
+        $this->assertDatabaseHas('contact_methods', [
+            'contactable_type' => 'developer',
+            'contactable_id' => $developer->id,
+            'type' => 'whatsapp',
+            'country_code' => '+20',
+            'number' => '1000000000',
+        ]);
+        $this->assertDatabaseHas('contact_methods', [
+            'contactable_type' => 'developer',
+            'contactable_id' => $developer->id,
+            'type' => 'phone',
+            'country_code' => '+20',
+            'number' => '1111111111',
+        ]);
     }
 
     public function test_store_requires_arabic_name_and_about(): void

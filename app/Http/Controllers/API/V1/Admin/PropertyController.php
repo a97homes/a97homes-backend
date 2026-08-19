@@ -51,7 +51,9 @@ class PropertyController extends Controller implements HasMiddleware
                 'compound:id,name,developer_id',
                 'compound.developer:id,name',
                 'compound.developer.media',
-                'attributes:name,id'])
+                'attributes:name,id',
+                'phones',
+                'whatsappNumbers'])
 
             ->allowedFilters([
                 AllowedFilter::partial('name'),
@@ -86,14 +88,14 @@ class PropertyController extends Controller implements HasMiddleware
     public function update(UpdatePropertyRequest $request, Property $property, UpdatePropertyAction $action): JsonResponse
     {
         $action->execute($property, $request->validated());
-        $property->load('attributes:name,id');
+        $property->load(['attributes:name,id', 'phones', 'whatsappNumbers']);
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
     }
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id']);
+        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id', 'phones', 'whatsappNumbers']);
 
         return $this->ok(data: PropertyResource::make($property));
     }
@@ -107,7 +109,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function dropdown(): JsonResponse
     {
-        $properties = Property::select('id', 'name')->get();
+        $properties = Property::select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: PropertyResource::collection($properties));
     }

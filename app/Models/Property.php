@@ -8,6 +8,7 @@ use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Observers\PropertyObserver;
 use App\Traits\HasArabicSearch;
+use App\Traits\HasContactMethods;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ class Property extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
+    use HasContactMethods;
     use HasTranslations;
     use InteractsWithMedia;
 

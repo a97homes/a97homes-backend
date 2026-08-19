@@ -5,6 +5,7 @@ namespace App\Http\Resources\API\V1\Property;
 use App\Http\Resources\API\V1\Attribute\AttributeOptionResource;
 use App\Http\Resources\API\V1\Attribute\AttributeResource;
 use App\Http\Resources\API\V1\Compound\CompoundResource;
+use App\Http\Resources\API\V1\ContactMethod\ContactMethodResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
 use App\Http\Resources\City\CityResource;
 use App\Models\Compound;
@@ -37,6 +38,8 @@ class PropertyResource extends JsonResource
             'sale_type' => $this->whenHas('sale_type', fn () => $property->sale_type),
             'latitude' => $this->whenHas('latitude', fn () => $property->latitude),
             'longitude' => $this->whenHas('longitude', fn () => $property->longitude),
+            'phones' => ContactMethodResource::collection($this->whenLoaded('phones')),
+            'whatsapp_numbers' => ContactMethodResource::collection($this->whenLoaded('whatsappNumbers')),
             'attributes' => AttributeResource::collection($this->whenLoaded('attributes')),
 
             'selected_options' => AttributeOptionResource::collection($this->whenLoaded('selectedOptions')),

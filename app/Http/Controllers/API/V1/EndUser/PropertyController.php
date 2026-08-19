@@ -36,6 +36,8 @@ class PropertyController extends Controller
                 'attributes' => fn ($q) => $q->with('unit'),
                 'selectedOptions',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ]);
 
         $this->loadFavoritesForAuthUser($query);
@@ -58,6 +60,8 @@ class PropertyController extends Controller
                 'compound:id,name,developer_id',
                 'compound.developer:id,name',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ])
             ->whereNotNull('latitude')
             ->whereNotNull('longitude');
@@ -134,6 +138,8 @@ class PropertyController extends Controller
             'compound.activePaymentPlans',
             'compound.media',
             'media',
+            'phones',
+            'whatsappNumbers',
         ]);
 
         return $this->ok(data: PropertyResource::make($property));
@@ -151,6 +157,8 @@ class PropertyController extends Controller
                 'compound:id,name,developer_id,delivery_date,completion_status',
                 'compound.developer.media',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ])
             ->whereIn('id', $request->input('property_ids'))
             ->get();

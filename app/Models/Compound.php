@@ -6,6 +6,7 @@ use App\Enums\CompletionStatusEnum;
 use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Traits\HasArabicSearch;
+use App\Traits\HasContactMethods;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ class Compound extends Model implements HasMedia
 {
     use CreatedAtFilter;
     use HasArabicSearch;
+    use HasContactMethods;
     use HasFactory;
     use HasTranslations;
     use InteractsWithMedia;

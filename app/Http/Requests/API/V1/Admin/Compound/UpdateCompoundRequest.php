@@ -3,11 +3,14 @@
 namespace App\Http\Requests\API\V1\Admin\Compound;
 
 use App\Enums\CompletionStatusEnum;
+use App\Http\Requests\Concerns\ValidatesContactMethods;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateCompoundRequest extends FormRequest
 {
+    use ValidatesContactMethods;
+
     public function authorize(): bool
     {
         return true;
@@ -28,6 +31,12 @@ class UpdateCompoundRequest extends FormRequest
             'description.ar' => ['nullable', 'string'],
             'delivery_date' => ['nullable', 'date'],
             'is_featured' => ['sometimes', 'boolean'],
+            ...$this->contactMethodRules(),
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->prepareContactMethodsForValidation();
     }
 }

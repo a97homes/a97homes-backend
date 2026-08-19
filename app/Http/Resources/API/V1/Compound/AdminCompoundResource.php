@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Compound;
 
+use App\Http\Resources\API\V1\ContactMethod\ContactMethodResource;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
 use App\Http\Resources\API\V1\Offer\OfferResource;
 use App\Models\Compound;
@@ -21,6 +22,8 @@ class AdminCompoundResource extends JsonResource
         return [
             'id' => $this->whenHas('id', fn () => $compound->id),
             'name' => $this->whenHas('name', fn () => $compound->name),
+            'phones' => ContactMethodResource::collection($this->whenLoaded('phones')),
+            'whatsapp_numbers' => ContactMethodResource::collection($this->whenLoaded('whatsappNumbers')),
             'developer' => DeveloperResource::make($this->whenLoaded('developer')),
             'delivery_date' => $this->whenHas('delivery_date', fn () => $compound->delivery_date?->toDateString()),
             'completion_status' => $this->whenHas('completion_status', fn () => $compound->completion_status),

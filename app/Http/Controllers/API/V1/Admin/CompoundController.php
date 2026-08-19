@@ -41,6 +41,7 @@ class CompoundController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $compounds = QueryBuilder::for(Compound::class)
+            ->with(['phones', 'whatsappNumbers'])
             ->allowedFilters([
                 AllowedFilter::exact('developer_id'),
                 AllowedFilter::partial('name'),
@@ -63,7 +64,7 @@ class CompoundController extends Controller implements HasMiddleware
 
     public function show(Compound $compound): JsonResponse
     {
-        return $this->ok(data: AdminCompoundResource::make($compound->load('developer:id,name')));
+        return $this->ok(data: AdminCompoundResource::make($compound->load(['developer:id,name', 'phones', 'whatsappNumbers'])));
     }
 
     public function update(UpdateCompoundRequest $request, Compound $compound, UpdateCompoundAction $action): JsonResponse
@@ -82,7 +83,7 @@ class CompoundController extends Controller implements HasMiddleware
 
     public function dropdown(): JsonResponse
     {
-        $compounds = Compound::select('id', 'name')->get();
+        $compounds = Compound::select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: AdminCompoundResource::collection($compounds));
     }

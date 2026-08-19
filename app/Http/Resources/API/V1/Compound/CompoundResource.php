@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1\Compound;
 
+use App\Http\Resources\API\V1\ContactMethod\ContactMethodResource;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
 use App\Http\Resources\API\V1\Offer\OfferResource;
 use App\Http\Resources\API\V1\PaymentPlan\PaymentPlanResource;
@@ -29,6 +30,8 @@ class CompoundResource extends JsonResource
             'id' => $compound->id,
             'name' => $this->whenHas('name', fn () => $compound->name),
             'description' => $this->whenHas('description', fn () => $compound->description),
+            'phones' => ContactMethodResource::collection($this->whenLoaded('phones')),
+            'whatsapp_numbers' => ContactMethodResource::collection($this->whenLoaded('whatsappNumbers')),
             'developer' => $this->when(
                 $compound->relationLoaded('developer') && optional($compound->developer)->is_active,
                 fn () => DeveloperResource::make($compound->developer),

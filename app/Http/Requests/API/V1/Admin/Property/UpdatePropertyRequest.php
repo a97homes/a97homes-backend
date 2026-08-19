@@ -3,11 +3,14 @@
 namespace App\Http\Requests\API\V1\Admin\Property;
 
 use App\Enums\SaleTypeEnum;
+use App\Http\Requests\Concerns\ValidatesContactMethods;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdatePropertyRequest extends FormRequest
 {
+    use ValidatesContactMethods;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -44,6 +47,12 @@ class UpdatePropertyRequest extends FormRequest
             'resale_price' => ['nullable', 'integer', 'min:0'],
             'sale_type' => ['nullable', Rule::enum(SaleTypeEnum::class)],
             'is_featured' => ['nullable', 'boolean'],
+            ...$this->contactMethodRules(),
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->prepareContactMethodsForValidation();
     }
 }

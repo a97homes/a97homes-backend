@@ -20,6 +20,7 @@ use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Permissions\PermissionRegistry;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -46,7 +47,7 @@ class DeveloperController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::class)
-            ->with(['areas.state:id,name'])
+            ->with(['areas.state:id,name', 'phones', 'whatsappNumbers'])
             ->withCount([
                 'compounds',
                 'properties as units_count',
@@ -58,8 +59,22 @@ class DeveloperController extends Controller implements HasMiddleware
             ])
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
-                AllowedFilter::partial('phone'),
-                AllowedFilter::partial('whatsapp'),
+                AllowedFilter::callback('phone', function (Builder $query, $value): void {
+                    $query->where(function (Builder $inner) use ($value): void {
+                        $inner->where('phone', 'LIKE', "%{$value}%")
+                            ->orWhereHas('phones', fn (Builder $phones) => $phones
+                                ->where('number', 'LIKE', "%{$value}%")
+                                ->orWhere('country_code', 'LIKE', "%{$value}%"));
+                    });
+                }),
+                AllowedFilter::callback('whatsapp', function (Builder $query, $value): void {
+                    $query->where(function (Builder $inner) use ($value): void {
+                        $inner->where('whatsapp', 'LIKE', "%{$value}%")
+                            ->orWhereHas('whatsappNumbers', fn (Builder $whatsappNumbers) => $whatsappNumbers
+                                ->where('number', 'LIKE', "%{$value}%")
+                                ->orWhere('country_code', 'LIKE', "%{$value}%"));
+                    });
+                }),
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('is_active'),
                 AllowedFilter::scope('area_id'),
@@ -150,6 +165,8 @@ class DeveloperController extends Controller implements HasMiddleware
             'areas.state:id,name',
             'offers',
             'faqs',
+            'phones',
+            'whatsappNumbers',
         ]);
 
         $developer->loadCount([
@@ -215,7 +232,7 @@ class DeveloperController extends Controller implements HasMiddleware
 
     public function dropdown(): JsonResponse
     {
-        $developers = Developer::select('id', 'name')->get();
+        $developers = Developer::select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: DeveloperResource::collection($developers));
     }

@@ -40,6 +40,8 @@ class CompoundController extends Controller
                 'properties.propertyType:id,name',
                 'activeDiscount',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ])
             ->withMin('properties', 'price')
             ->withMin('properties', 'resale_price')
@@ -64,6 +66,8 @@ class CompoundController extends Controller
                 'developer:id,name,is_active',
                 'developer.media',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ])
             ->withMin('properties', 'price')
             ->withMax('properties', 'price')
@@ -165,6 +169,8 @@ class CompoundController extends Controller
             'activeOffers',
             'activePaymentPlans',
             'media',
+            'phones',
+            'whatsappNumbers',
         ]);
 
         $compound->loadMin('properties', 'price');
@@ -193,6 +199,8 @@ class CompoundController extends Controller
                 'properties.propertyType:id,name',
                 'activeDiscount',
                 'media',
+                'phones',
+                'whatsappNumbers',
             ])
             ->withMin('properties', 'price')
             ->withMin('properties', 'resale_price')
@@ -205,7 +213,7 @@ class CompoundController extends Controller
 
     public function dropdown(): JsonResponse
     {
-        $compounds = Compound::select('id', 'name')->get();
+        $compounds = Compound::select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: AdminCompoundResource::collection($compounds));
     }

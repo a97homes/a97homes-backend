@@ -17,7 +17,7 @@ class DeveloperController extends Controller
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::query()->active())
-            ->with(['media'])
+            ->with(['media', 'phones', 'whatsappNumbers'])
             ->withCount([
                 'compounds',
                 'properties as units_count',
@@ -44,6 +44,8 @@ class DeveloperController extends Controller
             'areas',
             'activeOffers',
             'activeFaqs',
+            'phones',
+            'whatsappNumbers',
         ]);
 
         $developer->loadCount([
@@ -56,7 +58,7 @@ class DeveloperController extends Controller
 
     public function dropdown(): JsonResponse
     {
-        $developers = Developer::query()->active()->select('id', 'name')->get();
+        $developers = Developer::query()->active()->select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: DeveloperResource::collection($developers));
     }
