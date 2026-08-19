@@ -2,22 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Property;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
 class FeaturedSeeder extends Seeder
 {
-    private const IMAGE_DIR = 'seeders/cities';
+    private const IMAGE_DIR = 'seeders/sub_areas';
 
     public function run(): void
     {
         $this->markFeaturedCompounds();
         $this->markFeaturedProperties();
-        $this->addCityImages();
+        $this->addSubAreaImages();
     }
 
     private function markFeaturedCompounds(): void
@@ -51,7 +51,7 @@ class FeaturedSeeder extends Seeder
             ->update(['is_featured' => true]);
     }
 
-    private function addCityImages(): void
+    private function addSubAreaImages(): void
     {
         $cityImages = [
             'New Cairo' => 'https://images.unsplash.com/photo-1549918864-48ac978761a4?w=623&h=343&fit=crop&q=80',
@@ -70,18 +70,18 @@ class FeaturedSeeder extends Seeder
             File::makeDirectory($localDir, 0755, true);
         }
 
-        foreach ($cityImages as $cityNameEn => $imageUrl) {
-            $city = City::where('name->en', $cityNameEn)->first();
+        foreach ($cityImages as $subAreaNameEn => $imageUrl) {
+            $subArea = SubArea::where('name->en', $subAreaNameEn)->first();
 
-            if (! $city) {
+            if (! $subArea) {
                 continue;
             }
 
-            if ($city->getFirstMedia(City::MEDIA_COLLECTION_IMAGE) !== null) {
+            if ($subArea->getFirstMedia(SubArea::MEDIA_COLLECTION_IMAGE) !== null) {
                 continue;
             }
 
-            $slug = str_replace(' ', '_', strtolower($cityNameEn));
+            $slug = str_replace(' ', '_', strtolower($subAreaNameEn));
             $filename = "city_{$slug}.jpg";
             $localPath = $localDir.'/'.$filename;
 
@@ -101,11 +101,11 @@ class FeaturedSeeder extends Seeder
                 }
             }
 
-            $city
+            $subArea
                 ->addMedia($localPath)
                 ->preservingOriginal()
                 ->usingFileName($filename)
-                ->toMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+                ->toMediaCollection(SubArea::MEDIA_COLLECTION_IMAGE);
         }
     }
 }

@@ -31,13 +31,13 @@ class Property extends Model implements HasMedia
 
     public const MEDIA_COLLECTION_FLOOR_PLAN = 'property_floor_plan';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'consultant_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
+    protected $fillable = ['name', 'property_type_id', 'sub_area_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'consultant_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
 
     public array $translatable = ['name'];
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 
     public function propertyType(): BelongsTo

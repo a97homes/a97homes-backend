@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Actions\City;
+namespace App\Actions\SubArea;
 
-use App\Models\City;
+use App\Models\SubArea;
 
-class DeleteCityAction
+class DeleteSubAreaAction
 {
-    public function execute(City $city): bool
+    public function execute(SubArea $subArea): bool
     {
 
-        return $city->delete();
+        return $subArea->delete();
     }
 }

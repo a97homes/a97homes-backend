@@ -21,8 +21,8 @@ class FavoriteController extends Controller
         $compounds = Compound::query()
             ->with([
                 'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'properties:id,compound_id,property_type_id,price,resale_price',
                 'properties.propertyType:id,name',
                 'activeDiscount',
@@ -53,8 +53,8 @@ class FavoriteController extends Controller
 
         $compound = Compound::with([
             'developer.media',
-            'city:id,name,state_id',
-            'city.state:id,name',
+            'subArea:id,name,area_id',
+            'subArea.area:id,name',
             'properties:id,compound_id,property_type_id,price,resale_price',
             'properties.propertyType:id,name',
             'activeDiscount',

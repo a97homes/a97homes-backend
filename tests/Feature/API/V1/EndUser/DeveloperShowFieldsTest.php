@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API\V1\EndUser;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Faq;
 use App\Models\Offer;
 use App\Models\Property;
+use App\Models\SubArea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -26,10 +26,10 @@ class DeveloperShowFieldsTest extends TestCase
             'phone' => '+201111111111',
         ]);
 
-        $city = City::factory()->create();
+        $subArea = SubArea::factory()->create();
         Compound::factory()->create([
             'developer_id' => $developer->id,
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
         ]);
 
         $offer = Offer::factory()->create([
@@ -52,17 +52,17 @@ class DeveloperShowFieldsTest extends TestCase
             ->assertJsonPath('data.phone', '+201111111111')
             ->assertJsonPath('data.offers.0.id', $offer->id)
             ->assertJsonPath('data.faqs.0.id', $faq->id)
-            ->assertJsonPath('data.areas.0.id', $city->id);
+            ->assertJsonPath('data.sub_areas.0.id', $subArea->id);
     }
 
     public function test_show_returns_compounds_and_units_counts(): void
     {
         $developer = Developer::factory()->create();
-        $city = City::factory()->create();
+        $subArea = SubArea::factory()->create();
 
         $compounds = Compound::factory()->count(2)->create([
             'developer_id' => $developer->id,
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
         ]);
 
         foreach ($compounds as $compound) {
@@ -82,20 +82,20 @@ class DeveloperShowFieldsTest extends TestCase
             ->assertJsonPath('data.units_count', 4);
     }
 
-    public function test_show_deduplicates_areas_across_compounds(): void
+    public function test_show_deduplicates_sub_areas_across_compounds(): void
     {
         $developer = Developer::factory()->create();
-        $city = City::factory()->create();
+        $subArea = SubArea::factory()->create();
 
         Compound::factory()->count(3)->create([
             'developer_id' => $developer->id,
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
         ]);
 
         $this->getJson("/api/V1/developers/{$developer->id}")
             ->assertOk()
-            ->assertJsonCount(1, 'data.areas')
-            ->assertJsonPath('data.areas.0.id', $city->id);
+            ->assertJsonCount(1, 'data.sub_areas')
+            ->assertJsonPath('data.sub_areas.0.id', $subArea->id);
     }
 
     public function test_show_hides_inactive_offers_and_faqs(): void

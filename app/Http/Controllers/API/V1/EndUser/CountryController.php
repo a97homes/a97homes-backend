@@ -16,10 +16,10 @@ class CountryController extends Controller
         return $this->ok(data: CountryResource::collection($countries));
     }
 
-    public function states(Country $country): JsonResponse
+    public function areas(Country $country): JsonResponse
     {
-        $states = $country->states()->select('id', 'name', 'country_id')->get();
+        $areas = $country->areas()->select('id', 'name', 'country_id')->get();
 
-        return $this->ok(data: \App\Http\Resources\State\StateResource::collection($states));
+        return $this->ok(data: \App\Http\Resources\Area\AreaResource::collection($areas));
     }
 }

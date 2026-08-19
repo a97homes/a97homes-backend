@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\City;
+namespace App\Actions\SubArea;
 
-use App\Models\City;
+use App\Models\SubArea;
 
-class StoreCityAction
+class StoreSubAreaAction
 {
-    public function execute(array $data): City
+    public function execute(array $data): SubArea
     {
-        return City::create($data);
+        return SubArea::create($data);
     }
 }

@@ -25,8 +25,8 @@ class PropertyController extends Controller
     {
         $query = $this->filteredQuery($request)
             ->with([
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'propertyType:id,name',
                 'compound:id,name,developer_id,delivery_date,completion_status',
                 'compound.developer:id,name,is_active',
@@ -55,7 +55,7 @@ class PropertyController extends Controller
     {
         $query = $this->filteredQuery($request)
             ->with([
-                'city:id,name,state_id',
+                'subArea:id,name,area_id',
                 'propertyType:id,name',
                 'compound:id,name,developer_id',
                 'compound.developer:id,name',
@@ -79,8 +79,8 @@ class PropertyController extends Controller
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
                 AllowedFilter::exact('property_type_id'),
-                AllowedFilter::exact('city_id'),
-                AllowedFilter::exact('city.state_id'),
+                AllowedFilter::exact('sub_area_id'),
+                AllowedFilter::exact('subArea.area_id'),
                 AllowedFilter::exact('compound_id'),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('sale_type'),
@@ -124,9 +124,9 @@ class PropertyController extends Controller
     public function show(Property $property): JsonResponse
     {
         $property->load([
-            'city:id,name,state_id',
-            'city.state:id,name,country_id',
-            'city.state.country:id,name',
+            'subArea:id,name,area_id',
+            'subArea.area:id,name,country_id',
+            'subArea.area.country:id,name',
             'propertyType:id,name',
             'attributes' => fn ($q) => $q->with('unit'),
             'selectedOptions.attribute',
@@ -149,8 +149,8 @@ class PropertyController extends Controller
     {
         $properties = Property::query()
             ->with([
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'propertyType:id,name',
                 'attributes' => fn ($q) => $q->with('unit'),
                 'selectedOptions.attribute',

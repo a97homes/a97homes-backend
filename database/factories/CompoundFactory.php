@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\CompletionStatusEnum;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
+use App\Models\SubArea;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,7 +25,7 @@ class CompoundFactory extends Factory
         return [
             'name' => $this->faker->unique()->company(),
             'developer_id' => Developer::factory(),
-            'city_id' => City::factory(),
+            'sub_area_id' => SubArea::factory(),
             'completion_status' => CompletionStatusEnum::UnderConstruction,
             'description' => [
                 'en' => $this->faker->paragraph(),

@@ -13,7 +13,7 @@ class Contact extends Model
         'email',
         'message',
         'phone',
-        'city_id',
+        'sub_area_id',
     ];
 
     protected function casts(): array
@@ -23,8 +23,8 @@ class Contact extends Model
         ];
     }
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 }

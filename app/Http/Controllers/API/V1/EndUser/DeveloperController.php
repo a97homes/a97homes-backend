@@ -41,7 +41,7 @@ class DeveloperController extends Controller
 
         $developer->load([
             'media',
-            'areas',
+            'subAreas',
             'activeOffers',
             'activeFaqs',
             'phones',

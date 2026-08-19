@@ -30,7 +30,7 @@ class SavedSearchControllerTest extends TestCase
         $payload = [
             'name' => 'Affordable Cairo compounds',
             'type' => 'compound',
-            'criteria' => ['filter' => ['city_id' => 1], 'sort' => '-id'],
+            'criteria' => ['filter' => ['sub_area_id' => 1], 'sort' => '-id'],
             'notify_by_email' => true,
         ];
 

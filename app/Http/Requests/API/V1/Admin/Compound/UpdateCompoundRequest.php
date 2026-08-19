@@ -24,7 +24,7 @@ class UpdateCompoundRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string', 'max:255'],
             'developer_id' => ['sometimes', Rule::exists('developers', 'id')],
-            'city_id' => ['nullable', 'integer', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['nullable', 'integer', Rule::exists('sub_areas', 'id')],
             'completion_status' => ['nullable', 'string', Rule::in(array_column(CompletionStatusEnum::cases(), 'value'))],
             'description' => ['nullable', 'array'],
             'description.en' => ['nullable', 'string'],

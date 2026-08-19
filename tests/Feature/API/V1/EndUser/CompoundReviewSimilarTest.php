@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API\V1\EndUser;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\CompoundReview;
 use App\Models\Developer;
+use App\Models\SubArea;
 use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -94,17 +94,17 @@ class CompoundReviewSimilarTest extends TestCase
         ])->assertUnprocessable();
     }
 
-    public function test_similar_endpoint_prioritises_same_city_and_excludes_self(): void
+    public function test_similar_endpoint_prioritises_same_sub_area_and_excludes_self(): void
     {
-        $city = City::factory()->create();
-        $otherCity = City::factory()->create();
+        $subArea = SubArea::factory()->create();
+        $otherSubArea = SubArea::factory()->create();
         $developer = Developer::factory()->create();
 
-        $target = Compound::factory()->create(['city_id' => $city->id, 'developer_id' => $developer->id]);
+        $target = Compound::factory()->create(['sub_area_id' => $subArea->id, 'developer_id' => $developer->id]);
 
-        Compound::factory()->count(3)->create(['city_id' => $city->id]);
-        Compound::factory()->create(['city_id' => $otherCity->id, 'developer_id' => $developer->id]);
-        Compound::factory()->create(['city_id' => $otherCity->id]); // neither matches, should be excluded
+        Compound::factory()->count(3)->create(['sub_area_id' => $subArea->id]);
+        Compound::factory()->create(['sub_area_id' => $otherSubArea->id, 'developer_id' => $developer->id]);
+        Compound::factory()->create(['sub_area_id' => $otherSubArea->id]); // neither matches, should be excluded
 
         $response = $this->getJson("/api/V1/compounds/{$target->id}/similar");
 
@@ -112,10 +112,10 @@ class CompoundReviewSimilarTest extends TestCase
         $data = $response->json('data');
         $this->assertCount(4, $data);
         $this->assertNotContains($target->id, array_column($data, 'id'));
-        // first three should be same-city matches
-        $this->assertSame($city->id, $data[0]['city']['id']);
-        $this->assertSame($city->id, $data[1]['city']['id']);
-        $this->assertSame($city->id, $data[2]['city']['id']);
+        // first three should be same-sub-area matches
+        $this->assertSame($subArea->id, $data[0]['sub_area']['id']);
+        $this->assertSame($subArea->id, $data[1]['sub_area']['id']);
+        $this->assertSame($subArea->id, $data[2]['sub_area']['id']);
     }
 
     public function test_show_exposes_reviews_count_and_average_rating(): void

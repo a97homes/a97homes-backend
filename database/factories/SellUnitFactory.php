@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\SellUnitStatusEnum;
-use App\Models\City;
 use App\Models\PropertyType;
+use App\Models\SubArea;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +22,7 @@ class SellUnitFactory extends Factory
         return [
             'name' => fake()->name(),
             'phone' => fake()->e164PhoneNumber(),
-            'city_id' => City::inRandomOrder()->value('id') ?? 1,
+            'sub_area_id' => SubArea::inRandomOrder()->value('id') ?? 1,
             'property_type_id' => PropertyType::inRandomOrder()->value('id') ?? 1,
             'notes' => fake()->optional()->sentence(),
             'status' => SellUnitStatusEnum::PENDING,

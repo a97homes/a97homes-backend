@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\V1\Admin\AreaController;
 use App\Http\Controllers\API\V1\Admin\ArticleController;
 use App\Http\Controllers\API\V1\Admin\AttributeController;
 use App\Http\Controllers\API\V1\Admin\BannerController;
 use App\Http\Controllers\API\V1\Admin\ChatbotConversationController;
-use App\Http\Controllers\API\V1\Admin\CityController;
 use App\Http\Controllers\API\V1\Admin\CompanyInfoController;
 use App\Http\Controllers\API\V1\Admin\CompoundController;
 use App\Http\Controllers\API\V1\Admin\CompoundReviewController;
@@ -30,7 +30,7 @@ use App\Http\Controllers\API\V1\Admin\PropertyTypeController;
 use App\Http\Controllers\API\V1\Admin\RoleController;
 use App\Http\Controllers\API\V1\Admin\SellUnitController;
 use App\Http\Controllers\API\V1\Admin\SocialController;
-use App\Http\Controllers\API\V1\Admin\StateController;
+use App\Http\Controllers\API\V1\Admin\SubAreaController;
 use App\Http\Controllers\API\V1\Admin\UnitController;
 use App\Http\Controllers\API\V1\Admin\UserController;
 use App\Http\Controllers\API\V1\Authentication\AdminLoginController;
@@ -53,17 +53,21 @@ Route::get('countries/dropdown', [CountryController::class, 'dropdown']);
 Route::apiResource('countries', CountryController::class);
 // ==========================country==========================
 
-// ==========================state=========================
-Route::get('states/dropdown', [StateController::class, 'dropdown']);
-Route::apiResource('states', StateController::class);
-// ==========================state=========================
+// ==========================area=========================
+Route::get('areas/dropdown', [AreaController::class, 'dropdown']);
+Route::apiResource('areas', AreaController::class);
+Route::post('areas/{area}/media', [AreaController::class, 'updateMedia']);
+Route::delete('areas/{area}/media/{collection}', [AreaController::class, 'deleteMedia']);
+// ==========================area=========================
 
-// ==========================city=========================
-Route::get('cities/dropdown', [CityController::class, 'dropdown']);
-Route::apiResource('cities', CityController::class);
-Route::post('cities/{city}/media', [CityController::class, 'updateMedia']);
-Route::delete('cities/{city}/media', [CityController::class, 'deleteMedia']);
-// ==========================city=========================
+// ==========================sub-area=========================
+Route::get('sub-areas/dropdown', [SubAreaController::class, 'dropdown']);
+Route::apiResource('sub-areas', SubAreaController::class)->parameters([
+    'sub-areas' => 'subArea',
+]);
+Route::post('sub-areas/{subArea}/media', [SubAreaController::class, 'updateMedia']);
+Route::delete('sub-areas/{subArea}/media', [SubAreaController::class, 'deleteMedia']);
+// ==========================sub-area=========================
 
 // ==========================property-type=========================
 Route::get('property-types/dropdown', [PropertyTypeController::class, 'dropdown']);

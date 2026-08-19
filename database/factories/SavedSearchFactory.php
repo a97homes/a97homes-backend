@@ -27,7 +27,7 @@ class SavedSearchFactory extends Factory
             'type' => SavedSearchTypeEnum::Compound,
             'criteria' => [
                 'filter' => [
-                    'city_id' => $this->faker->numberBetween(1, 10),
+                    'sub_area_id' => $this->faker->numberBetween(1, 10),
                 ],
                 'sort' => '-id',
             ],

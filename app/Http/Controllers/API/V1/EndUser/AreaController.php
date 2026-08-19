@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\API\V1\EndUser;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\City\CityResource;
-use App\Models\State;
+use App\Http\Resources\SubArea\SubAreaResource;
+use App\Models\Area;
 use Illuminate\Http\JsonResponse;
 
-class StateController extends Controller
+class AreaController extends Controller
 {
-    public function cities(State $state): JsonResponse
+    public function subAreas(Area $area): JsonResponse
     {
-        $cities = $state->cities()->select('id', 'name', 'state_id')->get();
+        $subAreas = $area->subAreas()->select('id', 'name', 'area_id')->get();
 
-        return $this->ok(data: CityResource::collection($cities));
+        return $this->ok(data: SubAreaResource::collection($subAreas));
     }
 }

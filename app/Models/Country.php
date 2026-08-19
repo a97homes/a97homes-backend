@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\CreatedAtFilter;
+use App\Filters\UpdatedAtFilter;
 use App\Traits\HasArabicSearch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ class Country extends Model implements HasMedia
     use HasFactory;
     use HasTranslations;
     use InteractsWithMedia;
+    use UpdatedAtFilter;
 
     public const MEDIA_COLLECTION_FLAG = 'country_flag';
 
@@ -42,8 +44,8 @@ class Country extends Model implements HasMedia
         return file_exists(public_path($path)) ? asset($path) : null;
     }
 
-    public function states(): HasMany
+    public function areas(): HasMany
     {
-        return $this->hasMany(State::class);
+        return $this->hasMany(Area::class);
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API\V1\EndUser;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
+use App\Models\SubArea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,7 +19,7 @@ class CompoundIndexSortTest extends TestCase
     {
         $compound = Compound::factory()->create([
             'developer_id' => Developer::factory(),
-            'city_id' => City::factory(),
+            'sub_area_id' => SubArea::factory(),
             'created_at' => $createdAt,
         ]);
 

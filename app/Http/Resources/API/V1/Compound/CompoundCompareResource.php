@@ -23,7 +23,7 @@ class CompoundCompareResource extends JsonResource
                 'name' => $compound->developer->name,
                 'logo' => $compound->developer->logo_url,
             ]),
-            'location' => $this->whenLoaded('city', fn () => $this->formatLocation($compound)),
+            'location' => $this->whenLoaded('subArea', fn () => $this->formatLocation($compound)),
             'starting_price' => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null,
             'resale_price' => $compound->isCompleted()
                 ? ($compound->properties_min_resale_price !== null ? (int) $compound->properties_min_resale_price : null)
@@ -48,14 +48,14 @@ class CompoundCompareResource extends JsonResource
 
     private function formatLocation(Compound $compound): ?string
     {
-        if (! $compound->city) {
+        if (! $compound->subArea) {
             return null;
         }
 
-        $parts = [$compound->city->getTranslation('name', app()->getLocale())];
+        $parts = [$compound->subArea->getTranslation('name', app()->getLocale())];
 
-        if ($compound->city->relationLoaded('state') && $compound->city->state) {
-            $parts[] = $compound->city->state->getTranslation('name', app()->getLocale());
+        if ($compound->subArea->relationLoaded('area') && $compound->subArea->area) {
+            $parts[] = $compound->subArea->area->getTranslation('name', app()->getLocale());
         }
 
         return implode(', ', $parts);

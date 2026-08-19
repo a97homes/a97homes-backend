@@ -37,7 +37,7 @@ class StorePropertyRequest extends FormRequest
             'attribute_values.*' => ['nullable', 'string', 'max:255'],
             'option_ids' => ['nullable', 'array'],
             'option_ids.*' => ['required', Rule::exists('attribute_options', 'id')],
-            'city_id' => ['required', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['required', Rule::exists('sub_areas', 'id')],
             'order_id' => ['nullable', Rule::exists('orders', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
             'compound_id' => ['required', 'integer', Rule::exists('compounds', 'id')],

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\City;
+namespace App\Http\Requests\API\V1\Admin\SubArea;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreCityRequest extends FormRequest
+class StoreSubAreaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class StoreCityRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->ar')],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('cities', 'name->en')],
-            'state_id' => ['required', Rule::exists('states', 'id')],
+            'name.ar' => ['required', 'string', 'max:255', Rule::unique('sub_areas', 'name->ar')],
+            'name.en' => ['required', 'string', 'max:255', Rule::unique('sub_areas', 'name->en')],
+            'area_id' => ['required', Rule::exists('areas', 'id')],
             'description' => ['nullable', 'array'],
             'description.ar' => ['nullable', 'string'],
             'description.en' => ['nullable', 'string'],

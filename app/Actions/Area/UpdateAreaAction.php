@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Actions\State;
+namespace App\Actions\Area;
 
-use App\Models\State;
+use App\Models\Area;
 
-class UpdateStateAction
+class UpdateAreaAction
 {
-    public function execute(State $state, array $data): State
+    public function execute(Area $area, array $data): Area
     {
-        $state->update($data);
+        $area->update($data);
 
-        return $state;
+        return $area;
     }
 }

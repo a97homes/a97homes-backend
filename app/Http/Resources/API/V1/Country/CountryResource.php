@@ -27,7 +27,9 @@ class CountryResource extends JsonResource
             'code' => $this->whenHas('code', fn () => $country->code),
             'flag' => $country->flag_url,
             'phone_code' => $this->whenHas('phone_code', fn () => $country->phone_code),
+            'areas_count' => $this->whenCounted('areas'),
             'created_at' => $this->whenHas('created_at', fn () => $country->created_at),
+            'updated_at' => $this->whenHas('updated_at', fn () => $country->updated_at),
         ];
     }
 }

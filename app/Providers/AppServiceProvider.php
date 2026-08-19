@@ -30,9 +30,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
+            'area' => \App\Models\Area::class,
             'article' => \App\Models\Article::class,
             'banner' => \App\Models\Banner::class,
-            'city' => \App\Models\City::class,
+            'sub_area' => \App\Models\SubArea::class,
             'compound' => \App\Models\Compound::class,
             'consultant' => \App\Models\Consultant::class,
             'country' => \App\Models\Country::class,

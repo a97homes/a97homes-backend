@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API\V1\EndUser;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
+use App\Models\SubArea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,7 +19,7 @@ class MapEndpointsTest extends TestCase
     {
         $compound = Compound::factory()->create([
             'developer_id' => Developer::factory(),
-            'city_id' => City::factory(),
+            'sub_area_id' => SubArea::factory(),
         ]);
 
         return Property::query()->create(array_merge([
@@ -31,12 +31,12 @@ class MapEndpointsTest extends TestCase
         ], $attributes));
     }
 
-    public function test_compounds_map_is_not_paginated_and_uses_city_coordinates(): void
+    public function test_compounds_map_is_not_paginated_and_uses_sub_area_coordinates(): void
     {
-        $city = City::factory()->create(['latitude' => 30.05, 'longitude' => 31.23]);
+        $subArea = SubArea::factory()->create(['latitude' => 30.05, 'longitude' => 31.23]);
         $compound = Compound::factory()->create([
             'developer_id' => Developer::factory(),
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
         ]);
 
         $response = $this->getJson('/api/V1/compounds/map')->assertOk();
@@ -47,12 +47,12 @@ class MapEndpointsTest extends TestCase
         $response->assertJsonPath('data.0.longitude', 31.23);
     }
 
-    public function test_compounds_map_excludes_compounds_without_city_coordinates(): void
+    public function test_compounds_map_excludes_compounds_without_sub_area_coordinates(): void
     {
-        $city = City::factory()->create(['latitude' => null, 'longitude' => null]);
+        $subArea = SubArea::factory()->create(['latitude' => null, 'longitude' => null]);
         Compound::factory()->create([
             'developer_id' => Developer::factory(),
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
         ]);
 
         $this->getJson('/api/V1/compounds/map')

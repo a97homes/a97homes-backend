@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\V1\Property;
 
 use App\Http\Resources\API\V1\Compound\AdminCompoundResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Models\Property;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class PropertyMapResource extends JsonResource
             'status' => $property->status,
             'sale_type' => $property->sale_type,
             'property_type' => PropertyTypeResource::make($this->whenLoaded('propertyType')),
-            'city' => CityResource::make($this->whenLoaded('city')),
+            'sub_area' => SubAreaResource::make($this->whenLoaded('subArea')),
             'compound' => AdminCompoundResource::make($this->whenLoaded('compound')),
             'thumbnail' => $this->whenLoaded('media', fn () => optional($property->media
                 ->firstWhere('collection_name', Property::MEDIA_COLLECTION_FILE))?->getFullUrl()),

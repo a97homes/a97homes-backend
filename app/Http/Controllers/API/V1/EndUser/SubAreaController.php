@@ -12,8 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Compound\CompoundCollection;
 use App\Http\Resources\API\V1\Faq\FaqResource;
 use App\Http\Resources\API\V1\Offer\OfferCollection;
-use App\Http\Resources\City\CityResource;
-use App\Models\City;
+use App\Http\Resources\SubArea\SubAreaResource;
+use App\Models\SubArea;
 use App\Models\Compound;
 use App\Models\Offer;
 use Illuminate\Http\JsonResponse;
@@ -22,62 +22,62 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CityController extends Controller
+class SubAreaController extends Controller
 {
     public function popular(): JsonResponse
     {
-        $cities = QueryBuilder::for(City::class)
+        $subAreas = QueryBuilder::for(SubArea::class)
             ->withCount('properties')
-            ->with('state:id,name')
+            ->with('area:id,name')
             ->whereHas('properties')
             ->defaultSort('-properties_count')
             ->allowedSorts([
                 AllowedSort::field('properties_count'),
             ])->macroPaginate();
 
-        return $this->ok(data: CityResource::collection($cities));
+        return $this->ok(data: SubAreaResource::collection($subAreas));
     }
 
     public function dropdown(): JsonResponse
     {
-        $cities = City::select('id', 'name')->get();
+        $subAreas = SubArea::select('id', 'name')->get();
 
-        return $this->ok(data: CityResource::collection($cities));
+        return $this->ok(data: SubAreaResource::collection($subAreas));
     }
 
     /**
-     * City (area) detail page header: description, cover, coords,
+     * SubArea (area) detail page header: description, cover, coords,
      * units and compounds counts.
      */
-    public function show(City $city): JsonResponse
+    public function show(SubArea $subArea): JsonResponse
     {
-        $city->load([
-            'state:id,name,country_id',
-            'state.country:id,name',
+        $subArea->load([
+            'area:id,name,country_id',
+            'area.country:id,name',
             'media',
         ]);
 
-        $city->loadCount([
+        $subArea->loadCount([
             'properties as units_count',
             'compounds as compounds_count',
         ]);
 
-        return $this->ok(data: CityResource::make($city));
+        return $this->ok(data: SubAreaResource::make($subArea));
     }
 
     /**
-     * Active offers belonging to compounds in this city.
+     * Active offers belonging to compounds in this subArea.
      */
-    public function offers(City $city): JsonResponse
+    public function offers(SubArea $subArea): JsonResponse
     {
         $offers = Offer::query()
             ->active()
             ->with([
-                'compound:id,name,developer_id,city_id',
+                'compound:id,name,developer_id,sub_area_id',
                 'compound.developer:id,name',
                 'compound.developer.media',
             ])
-            ->whereHas('compound', fn ($q) => $q->where('city_id', $city->id))
+            ->whereHas('compound', fn ($q) => $q->where('sub_area_id', $subArea->id))
             ->latest()
             ->macroPaginate();
 
@@ -85,22 +85,22 @@ class CityController extends Controller
     }
 
     /**
-     * Compounds in this city with sort/filter and sale_type tab support.
+     * Compounds in this subArea with sort/filter and sale_type tab support.
      *
      * Query params:
      *   sale_type = resale | developer | all (defaults to all)
      */
-    public function compounds(Request $request, City $city): JsonResponse
+    public function compounds(Request $request, SubArea $subArea): JsonResponse
     {
         $saleType = $request->input('sale_type', 'all');
 
         $query = QueryBuilder::for(Compound::class)
-            ->where('city_id', $city->id)
+            ->where('sub_area_id', $subArea->id)
             ->with([
                 'developer:id,name',
                 'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'properties:id,compound_id,property_type_id,price,resale_price,sale_type',
                 'properties.propertyType:id,name',
                 'activeDiscount',
@@ -134,11 +134,11 @@ class CityController extends Controller
     }
 
     /**
-     * FAQs attached to this city.
+     * FAQs attached to this subArea.
      */
-    public function faqs(City $city): JsonResponse
+    public function faqs(SubArea $subArea): JsonResponse
     {
-        $faqs = $city->activeFaqs()->get();
+        $faqs = $subArea->activeFaqs()->get();
 
         return $this->ok(data: FaqResource::collection($faqs));
     }

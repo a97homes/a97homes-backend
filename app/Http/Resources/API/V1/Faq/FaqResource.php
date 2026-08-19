@@ -53,7 +53,7 @@ class FaqResource extends JsonResource
 
     /**
      * Parent breadcrumb for the owner: a compound exposes its developer and
-     * area (city + state); a city (area) exposes its state.
+     * location (sub area + area); a sub area exposes its area.
      *
      * @return array<string, mixed>
      */
@@ -65,12 +65,12 @@ class FaqResource extends JsonResource
             $context['developer'] = $faqable->developer ? $this->idNamePayload($faqable->developer) : null;
         }
 
-        if ($faqable->relationLoaded('city')) {
-            $context['area'] = $faqable->city ? $this->idNamePayload($faqable->city) : null;
-            $state = $faqable->city?->relationLoaded('state') ? $faqable->city->state : null;
-            $context['state'] = $state ? $this->idNamePayload($state) : null;
-        } elseif ($faqable->relationLoaded('state')) {
-            $context['state'] = $faqable->state ? $this->idNamePayload($faqable->state) : null;
+        if ($faqable->relationLoaded('subArea')) {
+            $context['sub_area'] = $faqable->subArea ? $this->idNamePayload($faqable->subArea) : null;
+            $area = $faqable->subArea?->relationLoaded('area') ? $faqable->subArea->area : null;
+            $context['area'] = $area ? $this->idNamePayload($area) : null;
+        } elseif ($faqable->relationLoaded('area')) {
+            $context['area'] = $faqable->area ? $this->idNamePayload($faqable->area) : null;
         }
 
         return $context;

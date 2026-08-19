@@ -20,7 +20,7 @@ class StoreFaqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'faqable_type' => ['required', 'string', Rule::in(['city', 'compound', 'developer'])],
+            'faqable_type' => ['required', 'string', Rule::in(['subArea', 'compound', 'developer'])],
             'faqable_id' => ['required', 'integer', $this->faqableExistsRule()],
             'question' => ['required', 'array'],
             'question.ar' => ['required', 'string'],
@@ -35,7 +35,7 @@ class StoreFaqRequest extends FormRequest
 
     public function resolvedFaqableType(): string
     {
-        return $this->input('faqable_type', 'city');
+        return $this->input('faqable_type', 'subArea');
     }
 
     private function faqableExistsRule(): object
@@ -45,7 +45,7 @@ class StoreFaqRequest extends FormRequest
         return match ($type) {
             'compound' => Rule::exists('compounds', 'id'),
             'developer' => Rule::exists('developers', 'id'),
-            default => Rule::exists('cities', 'id'),
+            default => Rule::exists('sub_areas', 'id'),
         };
     }
 }

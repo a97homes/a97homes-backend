@@ -12,10 +12,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Faq\StoreFaqRequest;
 use App\Http\Requests\API\V1\Admin\Faq\UpdateFaqRequest;
 use App\Http\Resources\API\V1\Faq\FaqResource;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Faq;
+use App\Models\SubArea;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\JsonResponse;
@@ -79,8 +79,8 @@ class FaqController extends Controller implements HasMiddleware
     private function faqableEagerLoads(): array
     {
         return [
-            Compound::class => ['developer:id,name', 'city:id,name,state_id', 'city.state:id,name'],
-            City::class => ['state:id,name'],
+            Compound::class => ['developer:id,name', 'subArea:id,name,area_id', 'subArea.area:id,name'],
+            SubArea::class => ['area:id,name'],
             Developer::class => [],
         ];
     }

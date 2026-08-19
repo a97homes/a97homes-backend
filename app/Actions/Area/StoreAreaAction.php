@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\State;
+namespace App\Actions\Area;
 
-use App\Models\State;
+use App\Models\Area;
 
-class StoreStateAction
+class StoreAreaAction
 {
-    public function execute(array $data): State
+    public function execute(array $data): Area
     {
-        return State::create($data);
+        return Area::create($data);
     }
 }

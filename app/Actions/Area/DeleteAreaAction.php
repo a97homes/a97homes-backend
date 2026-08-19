@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\State;
+namespace App\Actions\Area;
 
-use App\Models\State;
+use App\Models\Area;
 
-class DeleteStateAction
+class DeleteAreaAction
 {
-    public function execute(State $state): bool
+    public function execute(Area $area): bool
     {
-        return $state->delete();
+        return $area->delete();
     }
 }

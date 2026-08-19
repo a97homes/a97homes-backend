@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Resources\State;
+namespace App\Http\Resources\Area;
 
 use App\Http\Resources\BasePaginationResource;
 
-class StateCollection extends BasePaginationResource
+class AreaCollection extends BasePaginationResource
 {
     /**
      * Transform the resource collection into an array.
      *
      * @return array<int|string, mixed>
      */
-    public $collects = StateResource::class;
+    public $collects = AreaResource::class;
 }

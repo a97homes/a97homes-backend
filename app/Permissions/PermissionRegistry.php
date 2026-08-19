@@ -64,17 +64,17 @@ class PermissionRegistry
     public const ADMIN_ATTRIBUTES_DESTROY = 'admin.attributes.destroy';
     // =========================attribute Permissions===========================
 
-    // =========================city Permissions===========================
-    public const ADMIN_CITIES_INDEX = 'admin.cities.index';
+    // =========================sub_area Permissions===========================
+    public const ADMIN_SUB_AREAS_INDEX = 'admin.sub_areas.index';
 
-    public const ADMIN_CITIES_STORE = 'admin.cities.store';
+    public const ADMIN_SUB_AREAS_STORE = 'admin.sub_areas.store';
 
-    public const ADMIN_CITIES_SHOW = 'admin.cities.show';
+    public const ADMIN_SUB_AREAS_SHOW = 'admin.sub_areas.show';
 
-    public const ADMIN_CITIES_UPDATE = 'admin.cities.update';
+    public const ADMIN_SUB_AREAS_UPDATE = 'admin.sub_areas.update';
 
-    public const ADMIN_CITIES_DESTROY = 'admin.cities.destroy';
-    // =========================city Permissions===========================
+    public const ADMIN_SUB_AREAS_DESTROY = 'admin.sub_areas.destroy';
+    // =========================sub_area Permissions===========================
 
     // =========================== Country Permissions ===========================
     const COUNTRY_INDEX = 'country.index';
@@ -112,17 +112,17 @@ class PermissionRegistry
     public const ADMIN_PROPERTY_TYPES_DESTROY = 'admin.property_types.destroy';
     // ===========================property_type Permissions =======================
 
-    // ===========================state Permissions ======================
-    public const ADMIN_STATES_INDEX = 'admin.states.index';
+    // ===========================area Permissions ======================
+    public const ADMIN_AREAS_INDEX = 'admin.areas.index';
 
-    public const ADMIN_STATES_STORE = 'admin.states.store';
+    public const ADMIN_AREAS_STORE = 'admin.areas.store';
 
-    public const ADMIN_STATES_SHOW = 'admin.states.show';
+    public const ADMIN_AREAS_SHOW = 'admin.areas.show';
 
-    public const ADMIN_STATES_UPDATE = 'admin.states.update';
+    public const ADMIN_AREAS_UPDATE = 'admin.areas.update';
 
-    public const ADMIN_STATES_DESTROY = 'admin.states.destroy';
-    // ===========================state Permissions ======================
+    public const ADMIN_AREAS_DESTROY = 'admin.areas.destroy';
+    // ===========================area Permissions ======================
 
     // ================= Units Permissions =================
     public const ADMIN_UNITS_INDEX = 'admin.units.index';
@@ -347,11 +347,17 @@ class PermissionRegistry
     public const ADMIN_DISCOUNTS_DESTROY = 'admin.discounts.destroy';
     // ==================== Discount Permissions ======================
 
-    // ==================== City Media Permissions ======================
-    public const ADMIN_CITIES_MEDIA_UPDATE = 'admin.cities.media.update';
+    // ==================== Sub Area Media Permissions ======================
+    public const ADMIN_SUB_AREAS_MEDIA_UPDATE = 'admin.sub_areas.media.update';
 
-    public const ADMIN_CITIES_MEDIA_DESTROY = 'admin.cities.media.destroy';
-    // ==================== City Media Permissions ======================
+    public const ADMIN_SUB_AREAS_MEDIA_DESTROY = 'admin.sub_areas.media.destroy';
+    // ==================== Sub Area Media Permissions ======================
+
+    // ==================== Area Media Permissions ======================
+    public const ADMIN_AREAS_MEDIA_UPDATE = 'admin.areas.media.update';
+
+    public const ADMIN_AREAS_MEDIA_DESTROY = 'admin.areas.media.destroy';
+    // ==================== Area Media Permissions ======================
 
     public static function all(): array
     {

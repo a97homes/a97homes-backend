@@ -30,7 +30,7 @@ class UpdatePropertyRequest extends FormRequest
             'name' => ['array', 'required'],
             'name.ar' => ['required', 'string', 'max:255'],
             'name.en' => ['required', 'string', 'max:255'],
-            'city_id' => ['required', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['required', Rule::exists('sub_areas', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
             'attributes_ids' => ['required', 'array'],
             'attributes_ids.*' => ['required', Rule::exists('attributes', 'id')],

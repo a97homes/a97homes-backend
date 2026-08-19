@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\City;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 
-class CityAreaDetailsSeeder extends Seeder
+class SubAreaDetailsSeeder extends Seeder
 {
     /**
-     * Backfill area-specific details (description, coords, phones) for cities
+     * Backfill area-specific details (description, coords, phones) for sub areas
      * that host compounds so the public area detail page has rich data.
      */
     public function run(): void
@@ -51,10 +51,10 @@ class CityAreaDetailsSeeder extends Seeder
         ];
 
         foreach ($details as $nameEn => $data) {
-            City::query()
+            SubArea::query()
                 ->where('name->en', $nameEn)
-                ->each(function (City $city) use ($data) {
-                    $city->update([
+                ->each(function (SubArea $subArea) use ($data) {
+                    $subArea->update([
                         'description' => $data['description'],
                         'latitude' => $data['latitude'],
                         'longitude' => $data['longitude'],

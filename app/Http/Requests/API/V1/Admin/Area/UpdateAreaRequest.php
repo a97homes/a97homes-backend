@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\API\V1\Admin\State;
+namespace App\Http\Requests\API\V1\Admin\Area;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateStateRequest extends FormRequest
+class UpdateAreaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,12 @@ class UpdateStateRequest extends FormRequest
     {
         return [
             'name' => ['array', 'required'],
-            'name.ar' => ['required', 'string', 'max:255', Rule::unique('states', 'name->ar')->ignore($this->state->id)],
-            'name.en' => ['required', 'string', 'max:255', Rule::unique('states', 'name->en')->ignore($this->state->id)],
+            'name.ar' => ['required', 'string', 'max:255', Rule::unique('areas', 'name->ar')->ignore($this->area->id)],
+            'name.en' => ['required', 'string', 'max:255', Rule::unique('areas', 'name->en')->ignore($this->area->id)],
             'country_id' => ['required', Rule::exists('countries', 'id')],
+            'about' => ['nullable', 'array'],
+            'about.ar' => ['nullable', 'string'],
+            'about.en' => ['nullable', 'string'],
         ];
     }
 }

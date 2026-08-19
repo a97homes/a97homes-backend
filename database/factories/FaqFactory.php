@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\City;
 use App\Models\Faq;
+use App\Models\SubArea;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,8 +21,8 @@ class FaqFactory extends Factory
     public function definition(): array
     {
         return [
-            'faqable_type' => (new City)->getMorphClass(),
-            'faqable_id' => City::factory(),
+            'faqable_type' => (new SubArea)->getMorphClass(),
+            'faqable_id' => SubArea::factory(),
             'question' => [
                 'en' => $this->faker->sentence().'?',
                 'ar' => 'ما هو '.$this->faker->word().'؟',

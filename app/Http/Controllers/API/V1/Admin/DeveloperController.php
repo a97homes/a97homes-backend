@@ -16,9 +16,9 @@ use App\Http\Requests\API\V1\Admin\Developer\StoreDeveloperRequest;
 use App\Http\Requests\API\V1\Admin\Developer\UpdateDeveloperRequest;
 use App\Http\Resources\API\V1\Developer\DeveloperCollection;
 use App\Http\Resources\API\V1\Developer\DeveloperResource;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
+use App\Models\SubArea;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -47,14 +47,14 @@ class DeveloperController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $developers = QueryBuilder::for(Developer::class)
-            ->with(['areas.state:id,name', 'phones', 'whatsappNumbers'])
+            ->with(['subAreas.area:id,name', 'phones', 'whatsappNumbers'])
             ->withCount([
                 'compounds',
                 'properties as units_count',
             ])
             ->addSelect([
-                'areas_count' => Compound::query()
-                    ->selectRaw('COUNT(DISTINCT city_id)')
+                'sub_areas_count' => Compound::query()
+                    ->selectRaw('COUNT(DISTINCT sub_area_id)')
                     ->whereColumn('developer_id', 'developers.id'),
             ])
             ->allowedFilters([
@@ -77,9 +77,8 @@ class DeveloperController extends Controller implements HasMiddleware
                 }),
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('is_active'),
+                AllowedFilter::scope('sub_area_id'),
                 AllowedFilter::scope('area_id'),
-                AllowedFilter::scope('city_id'),
-                AllowedFilter::scope('state_id'),
                 AllowedFilter::scope('property_type_id'),
                 AllowedFilter::scope('sale_type'),
                 AllowedFilter::scope('completion_status'),
@@ -87,8 +86,8 @@ class DeveloperController extends Controller implements HasMiddleware
                 AllowedFilter::scope('max_compounds'),
                 AllowedFilter::scope('min_units'),
                 AllowedFilter::scope('max_units'),
-                AllowedFilter::scope('min_areas'),
-                AllowedFilter::scope('max_areas'),
+                AllowedFilter::scope('min_sub_areas'),
+                AllowedFilter::scope('max_sub_areas'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
             ])
@@ -100,53 +99,53 @@ class DeveloperController extends Controller implements HasMiddleware
                 'is_active',
                 AllowedSort::field('compounds_count'),
                 AllowedSort::field('units_count'),
-                AllowedSort::field('areas_count'),
+                AllowedSort::field('sub_areas_count'),
             ])
             ->macroPaginate();
 
-        $this->attachAreaStats($developers->getCollection());
+        $this->attachSubAreaStats($developers->getCollection());
 
         return $this->ok(data: new DeveloperCollection($developers));
     }
 
-    private function attachAreaStats(Collection $developers): void
+    private function attachSubAreaStats(Collection $developers): void
     {
         $developerIds = $developers->pluck('id')->filter()->values();
-        $cityIds = $developers
-            ->flatMap(fn (Developer $developer) => $developer->areas->pluck('id'))
+        $subAreaIds = $developers
+            ->flatMap(fn (Developer $developer) => $developer->subAreas->pluck('id'))
             ->filter()
             ->unique()
             ->values();
 
-        if ($developerIds->isEmpty() || $cityIds->isEmpty()) {
+        if ($developerIds->isEmpty() || $subAreaIds->isEmpty()) {
             return;
         }
 
         $compoundCounts = Compound::query()
-            ->select('developer_id', 'city_id')
+            ->select('developer_id', 'sub_area_id')
             ->selectRaw('COUNT(*) as compounds_count')
             ->whereIn('developer_id', $developerIds)
-            ->whereIn('city_id', $cityIds)
-            ->groupBy('developer_id', 'city_id')
+            ->whereIn('sub_area_id', $subAreaIds)
+            ->groupBy('developer_id', 'sub_area_id')
             ->get()
-            ->keyBy(fn (Compound $compound): string => $compound->developer_id.'-'.$compound->city_id);
+            ->keyBy(fn (Compound $compound): string => $compound->developer_id.'-'.$compound->sub_area_id);
 
         $unitCounts = DB::table('compounds')
             ->leftJoin('properties', 'properties.compound_id', '=', 'compounds.id')
-            ->select('compounds.developer_id', 'compounds.city_id')
+            ->select('compounds.developer_id', 'compounds.sub_area_id')
             ->selectRaw('COUNT(properties.id) as units_count')
             ->whereIn('compounds.developer_id', $developerIds)
-            ->whereIn('compounds.city_id', $cityIds)
-            ->groupBy('compounds.developer_id', 'compounds.city_id')
+            ->whereIn('compounds.sub_area_id', $subAreaIds)
+            ->groupBy('compounds.developer_id', 'compounds.sub_area_id')
             ->get()
-            ->keyBy(fn ($row): string => $row->developer_id.'-'.$row->city_id);
+            ->keyBy(fn ($row): string => $row->developer_id.'-'.$row->sub_area_id);
 
         $developers->each(function (Developer $developer) use ($compoundCounts, $unitCounts): void {
-            $developer->areas->each(function (City $city) use ($developer, $compoundCounts, $unitCounts): void {
-                $key = $developer->id.'-'.$city->id;
+            $developer->subAreas->each(function (SubArea $subArea) use ($developer, $compoundCounts, $unitCounts): void {
+                $key = $developer->id.'-'.$subArea->id;
 
-                $city->setAttribute('developer_compounds_count', (int) ($compoundCounts->get($key)?->compounds_count ?? 0));
-                $city->setAttribute('developer_units_count', (int) ($unitCounts->get($key)?->units_count ?? 0));
+                $subArea->setAttribute('developer_compounds_count', (int) ($compoundCounts->get($key)?->compounds_count ?? 0));
+                $subArea->setAttribute('developer_units_count', (int) ($unitCounts->get($key)?->units_count ?? 0));
             });
         });
     }
@@ -162,7 +161,7 @@ class DeveloperController extends Controller implements HasMiddleware
     {
         $developer->load([
             'media',
-            'areas.state:id,name',
+            'subAreas.area:id,name',
             'offers',
             'faqs',
             'phones',
@@ -174,7 +173,7 @@ class DeveloperController extends Controller implements HasMiddleware
             'properties as units_count',
         ]);
 
-        $this->attachAreaStats(collect([$developer]));
+        $this->attachSubAreaStats(collect([$developer]));
 
         return $this->ok(data: DeveloperResource::make($developer));
     }

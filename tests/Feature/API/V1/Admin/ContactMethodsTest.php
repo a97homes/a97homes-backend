@@ -6,12 +6,12 @@ namespace Tests\Feature\API\V1\Admin;
 
 use App\Enums\Role\UserRoleEnum;
 use App\Models\Attribute;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\Role;
+use App\Models\SubArea;
 use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
@@ -113,8 +113,8 @@ class ContactMethodsTest extends TestCase
     public function test_property_accepts_contact_methods_and_empty_arrays(): void
     {
         $this->actingAsAdmin();
-        $city = City::factory()->create();
-        $compound = Compound::factory()->create(['city_id' => $city->id]);
+        $subArea = SubArea::factory()->create();
+        $compound = Compound::factory()->create(['sub_area_id' => $subArea->id]);
         $propertyType = PropertyType::query()->create([
             'name' => ['ar' => 'Apartment', 'en' => 'Apartment'],
         ]);
@@ -128,7 +128,7 @@ class ContactMethodsTest extends TestCase
             'name' => ['ar' => 'Apartment', 'en' => 'Apartment'],
             'attributes_ids' => [$attribute->id],
             'attribute_values' => [$attribute->id => '120'],
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
             'property_type_id' => $propertyType->id,
             'compound_id' => $compound->id,
             'address' => 'Test address',

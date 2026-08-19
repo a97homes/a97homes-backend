@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\API\V1\EndUser;
 
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
+use App\Models\SubArea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,16 +21,16 @@ class SearchControllerTest extends TestCase
             ->assertJsonPath('data.compounds', [])
             ->assertJsonPath('data.properties', [])
             ->assertJsonPath('data.developers', [])
-            ->assertJsonPath('data.cities', []);
+            ->assertJsonPath('data.sub_areas', []);
     }
 
     public function test_suggest_returns_results_grouped_by_type(): void
     {
-        $city = City::factory()->create(['name' => ['en' => 'Alamein City', 'ar' => 'مدينة العلمين']]);
+        $subArea = SubArea::factory()->create(['name' => ['en' => 'Alamein SubArea', 'ar' => 'مدينة العلمين']]);
         $developer = Developer::factory()->create(['name' => 'Alamein Developments']);
         Compound::factory()->create([
             'name' => 'Alamein Heights',
-            'city_id' => $city->id,
+            'sub_area_id' => $subArea->id,
             'developer_id' => $developer->id,
         ]);
 
@@ -40,22 +40,22 @@ class SearchControllerTest extends TestCase
             ->assertJsonPath('data.query', 'Alamein')
             ->assertJsonCount(1, 'data.compounds')
             ->assertJsonCount(1, 'data.developers')
-            ->assertJsonCount(1, 'data.cities')
+            ->assertJsonCount(1, 'data.sub_areas')
             ->assertJsonPath('data.compounds.0.type', 'compound')
             ->assertJsonPath('data.developers.0.type', 'developer')
-            ->assertJsonPath('data.cities.0.type', 'city');
+            ->assertJsonPath('data.sub_areas.0.type', 'sub_area');
     }
 
     public function test_suggest_limit_is_capped_to_max(): void
     {
-        City::factory()->count(12)->create([
-            'name' => fn () => ['en' => 'SameCityName '.fake()->unique()->word(), 'ar' => 'مدينة'],
+        SubArea::factory()->count(12)->create([
+            'name' => fn () => ['en' => 'SameSubAreaName '.fake()->unique()->word(), 'ar' => 'مدينة'],
         ]);
 
-        $response = $this->getJson('/api/V1/search/suggest?q=SameCityName&limit=50');
+        $response = $this->getJson('/api/V1/search/suggest?q=SameSubAreaName&limit=50');
 
         $response->assertOk()
-            ->assertJsonCount(10, 'data.cities');
+            ->assertJsonCount(10, 'data.sub_areas');
     }
 
     public function test_search_returns_paginated_results_for_valid_type(): void

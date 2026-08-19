@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Compound\CompoundCollection;
 use App\Http\Resources\API\V1\Developer\DeveloperCollection;
 use App\Http\Resources\API\V1\Property\PropertyCollection;
-use App\Http\Resources\City\CityCollection;
-use App\Models\City;
+use App\Http\Resources\SubArea\SubAreaCollection;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
+use App\Models\SubArea;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -23,7 +23,7 @@ class SearchController extends Controller
 
     public const SUGGEST_MAX_LIMIT = 10;
 
-    public const SEARCHABLE_TYPES = ['compound', 'property', 'developer', 'city'];
+    public const SEARCHABLE_TYPES = ['compound', 'property', 'developer', 'sub_area'];
 
     /**
      * Autocomplete — returns a short list for each entity type matching
@@ -51,7 +51,7 @@ class SearchController extends Controller
                     'id' => $c->id,
                     'type' => 'compound',
                     'name' => $c->name,
-                    'subtitle' => optional($c->city)->name,
+                    'subtitle' => optional($c->subArea)->name,
                     'image_url' => $c->getFirstMediaUrl(Compound::MEDIA_COLLECTION_IMAGE) ?: null,
                 ])->values(),
             'properties' => $this->searchProperties($query, $limit)
@@ -59,7 +59,7 @@ class SearchController extends Controller
                     'id' => $p->id,
                     'type' => 'property',
                     'name' => $p->getTranslation('name', app()->getLocale()),
-                    'subtitle' => optional(optional($p->compound)->city)->getTranslation('name', app()->getLocale()),
+                    'subtitle' => optional(optional($p->compound)->subArea)->getTranslation('name', app()->getLocale()),
                     'image_url' => $p->getFirstMediaUrl(Property::MEDIA_COLLECTION_FILE) ?: null,
                 ])->values(),
             'developers' => $this->searchDevelopers($query, $limit)
@@ -70,20 +70,20 @@ class SearchController extends Controller
                     'subtitle' => null,
                     'image_url' => $d->getFirstMediaUrl(Developer::MEDIA_COLLECTION_LOGO) ?: null,
                 ])->values(),
-            'cities' => $this->searchCities($query, $limit)
-                ->map(fn (City $c) => [
+            'sub_areas' => $this->searchSubAreas($query, $limit)
+                ->map(fn (SubArea $c) => [
                     'id' => $c->id,
-                    'type' => 'city',
+                    'type' => 'sub_area',
                     'name' => $c->getTranslation('name', app()->getLocale()),
-                    'subtitle' => optional($c->state)->getTranslation('name', app()->getLocale()),
-                    'image_url' => $c->getFirstMediaUrl(City::MEDIA_COLLECTION_IMAGE) ?: null,
+                    'subtitle' => optional($c->area)->getTranslation('name', app()->getLocale()),
+                    'image_url' => $c->getFirstMediaUrl(SubArea::MEDIA_COLLECTION_IMAGE) ?: null,
                 ])->values(),
         ]);
     }
 
     /**
      * Paginated per-type search. `type` must be one of compound,
-     * property, developer, city (defaults to compound).
+     * property, developer, sub_area (defaults to compound).
      *
      * Query params:
      *   q        (required, min:2)
@@ -106,14 +106,14 @@ class SearchController extends Controller
         return match ($type) {
             'compound' => $this->ok(data: new CompoundCollection(
                 Compound::query()
-                    ->with(['developer:id,name,is_active', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
+                    ->with(['developer:id,name,is_active', 'developer.media', 'subArea:id,name,area_id', 'subArea.area:id,name', 'media'])
                     ->searchByName($queryString)
                     ->latest()
                     ->macroPaginate()
             )),
             'property' => $this->ok(data: new PropertyCollection(
                 Property::query()
-                    ->with(['city:id,name,state_id', 'city.state:id,name', 'propertyType:id,name', 'compound:id,name', 'media'])
+                    ->with(['subArea:id,name,area_id', 'subArea.area:id,name', 'propertyType:id,name', 'compound:id,name', 'media'])
                     ->where('status', 'active')
                     ->searchByName($queryString)
                     ->latest()
@@ -127,9 +127,9 @@ class SearchController extends Controller
                     ->latest()
                     ->macroPaginate()
             )),
-            'city' => $this->ok(data: new CityCollection(
-                City::query()
-                    ->with(['state:id,name', 'media'])
+            'sub_area' => $this->ok(data: new SubAreaCollection(
+                SubArea::query()
+                    ->with(['area:id,name', 'media'])
                     ->searchByName($queryString)
                     ->latest()
                     ->macroPaginate()
@@ -143,7 +143,7 @@ class SearchController extends Controller
     private function searchCompounds(string $value, int $limit): Collection
     {
         return Compound::query()
-            ->with(['city:id,name', 'media'])
+            ->with(['subArea:id,name', 'media'])
             ->searchByName($value)
             ->limit($limit)
             ->get();
@@ -155,7 +155,7 @@ class SearchController extends Controller
     private function searchProperties(string $value, int $limit): Collection
     {
         return Property::query()
-            ->with(['compound.city:id,name', 'media'])
+            ->with(['compound.subArea:id,name', 'media'])
             ->where('status', 'active')
             ->searchByName($value)
             ->limit($limit)
@@ -176,12 +176,12 @@ class SearchController extends Controller
     }
 
     /**
-     * @return Collection<int, City>
+     * @return Collection<int, SubArea>
      */
-    private function searchCities(string $value, int $limit): Collection
+    private function searchSubAreas(string $value, int $limit): Collection
     {
-        return City::query()
-            ->with(['state:id,name', 'media'])
+        return SubArea::query()
+            ->with(['area:id,name', 'media'])
             ->searchByName($value)
             ->limit($limit)
             ->get();
@@ -197,7 +197,7 @@ class SearchController extends Controller
             'compounds' => [],
             'properties' => [],
             'developers' => [],
-            'cities' => [],
+            'sub_areas' => [],
         ];
     }
 }

@@ -4,10 +4,10 @@ use App\Http\Controllers\API\V1\Authentication\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Authentication\LoginController;
 use App\Http\Controllers\API\V1\Authentication\ResetPasswordController;
 use App\Http\Controllers\API\V1\Authentication\UserLogoutController;
+use App\Http\Controllers\API\V1\EndUser\AreaController;
 use App\Http\Controllers\API\V1\EndUser\ArticleController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
 use App\Http\Controllers\API\V1\EndUser\ChatbotController;
-use App\Http\Controllers\API\V1\EndUser\CityController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
 use App\Http\Controllers\API\V1\EndUser\CompoundController;
 use App\Http\Controllers\API\V1\EndUser\ConsultantController;
@@ -29,7 +29,7 @@ use App\Http\Controllers\API\V1\EndUser\RegisterController;
 use App\Http\Controllers\API\V1\EndUser\SavedSearchController;
 use App\Http\Controllers\API\V1\EndUser\SearchController;
 use App\Http\Controllers\API\V1\EndUser\SellUnitController;
-use App\Http\Controllers\API\V1\EndUser\StateController;
+use App\Http\Controllers\API\V1\EndUser\SubAreaController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'login']);
@@ -46,24 +46,24 @@ Route::middleware('auth:sanctum')->post('logout', [UserLogoutController::class, 
 Route::get('offers', [HomeController::class, 'offers']);
 Route::get('banners', [HomeController::class, 'banners']);
 Route::get('latest-projects', [HomeController::class, 'latestProjects']);
-Route::get('popular-areas', [HomeController::class, 'popularAreas']);
+Route::get('popular-sub-areas', [HomeController::class, 'popularSubAreas']);
 Route::get('featured-compounds', [HomeController::class, 'featuredCompounds']);
 Route::get('featured-properties', [HomeController::class, 'featuredProperties']);
 // =========================Homepage==========================
 
 // =========================Location==========================
 Route::get('countries', [CountryController::class, 'index']);
-Route::get('countries/{country}/states', [CountryController::class, 'states']);
-Route::get('states/{state}/cities', [StateController::class, 'cities']);
-Route::get('cities/popular', [CityController::class, 'popular']);
+Route::get('countries/{country}/areas', [CountryController::class, 'areas']);
+Route::get('areas/{area}/sub-areas', [AreaController::class, 'subAreas']);
+Route::get('sub-areas/popular', [SubAreaController::class, 'popular']);
 // =========================Location==========================
 
-// =========================City (area) detail page==========================
-Route::get('cities/{city}', [CityController::class, 'show']);
-Route::get('cities/{city}/offers', [CityController::class, 'offers']);
-Route::get('cities/{city}/compounds', [CityController::class, 'compounds']);
-Route::get('cities/{city}/faqs', [CityController::class, 'faqs']);
-// =========================City (area) detail page==========================
+// =========================Sub Area detail page==========================
+Route::get('sub-areas/{subArea}', [SubAreaController::class, 'show']);
+Route::get('sub-areas/{subArea}/offers', [SubAreaController::class, 'offers']);
+Route::get('sub-areas/{subArea}/compounds', [SubAreaController::class, 'compounds']);
+Route::get('sub-areas/{subArea}/faqs', [SubAreaController::class, 'faqs']);
+// =========================Sub Area detail page==========================
 
 // =========================Dropdowns==========================
 Route::prefix('dropdowns')->group(function () {

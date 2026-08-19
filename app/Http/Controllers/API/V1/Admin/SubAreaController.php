@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Actions\City\DeleteCityAction;
-use App\Actions\City\StoreCityAction;
-use App\Actions\City\UpdateCityAction;
+use App\Actions\SubArea\DeleteSubAreaAction;
+use App\Actions\SubArea\StoreSubAreaAction;
+use App\Actions\SubArea\UpdateSubAreaAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Admin\City\StoreCityRequest;
-use App\Http\Requests\API\V1\Admin\City\UpdateCityMediaRequest;
-use App\Http\Requests\API\V1\Admin\City\UpdateCityRequest;
-use App\Http\Resources\City\CityCollection;
-use App\Http\Resources\City\CityResource;
-use App\Models\City;
+use App\Http\Requests\API\V1\Admin\SubArea\StoreSubAreaRequest;
+use App\Http\Requests\API\V1\Admin\SubArea\UpdateSubAreaMediaRequest;
+use App\Http\Requests\API\V1\Admin\SubArea\UpdateSubAreaRequest;
+use App\Http\Resources\SubArea\SubAreaCollection;
+use App\Http\Resources\SubArea\SubAreaResource;
+use App\Models\SubArea;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -23,92 +23,101 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class CityController extends Controller implements HasMiddleware
+class SubAreaController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_INDEX]), only: ['index', 'dropdown']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_STORE]), only: ['store']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_UPDATE]), only: ['update']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_DESTROY]), only: ['destroy']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_MEDIA_UPDATE]), only: ['updateMedia']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_CITIES_MEDIA_DESTROY]), only: ['deleteMedia']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_INDEX]), only: ['index', 'dropdown']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_MEDIA_UPDATE]), only: ['updateMedia']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_SUB_AREAS_MEDIA_DESTROY]), only: ['deleteMedia']),
         ];
     }
 
     public function index(): JsonResponse
     {
-        $cities = QueryBuilder::for(City::class)
+        $subAreas = QueryBuilder::for(SubArea::class)
+            ->with(['area:id,name,country_id', 'area.country:id,name', 'media'])
             ->allowedFilters([
+                AllowedFilter::exact('id'),
                 AllowedFilter::custom('name', new NameFilter),
-                AllowedFilter::exact('state_id'),
+                AllowedFilter::custom('search', new NameFilter),
+                AllowedFilter::exact('area_id'),
+                AllowedFilter::scope('country_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
+                AllowedFilter::scope('updated_from'),
+                AllowedFilter::scope('updated_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
+                AllowedSort::field('name'),
+                AllowedSort::field('created_at'),
+                AllowedSort::field('updated_at'),
             ])
             ->macroPaginate();
 
-        return $this->ok(data: new CityCollection($cities));
+        return $this->ok(data: new SubAreaCollection($subAreas));
     }
 
-    public function store(StoreCityRequest $request, StoreCityAction $action): JsonResponse
+    public function store(StoreSubAreaRequest $request, StoreSubAreaAction $action): JsonResponse
     {
-        $city = $action->execute($request->validated());
+        $subArea = $action->execute($request->validated());
 
-        return $this->ok(message: __('messages.city_created_successfully'), data: CityResource::make($city));
+        return $this->ok(message: __('messages.sub_area_created_successfully'), data: SubAreaResource::make($subArea));
     }
 
-    public function update(UpdateCityRequest $request, City $city, UpdateCityAction $action): JsonResponse
+    public function update(UpdateSubAreaRequest $request, SubArea $subArea, UpdateSubAreaAction $action): JsonResponse
     {
-        $action->execute($city, $request->validated());
+        $action->execute($subArea, $request->validated());
 
         return $this->ok(
-            message: __('messages.city_updated_successfully'),
-            data: CityResource::make($city)
+            message: __('messages.sub_area_updated_successfully'),
+            data: SubAreaResource::make($subArea)
         );
     }
 
-    public function show(City $city): JsonResponse
+    public function show(SubArea $subArea): JsonResponse
     {
-        return $this->ok(data: CityResource::make(
-            $city->load(['state:id,name,country_id', 'state.country:id,name'])
+        return $this->ok(data: SubAreaResource::make(
+            $subArea->load(['area:id,name,country_id', 'area.country:id,name'])
         ));
     }
 
-    public function destroy(City $city, DeleteCityAction $action): JsonResponse
+    public function destroy(SubArea $subArea, DeleteSubAreaAction $action): JsonResponse
     {
-        $action->execute($city);
+        $action->execute($subArea);
 
-        return $this->ok(message: __('messages.city_deleted_successfully'));
+        return $this->ok(message: __('messages.sub_area_deleted_successfully'));
     }
 
     public function dropdown(): JsonResponse
     {
-        $cities = City::select('id', 'name')->get();
+        $subAreas = SubArea::select('id', 'name')->get();
 
-        return $this->ok(data: CityResource::collection($cities));
+        return $this->ok(data: SubAreaResource::collection($subAreas));
     }
 
-    public function updateMedia(UpdateCityMediaRequest $request, City $city): JsonResponse
+    public function updateMedia(UpdateSubAreaMediaRequest $request, SubArea $subArea): JsonResponse
     {
-        $city->clearMediaCollection(City::MEDIA_COLLECTION_IMAGE);
-        $city->addMedia($request->file('image'))->toMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+        $subArea->clearMediaCollection(SubArea::MEDIA_COLLECTION_IMAGE);
+        $subArea->addMedia($request->file('image'))->toMediaCollection(SubArea::MEDIA_COLLECTION_IMAGE);
 
         return $this->ok(
-            message: __('messages.city_image_updated_successfully'),
-            data: CityResource::make($city->load('media')),
+            message: __('messages.sub_area_image_updated_successfully'),
+            data: SubAreaResource::make($subArea->load('media')),
         );
     }
 
-    public function deleteMedia(City $city): JsonResponse
+    public function deleteMedia(SubArea $subArea): JsonResponse
     {
-        $city->clearMediaCollection(City::MEDIA_COLLECTION_IMAGE);
+        $subArea->clearMediaCollection(SubArea::MEDIA_COLLECTION_IMAGE);
 
-        return $this->ok(message: __('messages.city_image_deleted_successfully'));
+        return $this->ok(message: __('messages.sub_area_image_deleted_successfully'));
     }
 }

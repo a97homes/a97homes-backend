@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Actions\City;
+namespace App\Actions\SubArea;
 
-use App\Models\City;
+use App\Models\SubArea;
 
-class UpdateCityAction
+class UpdateSubAreaAction
 {
-    public function execute(City $city, array $data): City
+    public function execute(SubArea $subArea, array $data): SubArea
     {
-        $city->update($data);
+        $subArea->update($data);
 
-        return $city;
+        return $subArea;
     }
 }

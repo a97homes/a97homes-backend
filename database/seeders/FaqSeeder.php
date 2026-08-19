@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\City;
 use App\Models\Faq;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 
 class FaqSeeder extends Seeder
@@ -65,12 +65,12 @@ class FaqSeeder extends Seeder
             ],
         ];
 
-        City::query()->whereHas('compounds')->limit(10)->get()->each(function (City $city) use ($samples) {
+        SubArea::query()->whereHas('compounds')->limit(10)->get()->each(function (SubArea $subArea) use ($samples) {
             foreach ($samples as $index => $item) {
                 Faq::updateOrCreate(
                     [
-                        'faqable_type' => (new City)->getMorphClass(),
-                        'faqable_id' => $city->id,
+                        'faqable_type' => (new SubArea)->getMorphClass(),
+                        'faqable_id' => $subArea->id,
                         'sort_order' => $index,
                     ],
                     [

@@ -14,6 +14,6 @@ class OrderController extends Controller
     {
         $order = $action->execute($request->validated());
 
-        return $this->ok(message: __('messages.order_created_successfully'), data: new OrderResource($order->load('propertyType:name,id', 'city:name,id')));
+        return $this->ok(message: __('messages.order_created_successfully'), data: new OrderResource($order->load('propertyType:name,id', 'subArea:name,id')));
     }
 }

@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call([AttributesSeeder::class]);
         $this->call([AttributeOptionSeeder::class]);
         $this->call([CountrySeeder::class]);
-        $this->call([StateSeeder::class]);
-        $this->call([CitySeeder::class]);
+        $this->call([AreaSeeder::class]);
+        $this->call([SubAreaSeeder::class]);
         $this->call([PropertyTypeSeeder::class]);
         $this->call([AttributePropertyTypeSeeder::class]);
         $this->call([DeveloperSeeder::class]);
@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
         $this->call([ConsultantReviewSeeder::class]);
         $this->call([PropertyMediaSeeder::class]);
         $this->call([PaymentPlanSeeder::class]);
-        $this->call([CityAreaDetailsSeeder::class]);
+        $this->call([SubAreaDetailsSeeder::class]);
         $this->call([FaqSeeder::class]);
         $this->call([PageSeeder::class]);
 

@@ -8,7 +8,7 @@ use App\Http\Resources\API\V1\Offer\OfferResource;
 use App\Http\Resources\API\V1\PaymentPlan\PaymentPlanResource;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Models\Compound;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -36,7 +36,7 @@ class CompoundResource extends JsonResource
                 $compound->relationLoaded('developer') && optional($compound->developer)->is_active,
                 fn () => DeveloperResource::make($compound->developer),
             ),
-            'city' => CityResource::make($this->whenLoaded('city')),
+            'sub_area' => SubAreaResource::make($this->whenLoaded('subArea')),
             'starting_price' => $this->whenHas('properties_min_price', fn () => $compound->properties_min_price !== null ? (int) $compound->properties_min_price : null),
             'resale_price' => $this->whenHas('properties_min_resale_price', fn () => $compound->isCompleted()
                 ? ($compound->properties_min_resale_price !== null ? (int) $compound->properties_min_resale_price : null)

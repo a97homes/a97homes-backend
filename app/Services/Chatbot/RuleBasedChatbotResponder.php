@@ -107,7 +107,7 @@ class RuleBasedChatbotResponder implements ChatbotResponder
         $en = [
             'greeting' => 'Welcome to A97! How can I help you today? Search for a compound, calculate a monthly instalment, or pick a consultant.',
             'help' => 'Of course! I can help you search compounds, compare properties, estimate monthly payments, or find a trusted consultant.',
-            'search' => 'Great! Try our quick search via /api/V1/search, or pick an area from the popular areas list. Which city are you considering?',
+            'search' => 'Great! Try our quick search via /api/V1/search, or pick an area from the popular areas list. Which area are you considering?',
             'pricing' => 'Pricing varies by area and developer. Use the price filter on the compounds listing, or estimate a mortgage via /api/V1/mortgage/calculate.',
             'location' => 'Browse popular areas at /api/V1/popular-areas, or open an area detail page for its compounds and offers.',
             'payment' => 'Calculate your monthly instalment by sending price, down-payment percentage, and years to /api/V1/mortgage/calculate.',

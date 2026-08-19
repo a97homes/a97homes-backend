@@ -37,7 +37,7 @@ class Compound extends Model implements HasMedia
     protected $fillable = [
         'name',
         'developer_id',
-        'city_id',
+        'sub_area_id',
         'completion_status',
         'description',
         'delivery_date',
@@ -73,9 +73,9 @@ class Compound extends Model implements HasMedia
         return $this->belongsTo(Developer::class);
     }
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 
     public function properties(): HasMany

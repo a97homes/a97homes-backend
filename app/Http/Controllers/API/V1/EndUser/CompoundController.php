@@ -34,8 +34,8 @@ class CompoundController extends Controller
             ->with([
                 'developer:id,name,is_active',
                 'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'properties:id,compound_id,property_type_id,price,resale_price',
                 'properties.propertyType:id,name',
                 'activeDiscount',
@@ -56,13 +56,13 @@ class CompoundController extends Controller
 
     /**
      * Non-paginated, lightweight list for map rendering. Same filters as the
-     * index; only compounds whose city has coordinates are returned.
+     * index; only compounds whose subArea has coordinates are returned.
      */
     public function map(Request $request): JsonResponse
     {
         $compounds = $this->filteredQuery($request)
             ->with([
-                'city:id,name,state_id,latitude,longitude',
+                'subArea:id,name,area_id,latitude,longitude',
                 'developer:id,name,is_active',
                 'developer.media',
                 'media',
@@ -71,7 +71,7 @@ class CompoundController extends Controller
             ])
             ->withMin('properties', 'price')
             ->withMax('properties', 'price')
-            ->whereHas('city', fn (Builder $q) => $q->whereNotNull('latitude')->whereNotNull('longitude'))
+            ->whereHas('subArea', fn (Builder $q) => $q->whereNotNull('latitude')->whereNotNull('longitude'))
             ->get();
 
         return $this->ok(data: CompoundMapResource::collection($compounds));
@@ -82,8 +82,8 @@ class CompoundController extends Controller
         $query = QueryBuilder::for(Compound::class)
             ->allowedFilters([
                 AllowedFilter::custom('name', new NameFilter),
-                AllowedFilter::exact('city_id'),
-                AllowedFilter::exact('city.state_id'),
+                AllowedFilter::exact('sub_area_id'),
+                AllowedFilter::exact('subArea.area_id'),
                 AllowedFilter::exact('developer_id'),
                 AllowedFilter::exact('completion_status'),
                 AllowedFilter::exact('is_featured'),
@@ -152,8 +152,8 @@ class CompoundController extends Controller
 
         $compound->load([
             'developer.media',
-            'city:id,name,state_id',
-            'city.state:id,name',
+            'subArea:id,name,area_id',
+            'subArea.area:id,name',
             'properties' => function ($q) use ($userId): void {
                 if ($userId) {
                     $q->withCount([
@@ -193,8 +193,8 @@ class CompoundController extends Controller
         $compounds = Compound::query()
             ->with([
                 'developer.media',
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'properties:id,compound_id,property_type_id,price,resale_price',
                 'properties.propertyType:id,name',
                 'activeDiscount',
@@ -251,21 +251,21 @@ class CompoundController extends Controller
     }
 
     /**
-     * Up to 6 similar compounds — same city first, then same developer,
+     * Up to 6 similar compounds — same subArea first, then same developer,
      * excluding the current compound.
      */
     public function similar(Compound $compound): JsonResponse
     {
         $compounds = Compound::query()
-            ->with(['developer:id,name,is_active', 'developer.media', 'city:id,name,state_id', 'city.state:id,name', 'media'])
+            ->with(['developer:id,name,is_active', 'developer.media', 'subArea:id,name,area_id', 'subArea.area:id,name', 'media'])
             ->withMin('properties', 'price')
             ->withMax('properties', 'price')
             ->where('id', '!=', $compound->id)
             ->where(function ($q) use ($compound): void {
-                $q->where('city_id', $compound->city_id)
+                $q->where('sub_area_id', $compound->sub_area_id)
                     ->orWhere('developer_id', $compound->developer_id);
             })
-            ->orderByRaw('CASE WHEN city_id = ? THEN 0 ELSE 1 END', [$compound->city_id])
+            ->orderByRaw('CASE WHEN sub_area_id = ? THEN 0 ELSE 1 END', [$compound->sub_area_id])
             ->limit(6)
             ->get();
 

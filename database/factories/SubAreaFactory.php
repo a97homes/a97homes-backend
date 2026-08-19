@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\City;
-use App\Models\State;
+use App\Models\SubArea;
+use App\Models\Area;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<City>
+ * @extends Factory<SubArea>
  */
-class CityFactory extends Factory
+class SubAreaFactory extends Factory
 {
-    protected $model = City::class;
+    protected $model = SubArea::class;
 
     /**
      * @return array<string, mixed>
@@ -25,7 +25,7 @@ class CityFactory extends Factory
                 'en' => $this->faker->unique()->city(),
                 'ar' => 'مدينة '.$this->faker->unique()->word(),
             ],
-            'state_id' => State::factory(),
+            'area_id' => Area::factory(),
             'description' => [
                 'en' => $this->faker->paragraph(3),
                 'ar' => 'وصف مفصل للمنطقة يحتوي على أهم المعلومات.',

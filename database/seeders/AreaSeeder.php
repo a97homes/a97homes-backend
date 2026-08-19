@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Area;
 use App\Models\Country;
-use App\Models\State;
 use Illuminate\Database\Seeder;
 
-class StateSeeder extends Seeder
+class AreaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,10 +14,8 @@ class StateSeeder extends Seeder
     public function run(): void
     {
         $egyptId = Country::where('code', 'EG')->value('id');
-        $saudiId = Country::where('code', 'SA')->value('id');
-        $uaeId = Country::where('code', 'AE')->value('id');
 
-        $states = [
+        $areas = [
             ['name' => ['en' => 'Cairo', 'ar' => 'القاهرة'], 'country_id' => $egyptId],
             ['name' => ['en' => 'Giza', 'ar' => 'الجيزة'], 'country_id' => $egyptId],
             ['name' => ['en' => 'Alexandria', 'ar' => 'الإسكندرية'], 'country_id' => $egyptId],
@@ -45,17 +43,10 @@ class StateSeeder extends Seeder
             ['name' => ['en' => 'Luxor', 'ar' => 'الأقصر'], 'country_id' => $egyptId],
             ['name' => ['en' => 'Aswan', 'ar' => 'أسوان'], 'country_id' => $egyptId],
             ['name' => ['en' => 'New Valley', 'ar' => 'الوادي الجديد'], 'country_id' => $egyptId],
-
-            ['name' => ['en' => 'Riyadh', 'ar' => 'الرياض'], 'country_id' => $saudiId],
-            ['name' => ['en' => 'Jeddah', 'ar' => 'جدة'], 'country_id' => $saudiId],
-            ['name' => ['en' => 'Mecca', 'ar' => 'مكة المكرمة'], 'country_id' => $saudiId],
-            ['name' => ['en' => 'Dubai', 'ar' => 'دبي'], 'country_id' => $uaeId],
-            ['name' => ['en' => 'Abu Dhabi', 'ar' => 'أبوظبي'], 'country_id' => $uaeId],
-            ['name' => ['en' => 'Sharjah', 'ar' => 'الشارقة'], 'country_id' => $uaeId],
         ];
 
-        foreach ($states as $state) {
-            State::create($state);
+        foreach ($areas as $area) {
+            Area::create($area);
         }
     }
 }

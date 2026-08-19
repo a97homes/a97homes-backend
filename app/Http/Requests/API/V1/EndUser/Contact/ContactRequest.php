@@ -28,7 +28,7 @@ class ContactRequest extends FormRequest
             'phone' => ['required', 'max:20', 'string',
                 (new Phone)->international()],
             'email' => ['nullable', 'email', 'max:255'],
-            'city_id' => ['nullable', 'integer', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['nullable', 'integer', Rule::exists('sub_areas', 'id')],
             'message' => ['required', 'string', 'max:1000'],
         ];
     }

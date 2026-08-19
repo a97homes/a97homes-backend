@@ -7,7 +7,7 @@ use App\Http\Resources\API\V1\Attribute\AttributeResource;
 use App\Http\Resources\API\V1\Compound\CompoundResource;
 use App\Http\Resources\API\V1\ContactMethod\ContactMethodResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Models\Compound;
 use App\Models\Property;
 use App\Traits\HasTranslatableFields;
@@ -29,7 +29,7 @@ class PropertyResource extends JsonResource
         return [
             'id' => $this->whenHas('id', fn () => $this->id),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($property, 'name')),
-            'city' => CityResource::make($this->whenLoaded('city')),
+            'sub_area' => SubAreaResource::make($this->whenLoaded('subArea')),
             'property_type' => PropertyTypeResource::make($this->whenLoaded('propertyType')),
             'status' => $this->whenHas('status', fn () => $property->status),
             'address' => $this->whenHas('address', fn () => $property->address),

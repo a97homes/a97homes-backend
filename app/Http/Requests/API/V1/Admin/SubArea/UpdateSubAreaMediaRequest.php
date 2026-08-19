@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\API\V1\Admin\City;
+namespace App\Http\Requests\API\V1\Admin\SubArea;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCityMediaRequest extends FormRequest
+class UpdateSubAreaMediaRequest extends FormRequest
 {
     public function authorize(): bool
     {

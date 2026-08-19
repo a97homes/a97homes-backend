@@ -52,7 +52,7 @@ class ConsultantController extends Controller
     public function properties(Consultant $consultant): JsonResponse
     {
         $properties = QueryBuilder::for(Property::where('consultant_id', $consultant->id))
-            ->with(['city', 'propertyType', 'compound', 'attributes', 'selectedOptions', 'media'])
+            ->with(['subArea', 'propertyType', 'compound', 'attributes', 'selectedOptions', 'media'])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),

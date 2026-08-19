@@ -45,9 +45,9 @@ class PropertyController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $properties = QueryBuilder::for(Property::class)
-            ->with(['city:id,name,state_id',
-                'city.state:id,name,country_id',
-                'city.state.country:id,name',
+            ->with(['subArea:id,name,area_id',
+                'subArea.area:id,name,country_id',
+                'subArea.area.country:id,name',
                 'compound:id,name,developer_id',
                 'compound.developer:id,name',
                 'compound.developer.media',
@@ -95,7 +95,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id', 'phones', 'whatsappNumbers']);
+        $property->load(['subArea:id,name,area_id', 'subArea.area:id,name,country_id', 'subArea.area.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id', 'phones', 'whatsappNumbers']);
 
         return $this->ok(data: PropertyResource::make($property));
     }

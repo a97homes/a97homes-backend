@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\API\V1\Admin;
 
-use App\Actions\State\DeleteStateAction;
-use App\Actions\State\StoreStateAction;
-use App\Actions\State\UpdateStateAction;
+use App\Actions\Area\DeleteAreaAction;
+use App\Actions\Area\StoreAreaAction;
+use App\Actions\Area\UpdateAreaAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Filters\NameFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\API\V1\Admin\State\StoreStateRequest;
-use App\Http\Requests\API\V1\Admin\State\UpdateStateRequest;
-use App\Http\Resources\State\StateCollection;
-use App\Http\Resources\State\StateResource;
-use App\Models\State;
+use App\Http\Requests\API\V1\Admin\Area\StoreAreaRequest;
+use App\Http\Requests\API\V1\Admin\Area\UpdateAreaMediaRequest;
+use App\Http\Requests\API\V1\Admin\Area\UpdateAreaRequest;
+use App\Http\Resources\Area\AreaCollection;
+use App\Http\Resources\Area\AreaResource;
+use App\Models\Area;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -22,69 +23,103 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class StateController extends Controller implements HasMiddleware
+class AreaController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_STATES_INDEX]), only: ['index', 'dropdown']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_STATES_STORE]), only: ['store']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_STATES_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_STATES_UPDATE]), only: ['update']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_STATES_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_INDEX]), only: ['index', 'dropdown']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_STORE]), only: ['store']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_SHOW]), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_MEDIA_UPDATE]), only: ['updateMedia']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_AREAS_MEDIA_DESTROY]), only: ['deleteMedia']),
         ];
     }
 
     public function index(): JsonResponse
     {
-        $states = QueryBuilder::for(State::class)
-            ->with(['country:id,name'])
+        $areas = QueryBuilder::for(Area::class)
+            ->with(['country:id,name', 'media'])
+            ->withCount('subAreas')
             ->allowedFilters([
+                AllowedFilter::exact('id'),
                 AllowedFilter::custom('name', new NameFilter),
+                AllowedFilter::custom('search', new NameFilter),
                 AllowedFilter::exact('country_id'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
+                AllowedFilter::scope('updated_from'),
+                AllowedFilter::scope('updated_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
                 AllowedSort::field('name'),
+                AllowedSort::field('created_at'),
+                AllowedSort::field('updated_at'),
+                AllowedSort::field('sub_areas_count'),
             ])
             ->macroPaginate();
 
-        return $this->ok(data: new StateCollection($states));
+        return $this->ok(data: new AreaCollection($areas));
     }
 
-    public function store(StoreStateRequest $request, StoreStateAction $action): JsonResponse
+    public function store(StoreAreaRequest $request, StoreAreaAction $action): JsonResponse
     {
-        $state = $action->execute($request->validated());
+        $area = $action->execute($request->validated());
 
-        return $this->ok(message: __('messages.state_created_successfully'), data: StateResource::make($state));
+        return $this->ok(message: __('messages.area_created_successfully'), data: AreaResource::make($area));
     }
 
-    public function update(UpdateStateRequest $request, State $state, UpdateStateAction $action): JsonResponse
+    public function update(UpdateAreaRequest $request, Area $area, UpdateAreaAction $action): JsonResponse
     {
-        $action->execute($state, $request->validated());
+        $action->execute($area, $request->validated());
 
-        return $this->ok(message: __('messages.state_updated_successfully'), data: StateResource::make($state));
+        return $this->ok(message: __('messages.area_updated_successfully'), data: AreaResource::make($area));
     }
 
-    public function show(State $state): JsonResponse
+    public function show(Area $area): JsonResponse
     {
-        return $this->ok(data: StateResource::make($state->load(['country:id,name'])));
+        $area->load(['country:id,name', 'media'])->loadCount('subAreas');
+
+        return $this->ok(data: AreaResource::make($area));
     }
 
-    public function destroy(State $state, DeleteStateAction $action): JsonResponse
+    public function destroy(Area $area, DeleteAreaAction $action): JsonResponse
     {
-        $action->execute($state);
+        $action->execute($area);
 
-        return $this->ok(message: __('messages.state_deleted_successfully'));
+        return $this->ok(message: __('messages.area_deleted_successfully'));
     }
 
     public function dropdown(): JsonResponse
     {
-        $states = State::select('id', 'name')->get();
+        $areas = Area::select('id', 'name')->get();
 
-        return $this->ok(data: StateResource::collection($states));
+        return $this->ok(data: AreaResource::collection($areas));
+    }
+
+    public function updateMedia(UpdateAreaMediaRequest $request, Area $area): JsonResponse
+    {
+        $collection = $request->string('collection')->toString();
+
+        $area->clearMediaCollection($collection);
+        $area->addMedia($request->file('file'))->toMediaCollection($collection);
+
+        return $this->ok(
+            message: __('messages.area_media_updated_successfully'),
+            data: AreaResource::make($area->load('media')),
+        );
+    }
+
+    public function deleteMedia(Area $area, string $collection): JsonResponse
+    {
+        abort_unless(in_array($collection, Area::MEDIA_COLLECTIONS, true), 404);
+
+        $area->clearMediaCollection($collection);
+
+        return $this->ok(message: __('messages.area_media_deleted_successfully'));
     }
 }

@@ -36,7 +36,7 @@ class SellUnitController extends Controller implements HasMiddleware
         $sellUnits = QueryBuilder::for(SellUnit::class)
             ->allowedFilters([
                 AllowedFilter::exact('status'),
-                AllowedFilter::exact('city_id'),
+                AllowedFilter::exact('sub_area_id'),
                 AllowedFilter::exact('property_type_id'),
                 AllowedFilter::exact('compound_id'),
                 AllowedFilter::scope('created_from'),
@@ -47,7 +47,7 @@ class SellUnitController extends Controller implements HasMiddleware
                 AllowedSort::field('id'),
                 AllowedSort::field('created_at'),
             ])
-            ->with(['city:id,name', 'propertyType:id,name', 'compound:id,name'])
+            ->with(['subArea:id,name', 'propertyType:id,name', 'compound:id,name'])
             ->macroPaginate();
 
         return $this->ok(data: new SellUnitCollection($sellUnits));
@@ -56,7 +56,7 @@ class SellUnitController extends Controller implements HasMiddleware
     public function show(SellUnit $sellUnit): JsonResponse
     {
         return $this->ok(data: SellUnitResource::make(
-            $sellUnit->load(['city:id,name', 'propertyType:id,name', 'compound:id,name'])
+            $sellUnit->load(['subArea:id,name', 'propertyType:id,name', 'compound:id,name'])
         ));
     }
 

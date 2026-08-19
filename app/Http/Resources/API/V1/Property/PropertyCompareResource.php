@@ -5,7 +5,7 @@ namespace App\Http\Resources\API\V1\Property;
 use App\Http\Resources\API\V1\Attribute\AttributeOptionResource;
 use App\Http\Resources\API\V1\Attribute\AttributeResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Models\Property;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -37,7 +37,7 @@ class PropertyCompareResource extends JsonResource
                 'delivery_date' => $property->compound->delivery_date?->toDateString(),
                 'completion_status' => $property->compound->completion_status,
             ]),
-            'location' => CityResource::make($this->whenLoaded('city')),
+            'location' => SubAreaResource::make($this->whenLoaded('subArea')),
             'price' => $property->price,
             'resale_price' => $property->resale_price,
             'attributes' => AttributeResource::collection($this->whenLoaded('attributes')),

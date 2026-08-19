@@ -51,25 +51,17 @@ class Developer extends Model implements HasMedia
     /**
      * @param  int|string|array<int, int|string>  $value
      */
+    public function scopeSubAreaId(Builder $query, int|string|array $value): void
+    {
+        $query->whereHas('compounds', fn (Builder $compounds) => $compounds->whereIn('sub_area_id', (array) $value));
+    }
+
+    /**
+     * @param  int|string|array<int, int|string>  $value
+     */
     public function scopeAreaId(Builder $query, int|string|array $value): void
     {
-        $query->whereHas('compounds', fn (Builder $compounds) => $compounds->whereIn('city_id', (array) $value));
-    }
-
-    /**
-     * @param  int|string|array<int, int|string>  $value
-     */
-    public function scopeCityId(Builder $query, int|string|array $value): void
-    {
-        $this->scopeAreaId($query, $value);
-    }
-
-    /**
-     * @param  int|string|array<int, int|string>  $value
-     */
-    public function scopeStateId(Builder $query, int|string|array $value): void
-    {
-        $query->whereHas('compounds.city', fn (Builder $cities) => $cities->whereIn('state_id', (array) $value));
+        $query->whereHas('compounds.subArea', fn (Builder $subAreas) => $subAreas->whereIn('area_id', (array) $value));
     }
 
     /**
@@ -116,14 +108,14 @@ class Developer extends Model implements HasMedia
         $query->has('properties', '<=', (int) $value);
     }
 
-    public function scopeMinAreas(Builder $query, int|string $value): void
+    public function scopeMinSubAreas(Builder $query, int|string $value): void
     {
-        $query->whereRaw('(select count(distinct city_id) from compounds where compounds.developer_id = developers.id) >= ?', [(int) $value]);
+        $query->whereRaw('(select count(distinct sub_area_id) from compounds where compounds.developer_id = developers.id) >= ?', [(int) $value]);
     }
 
-    public function scopeMaxAreas(Builder $query, int|string $value): void
+    public function scopeMaxSubAreas(Builder $query, int|string $value): void
     {
-        $query->whereRaw('(select count(distinct city_id) from compounds where compounds.developer_id = developers.id) <= ?', [(int) $value]);
+        $query->whereRaw('(select count(distinct sub_area_id) from compounds where compounds.developer_id = developers.id) <= ?', [(int) $value]);
     }
 
     public function compounds(): HasMany
@@ -159,14 +151,14 @@ class Developer extends Model implements HasMedia
     }
 
     /**
-     * Areas the developer operates in: the cities of its compounds.
+     * Sub areas the developer operates in: the sub areas of its compounds.
      *
      * Not distinct at the SQL level: PostgreSQL cannot `SELECT DISTINCT` over
-     * the city's json columns. De-duplicate by id when presenting.
+     * the sub area's json columns. De-duplicate by id when presenting.
      */
-    public function areas(): BelongsToMany
+    public function subAreas(): BelongsToMany
     {
-        return $this->belongsToMany(City::class, 'compounds', 'developer_id', 'city_id');
+        return $this->belongsToMany(SubArea::class, 'compounds', 'developer_id', 'sub_area_id');
     }
 
     public function getLogoUrlAttribute(): ?string

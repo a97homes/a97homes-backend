@@ -6,8 +6,8 @@ use App\Http\Resources\API\V1\Compound\CompoundResource;
 use App\Http\Resources\API\V1\ContactMethod\ContactMethodResource;
 use App\Http\Resources\API\V1\Faq\FaqResource;
 use App\Http\Resources\API\V1\Offer\OfferResource;
-use App\Models\City;
 use App\Models\Developer;
+use App\Models\SubArea;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -45,18 +45,18 @@ class DeveloperResource extends JsonResource
             'banner_url' => $developer->banner_url,
             'compounds_count' => $this->whenHas('compounds_count', fn () => $developer->compounds_count),
             'units_count' => $this->whenHas('units_count', fn () => (int) $developer->units_count),
-            'areas_count' => $this->whenHas('areas_count', fn () => (int) $developer->areas_count),
-            'areas' => $this->when(
-                $developer->relationLoaded('areas'),
-                fn () => $developer->areas->unique('id')->values()->map(fn (City $city) => [
-                    'id' => $city->id,
-                    'name' => $this->getTranslatableField($city, 'name'),
-                    'state' => $city->relationLoaded('state') && $city->state ? [
-                        'id' => $city->state->id,
-                        'name' => $this->getTranslatableField($city->state, 'name'),
+            'sub_areas_count' => $this->whenHas('sub_areas_count', fn () => (int) $developer->sub_areas_count),
+            'sub_areas' => $this->when(
+                $developer->relationLoaded('subAreas'),
+                fn () => $developer->subAreas->unique('id')->values()->map(fn (SubArea $subArea) => [
+                    'id' => $subArea->id,
+                    'name' => $this->getTranslatableField($subArea, 'name'),
+                    'area' => $subArea->relationLoaded('area') && $subArea->area ? [
+                        'id' => $subArea->area->id,
+                        'name' => $this->getTranslatableField($subArea->area, 'name'),
                     ] : null,
-                    'compounds_count' => (int) ($city->developer_compounds_count ?? 0),
-                    'units_count' => (int) ($city->developer_units_count ?? 0),
+                    'compounds_count' => (int) ($subArea->developer_compounds_count ?? 0),
+                    'units_count' => (int) ($subArea->developer_units_count ?? 0),
                 ]),
             ),
             'offers' => $this->when(
