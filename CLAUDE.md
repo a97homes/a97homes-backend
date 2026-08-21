@@ -284,3 +284,12 @@ protected function isAccessible(User $user, ?string $path = null): bool
 | decoration-slice | box-decoration-slice |
 | decoration-clone | box-decoration-clone |
 </laravel-boost-guidelines>
+
+# API Development — Postman Is Part of the Implementation
+
+This project's Postman collection is a first-class deliverable, not documentation debt.
+
+- **Always-on rules:** `.claude/rules/api-postman-sync.md` — read it before any API change.
+- **Workflow skill:** `postman-api-sync` (`.claude/skills/postman-api-sync/SKILL.md`) — invoke it whenever you touch `routes/V1/**`, `app/Http/Controllers/API/**`, `app/Http/Requests/API/**`, `app/Http/Resources/**`, API-exposed enums, or endpoint auth/permissions. Includes the collection map, MCP call recipes, and the final contract audit.
+
+Non-negotiable: inspect Laravel **and** the live Postman collection before implementing; sync the collection in the same task; never invent request/response shapes; never claim a sync that did not happen.
