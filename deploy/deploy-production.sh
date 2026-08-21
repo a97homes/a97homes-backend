@@ -60,7 +60,7 @@ echo "--- 2. fetch code ---"
 chown root:root "$NEW"
 chown -R root:root "$NEW/.git"
 git fetch --prune origin "$BRANCH"
-git checkout -B "$BRANCH" "$REF"
+git checkout -f -B "$BRANCH" "$REF"
 git reset --hard "$REF"
 git clean -fd -e vendor -e node_modules -e storage -e .env
 SHA=$(git rev-parse --short HEAD)

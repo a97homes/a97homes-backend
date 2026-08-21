@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\SubArea;
 use App\Models\Area;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 
 class SubAreaSeeder extends Seeder
@@ -40,11 +40,6 @@ class SubAreaSeeder extends Seeder
         $luxorId = Area::where('name->en', 'Luxor')->value('id');
         $aswanId = Area::where('name->en', 'Aswan')->value('id');
         $newValleyId = Area::where('name->en', 'New Valley')->value('id');
-
-        $riyadhId = Area::where('name->en', 'Riyadh')->value('id');
-        $jeddahId = Area::where('name->en', 'Jeddah')->value('id');
-        $dubaiId = Area::where('name->en', 'Dubai')->value('id');
-        $abudhabiId = Area::where('name->en', 'Abu Dhabi')->value('id');
 
         $subAreas = [
             // القاهرة
@@ -360,14 +355,6 @@ class SubAreaSeeder extends Seeder
             ['name' => ['en' => 'Farafra', 'ar' => 'الفرافرة'], 'area_id' => $newValleyId],
             ['name' => ['en' => 'Baris', 'ar' => 'باريس'], 'area_id' => $newValleyId],
             ['name' => ['en' => 'Balat', 'ar' => 'بلاط'], 'area_id' => $newValleyId],
-
-            // السعودية
-            ['name' => ['en' => 'Al Olaya', 'ar' => 'العليا'], 'area_id' => $riyadhId],
-            ['name' => ['en' => 'Al Balad', 'ar' => 'البلد'], 'area_id' => $jeddahId],
-
-            // الإمارات
-            ['name' => ['en' => 'Business Bay', 'ar' => 'الخليج التجاري'], 'area_id' => $dubaiId],
-            ['name' => ['en' => 'Corniche', 'ar' => 'الكورنيش'], 'area_id' => $abudhabiId],
         ];
 
         foreach ($subAreas as $subArea) {
