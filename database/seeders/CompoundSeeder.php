@@ -283,7 +283,7 @@ class CompoundSeeder extends Seeder
                 continue;
             }
 
-            $subAreaId = $subAreas[$compoundData['subArea']] ?? null;
+            $subAreaId = $subAreas[$compoundData['sub_area']] ?? null;
 
             $compound = Compound::updateOrCreate(
                 ['name' => $compoundData['name'], 'developer_id' => $developer->id],
@@ -314,7 +314,7 @@ class CompoundSeeder extends Seeder
                             'ar' => $unitData['type'].' وحدة '.($index + 1).' - '.$compoundData['name'],
                         ],
                         'status' => 'active',
-                        'address' => $compoundData['subArea'],
+                        'address' => $compoundData['sub_area'],
                         'resale_price' => $unitData['resale_price'],
                         'sub_area_id' => $subAreaId,
                     ],
