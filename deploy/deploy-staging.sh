@@ -29,7 +29,7 @@ as_web php artisan down --retry=30 || true
 trap 'as_web php artisan up || true' EXIT
 
 git fetch --prune origin "$BRANCH"
-git checkout -B "$BRANCH" "$REF"
+git checkout -f -B "$BRANCH" "$REF"
 git reset --hard "$REF"
 SHA=$(git rev-parse --short HEAD)
 echo "deploying sha: $SHA ($(git log -1 --pretty=%s))"
