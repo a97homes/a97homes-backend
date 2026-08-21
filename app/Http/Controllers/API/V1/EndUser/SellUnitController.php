@@ -16,7 +16,7 @@ class SellUnitController extends Controller
 
         return $this->ok(
             message: __('messages.sell_unit_created_successfully'),
-            data: new SellUnitResource($sellUnit->load('propertyType:name,id', 'city:name,id'))
+            data: new SellUnitResource($sellUnit->load('propertyType:name,id', 'subArea:name,id', 'compound:name,id'))
         );
     }
 }

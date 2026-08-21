@@ -21,8 +21,8 @@ class PropertyFavoriteController extends Controller
         $properties = Property::query()
             ->with([
                 'propertyType:id,name',
-                'city:id,name,state_id',
-                'city.state:id,name',
+                'subArea:id,name,area_id',
+                'subArea.area:id,name',
                 'compound:id,name',
                 'compound.developer.media',
                 'media',
@@ -35,7 +35,6 @@ class PropertyFavoriteController extends Controller
 
             return $property;
         });
-
 
         return $this->ok(data: new PropertyCollection($properties));
     }
@@ -52,8 +51,8 @@ class PropertyFavoriteController extends Controller
 
         $property = Property::with([
             'propertyType:id,name',
-            'city:id,name,state_id',
-            'city.state:id,name',
+            'subArea:id,name,area_id',
+            'subArea.area:id,name',
             'compound:id,name',
             'compound.developer.media',
             'media',

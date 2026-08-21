@@ -6,23 +6,35 @@ namespace App\Models\User;
 use App\Enums\User\TokenAbilityEnum;
 use App\Filters\CreatedAtFilter;
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use CreatedAtFilter;
     use HasApiTokens;
+    use InteractsWithMedia;
+
+    public const MEDIA_COLLECTION_AVATAR = 'user_avatar';
 
     protected $guard_name = 'web';
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
 
     use HasRoles;
     use Notifiable;

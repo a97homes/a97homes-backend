@@ -28,7 +28,7 @@ class StoreOrderRequest extends FormRequest
             'phone' => ['nullable', 'max:20', 'string',
                 (new Phone)->international(), Rule::unique('orders', 'phone')],
             'description' => ['required', 'string', 'max:1000'],
-            'city_id' => ['required', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['required', Rule::exists('sub_areas', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
 
         ];

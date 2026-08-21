@@ -19,7 +19,7 @@ class Order extends Model
 {
     use CreatedAtFilter;
 
-    protected $fillable = ['status', 'phone', 'name', 'description', 'city_id', 'property_type_id'];
+    protected $fillable = ['status', 'phone', 'name', 'description', 'sub_area_id', 'property_type_id'];
 
     public function user(): BelongsTo
     {
@@ -31,9 +31,9 @@ class Order extends Model
         return $this->belongsTo(PropertyType::class);
     }
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 
     #[Scope]

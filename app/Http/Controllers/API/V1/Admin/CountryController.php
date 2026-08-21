@@ -27,7 +27,7 @@ class CountryController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_SHOW]), only: ['show']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::COUNTRY_UPDATE]), only: ['update']),
@@ -38,15 +38,26 @@ class CountryController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $countries = QueryBuilder::for(Country::class)
+            ->withCount('areas')
             ->allowedFilters([
+                AllowedFilter::exact('id'),
                 AllowedFilter::custom('name', new NameFilter),
+                AllowedFilter::custom('search', new NameFilter),
                 AllowedFilter::exact('code'),
+                AllowedFilter::exact('phone_code'),
                 AllowedFilter::scope('created_from'),
                 AllowedFilter::scope('created_to'),
+                AllowedFilter::scope('updated_from'),
+                AllowedFilter::scope('updated_to'),
             ])
             ->defaultSort('-id')
             ->allowedSorts([
                 AllowedSort::field('id'),
+                AllowedSort::field('name'),
+                AllowedSort::field('code'),
+                AllowedSort::field('created_at'),
+                AllowedSort::field('updated_at'),
+                AllowedSort::field('areas_count'),
             ])
             ->macroPaginate();
 

@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Http\Requests\API\V1\EndUser\Consultant;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class VerifyConsultantPhoneRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'phone' => ['required', 'string', 'max:20'],
+        ];
+    }
+}

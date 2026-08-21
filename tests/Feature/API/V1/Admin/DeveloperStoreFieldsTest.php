@@ -1,0 +1,119 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\API\V1\Admin;
+
+use App\Enums\Role\UserRoleEnum;
+use App\Models\Developer;
+use App\Models\Role;
+use App\Models\User\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
+
+class DeveloperStoreFieldsTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private function actingAsAdmin(): User
+    {
+        Role::firstOrCreate([
+            'name' => UserRoleEnum::ADMIN->value,
+            'guard_name' => Config::get('auth.defaults.guard'),
+        ]);
+
+        $admin = User::factory()->create();
+        $admin->assignRole(UserRoleEnum::ADMIN->value);
+        Sanctum::actingAs($admin);
+
+        return $admin;
+    }
+
+    public function test_store_creates_developer_with_all_fields(): void
+    {
+        $this->actingAsAdmin();
+
+        $payload = [
+            'name' => ['ar' => 'مطور', 'en' => 'Developer One'],
+            'about' => ['ar' => 'نبذة', 'en' => 'About'],
+            'whatsapp' => '+201000000000',
+            'phone' => '+201111111111',
+            'is_active' => true,
+        ];
+
+        $response = $this->postJson('/api/admin/V1/developers', $payload)->assertOk();
+
+        $developer = Developer::findOrFail($response->json('data.id'));
+
+        $this->assertSame('Developer One', $developer->getTranslation('name', 'en'));
+        $this->assertSame('مطور', $developer->getTranslation('name', 'ar'));
+        $this->assertSame('About', $developer->getTranslation('about', 'en'));
+        $this->assertDatabaseHas('contact_methods', [
+            'contactable_type' => 'developer',
+            'contactable_id' => $developer->id,
+            'type' => 'whatsapp',
+            'country_code' => '+20',
+            'number' => '1000000000',
+        ]);
+        $this->assertDatabaseHas('contact_methods', [
+            'contactable_type' => 'developer',
+            'contactable_id' => $developer->id,
+            'type' => 'phone',
+            'country_code' => '+20',
+            'number' => '1111111111',
+        ]);
+    }
+
+    public function test_store_requires_arabic_name_and_about(): void
+    {
+        $this->actingAsAdmin();
+
+        $errors = $this->postJson('/api/admin/V1/developers', [
+            'name' => ['en' => 'Only English'],
+            'about' => ['en' => 'Only English'],
+        ])
+            ->assertUnprocessable()
+            ->json('message');
+
+        $this->assertArrayHasKey('name.ar', $errors);
+        $this->assertArrayHasKey('about.ar', $errors);
+    }
+
+    public function test_store_accepts_long_arabic_and_english_about_text(): void
+    {
+        $this->actingAsAdmin();
+
+        $longArabicAbout = str_repeat('a', 12000);
+        $longEnglishAbout = str_repeat('e', 12000);
+
+        $response = $this->postJson('/api/admin/V1/developers', [
+            'name' => ['ar' => 'Ù…Ø·ÙˆØ±', 'en' => 'Developer One'],
+            'about' => ['ar' => $longArabicAbout, 'en' => $longEnglishAbout],
+        ])->assertOk();
+
+        $developer = Developer::findOrFail($response->json('data.id'));
+
+        $this->assertSame($longArabicAbout, $developer->getTranslation('about', 'ar'));
+        $this->assertSame($longEnglishAbout, $developer->getTranslation('about', 'en'));
+    }
+
+    public function test_update_accepts_long_arabic_and_english_about_text(): void
+    {
+        $this->actingAsAdmin();
+
+        $developer = Developer::factory()->create();
+        $longArabicAbout = str_repeat('a', 12000);
+        $longEnglishAbout = str_repeat('e', 12000);
+
+        $this->patchJson("/api/admin/V1/developers/{$developer->id}", [
+            'about' => ['ar' => $longArabicAbout, 'en' => $longEnglishAbout],
+        ])->assertOk();
+
+        $developer->refresh();
+
+        $this->assertSame($longArabicAbout, $developer->getTranslation('about', 'ar'));
+        $this->assertSame($longEnglishAbout, $developer->getTranslation('about', 'en'));
+    }
+}

@@ -26,9 +26,9 @@ class StoreSellUnitRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'phone' => ['required', 'max:20', 'string', (new Phone)->international()],
-            'city_id' => ['required', Rule::exists('cities', 'id')],
+            'sub_area_id' => ['required', Rule::exists('sub_areas', 'id')],
             'property_type_id' => ['required', Rule::exists('property_types', 'id')],
-            'bedrooms' => ['nullable', 'integer', 'min:1', 'max:20'],
+            'compound_id' => ['nullable', Rule::exists('compounds', 'id')],
             'notes' => ['nullable', 'string', 'max:2000'],
         ];
     }

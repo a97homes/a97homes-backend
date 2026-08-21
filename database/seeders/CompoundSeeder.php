@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Enums\CompletionStatusEnum;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
 use App\Models\PropertyType;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,27 +17,29 @@ class CompoundSeeder extends Seeder
     {
         // Reset PostgreSQL sequence to avoid conflicts with manually-inserted IDs
         $maxId = DB::table('compounds')->max('id') ?? 0;
-        DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('compounds_id_seq', ?, true)", [$maxId]);
+        }
 
-        $developers = Developer::all()->keyBy('name');
+        $developers = Developer::all()->keyBy(fn (Developer $developer) => $developer->getTranslation('name', 'ar'));
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
 
-        $cities = [
-            'New Cairo' => City::where('name->en', 'New Cairo')->value('id'),
-            '6th of October' => City::where('name->en', '6th of October')->value('id'),
-            'Sheikh Zayed' => City::where('name->en', 'Sheikh Zayed')->value('id'),
-            'Nasr City' => City::where('name->en', 'Nasr City')->value('id'),
-            'El Alamein' => City::where('name->en', 'El Alamein')->value('id'),
-            'El Shorouk' => City::where('name->en', 'El Shorouk')->value('id'),
-            'Hurghada' => City::where('name->en', 'Hurghada')->value('id'),
-            'Maadi' => City::where('name->en', 'Maadi')->value('id'),
+        $subAreas = [
+            'New Cairo' => SubArea::where('name->en', 'New Cairo')->value('id'),
+            '6th of October' => SubArea::where('name->en', '6th of October')->value('id'),
+            'Sheikh Zayed' => SubArea::where('name->en', 'Sheikh Zayed')->value('id'),
+            'Nasr City' => SubArea::where('name->en', 'Nasr City')->value('id'),
+            'El Alamein' => SubArea::where('name->en', 'El Alamein')->value('id'),
+            'El Shorouk' => SubArea::where('name->en', 'El Shorouk')->value('id'),
+            'Hurghada' => SubArea::where('name->en', 'Hurghada')->value('id'),
+            'Maadi' => SubArea::where('name->en', 'Maadi')->value('id'),
         ];
 
         $compounds = [
             [
                 'name' => 'مراسي',
                 'developer' => 'إعمار مصر',
-                'city' => 'El Alamein',
+                'sub_area' => 'El Alamein',
                 'status' => CompletionStatusEnum::Completed,
                 'delivery_date' => '2024-06-01',
                 'description' => [
@@ -55,7 +57,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'أبتاون كايرو',
                 'developer' => 'إعمار مصر',
-                'city' => 'New Cairo',
+                'sub_area' => 'New Cairo',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2027-12-01',
                 'description' => [
@@ -74,7 +76,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'أليجريا',
                 'developer' => 'سوديك',
-                'city' => 'Sheikh Zayed',
+                'sub_area' => 'Sheikh Zayed',
                 'status' => CompletionStatusEnum::Completed,
                 'delivery_date' => '2023-03-01',
                 'description' => [
@@ -91,7 +93,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'فيليت',
                 'developer' => 'سوديك',
-                'city' => 'New Cairo',
+                'sub_area' => 'New Cairo',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2028-06-01',
                 'description' => [
@@ -109,7 +111,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'بالم هيلز أكتوبر',
                 'developer' => 'بالم هيلز للتعمير',
-                'city' => '6th of October',
+                'sub_area' => '6th of October',
                 'status' => CompletionStatusEnum::Completed,
                 'delivery_date' => '2022-09-01',
                 'description' => [
@@ -127,7 +129,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'بادية',
                 'developer' => 'بالم هيلز للتعمير',
-                'city' => '6th of October',
+                'sub_area' => '6th of October',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2029-01-01',
                 'description' => [
@@ -146,7 +148,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'ماونتن فيو آي سيتي',
                 'developer' => 'ماونتن فيو',
-                'city' => 'New Cairo',
+                'sub_area' => 'New Cairo',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2027-06-01',
                 'description' => [
@@ -164,11 +166,11 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'زيد الشيخ زايد',
                 'developer' => 'أورا ديفلوبرز',
-                'city' => 'Sheikh Zayed',
+                'sub_area' => 'Sheikh Zayed',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2028-03-01',
                 'description' => [
-                    'en' => 'ZED Sheikh Zayed by Ora Developers is a luxury compound offering premium residences with state-of-the-art amenities.',
+                    'en' => 'ZED Sheikh Zayed by Ora Developers is a luxury compound offering premium residences with area-of-the-art amenities.',
                     'ar' => 'زيد الشيخ زايد من أورا ديفلوبرز كمبوند فاخر يقدم وحدات سكنية متميزة مع مرافق حديثة.',
                 ],
                 'units' => [
@@ -182,7 +184,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'المونت جلالة',
                 'developer' => 'تطوير مصر',
-                'city' => 'Hurghada',
+                'sub_area' => 'Hurghada',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2027-09-01',
                 'description' => [
@@ -200,7 +202,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'سوان ليك ريزيدنس',
                 'developer' => 'حسن علام العقارية',
-                'city' => 'New Cairo',
+                'sub_area' => 'New Cairo',
                 'status' => CompletionStatusEnum::Completed,
                 'delivery_date' => '2023-12-01',
                 'description' => [
@@ -217,7 +219,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'تاج سيتي',
                 'developer' => 'مدينة نصر للإسكان والتعمير',
-                'city' => 'Nasr City',
+                'sub_area' => 'Nasr City',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2028-12-01',
                 'description' => [
@@ -236,7 +238,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'هايد بارك',
                 'developer' => 'هايد بارك للتطوير العقاري',
-                'city' => 'El Shorouk',
+                'sub_area' => 'El Shorouk',
                 'status' => CompletionStatusEnum::UnderConstruction,
                 'delivery_date' => '2027-03-01',
                 'description' => [
@@ -254,7 +256,7 @@ class CompoundSeeder extends Seeder
             [
                 'name' => 'نورث إيدج تاورز',
                 'developer' => 'سيتي إيدج للتطوير العقاري',
-                'city' => 'El Alamein',
+                'sub_area' => 'El Alamein',
                 'status' => CompletionStatusEnum::Completed,
                 'delivery_date' => '2024-01-01',
                 'description' => [
@@ -270,6 +272,10 @@ class CompoundSeeder extends Seeder
             ],
         ];
 
+        $totalUnits = array_sum(array_map(fn (array $compoundData): int => count($compoundData['units']), $compounds));
+        $propertyCreatedAt = now()->startOfSecond()->subSeconds($totalUnits);
+        $propertyCreatedAtOffset = 0;
+
         foreach ($compounds as $compoundData) {
             $developer = $developers->get($compoundData['developer']);
 
@@ -277,12 +283,12 @@ class CompoundSeeder extends Seeder
                 continue;
             }
 
-            $cityId = $cities[$compoundData['city']] ?? null;
+            $subAreaId = $subAreas[$compoundData['subArea']] ?? null;
 
             $compound = Compound::updateOrCreate(
                 ['name' => $compoundData['name'], 'developer_id' => $developer->id],
                 [
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'completion_status' => $compoundData['status'],
                     'description' => $compoundData['description'],
                     'delivery_date' => $compoundData['delivery_date'],
@@ -296,7 +302,7 @@ class CompoundSeeder extends Seeder
                     continue;
                 }
 
-                Property::updateOrCreate(
+                $property = Property::updateOrCreate(
                     [
                         'compound_id' => $compound->id,
                         'property_type_id' => $propertyType->id,
@@ -308,11 +314,17 @@ class CompoundSeeder extends Seeder
                             'ar' => $unitData['type'].' وحدة '.($index + 1).' - '.$compoundData['name'],
                         ],
                         'status' => 'active',
-                        'address' => $compoundData['city'],
+                        'address' => $compoundData['subArea'],
                         'resale_price' => $unitData['resale_price'],
-                        'city_id' => $cityId,
+                        'sub_area_id' => $subAreaId,
                     ],
                 );
+
+                $propertyTimestamp = $propertyCreatedAt->copy()->addSeconds($propertyCreatedAtOffset++);
+                $property->forceFill([
+                    'created_at' => $propertyTimestamp,
+                    'updated_at' => $propertyTimestamp,
+                ])->saveQuietly();
             }
         }
     }

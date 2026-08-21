@@ -4,9 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\Developer;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 class DeveloperSeeder extends Seeder
 {
+    private const IMAGE_DIR = 'seeders/developers';
+
     public function run(): void
     {
         $developers = [
@@ -52,18 +56,63 @@ class DeveloperSeeder extends Seeder
             ],
         ];
 
+        $developerImages = [
+            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1448630360428-65456659e233?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1462826303086-329426d1aef5?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1464938050520-ef2571e0d6e0?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=400&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400&h=400&fit=crop&q=80',
+        ];
+
+        $localDir = public_path(self::IMAGE_DIR);
+
+        if (! File::isDirectory($localDir)) {
+            File::makeDirectory($localDir, 0755, true);
+        }
+
         foreach ($developers as $index => $developerData) {
             $developer = Developer::firstOrCreate(
-                ['name' => $developerData['name']],
-                $developerData
+                ['name->ar' => $developerData['name']],
+                [
+                    'name' => ['ar' => $developerData['name']],
+                    'about' => ['ar' => $developerData['about']],
+                ]
             );
 
-            if ($developer->getFirstMedia(Developer::MEDIA_COLLECTION_LOGO) === null) {
-                $developer
-                    ->addMediaFromUrl('https://placehold.co/400x400/png?text='.urlencode($index + 1))
-                    ->usingFileName("developer_{$developer->id}_logo.png")
-                    ->toMediaCollection(Developer::MEDIA_COLLECTION_LOGO);
+            if ($developer->getFirstMedia(Developer::MEDIA_COLLECTION_LOGO) !== null) {
+                continue;
             }
+
+            $imageUrl = $developerImages[$index] ?? $developerImages[0];
+            $filename = "developer_{$developer->id}_logo.jpg";
+            $localPath = $localDir.'/'.$filename;
+
+            if (! File::exists($localPath)) {
+                try {
+                    $response = Http::timeout(30)
+                        ->withOptions(['allow_redirects' => true])
+                        ->get($imageUrl);
+
+                    if ($response->successful()) {
+                        File::put($localPath, $response->body());
+                    } else {
+                        continue;
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            $developer
+                ->addMedia($localPath)
+                ->preservingOriginal()
+                ->usingFileName($filename)
+                ->toMediaCollection(Developer::MEDIA_COLLECTION_LOGO);
         }
     }
 }

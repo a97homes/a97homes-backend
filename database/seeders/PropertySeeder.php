@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Attribute;
 use App\Models\AttributeOption;
-use App\Models\City;
 use App\Models\Compound;
 use App\Models\Developer;
 use App\Models\Property;
 use App\Models\PropertyType;
+use App\Models\SubArea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 
@@ -36,8 +36,8 @@ class PropertySeeder extends Seeder
 
         $propertyTypes = PropertyType::all()->keyBy(fn ($pt) => $pt->getTranslation('name', 'en'));
 
-        $cityId = City::where('name->en', 'Nasr City')->value('id')
-            ?? City::firstOrCreate(['name->en' => 'Nasr City'], ['name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر']])->id;
+        $subAreaId = SubArea::where('name->en', 'Nasr City')->value('id')
+            ?? SubArea::firstOrCreate(['name->en' => 'Nasr City'], ['name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر']])->id;
 
         $apartmentTypeId = $propertyTypes->get('Apartment')?->id;
         $villaTypeId = $propertyTypes->get('Villa')?->id;
@@ -55,7 +55,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Luxury Apartment in Nasr City', 'ar' => 'شقة فاخرة في مدينة نصر'],
                     'property_type_id' => $apartmentTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => '15 Abbas El-Akkad Street, Nasr City',
                     'compound_id' => $compound->id,
@@ -98,7 +98,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Modern Apartment in New Cairo', 'ar' => 'شقة حديثة في القاهرة الجديدة'],
                     'property_type_id' => $apartmentTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => '5th Settlement, New Cairo',
                     'compound_id' => $compound->id,
@@ -145,7 +145,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Standalone Villa in Madinaty', 'ar' => 'فيلا مستقلة في مدينتي'],
                     'property_type_id' => $villaTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => 'Madinaty, New Cairo',
                     'compound_id' => $compound->id,
@@ -200,7 +200,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Cozy Studio in Downtown', 'ar' => 'استوديو مريح في وسط البلد'],
                     'property_type_id' => $studioTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => 'Talaat Harb Street, Downtown Cairo',
                     'compound_id' => $compound->id,
@@ -237,7 +237,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Luxury Penthouse in Zamalek', 'ar' => 'بنتهاوس فاخر في الزمالك'],
                     'property_type_id' => $penthouseTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => '26th of July Street, Zamalek',
                     'compound_id' => $compound->id,
@@ -283,7 +283,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Office Space in Smart Village', 'ar' => 'مكتب في القرية الذكية'],
                     'property_type_id' => $officeTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => 'Smart Village, 6th of October',
                     'compound_id' => $compound->id,
@@ -324,7 +324,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Commercial Shop in Heliopolis', 'ar' => 'محل تجاري في مصر الجديدة'],
                     'property_type_id' => $shopTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => 'Al-Merghany Street, Heliopolis',
                     'compound_id' => $compound->id,
@@ -362,7 +362,7 @@ class PropertySeeder extends Seeder
                 'data' => [
                     'name' => ['en' => 'Townhouse in Palm Hills', 'ar' => 'تاون هاوس في بالم هيلز'],
                     'property_type_id' => $townhouseTypeId,
-                    'city_id' => $cityId,
+                    'sub_area_id' => $subAreaId,
                     'status' => 'active',
                     'address' => 'Palm Hills, 6th of October',
                     'compound_id' => $compound->id,
@@ -405,11 +405,19 @@ class PropertySeeder extends Seeder
             ],
         ];
 
-        foreach ($properties as $propertyData) {
+        $createdAt = now()->startOfSecond()->subSeconds(count($properties));
+
+        foreach ($properties as $index => $propertyData) {
             $property = Property::updateOrCreate(
                 ['name->en' => $propertyData['data']['name']['en']],
                 $propertyData['data'],
             );
+
+            $propertyTimestamp = $createdAt->copy()->addSeconds($index);
+            $property->forceFill([
+                'created_at' => $propertyTimestamp,
+                'updated_at' => $propertyTimestamp,
+            ])->saveQuietly();
 
             $this->attachScalarAttributes($property, $propertyData['scalar_values'] ?? []);
             $this->attachBooleanAttributes($property, $propertyData['boolean_true'] ?? []);

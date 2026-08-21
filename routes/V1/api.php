@@ -1,44 +1,82 @@
 <?php
 
+use App\Http\Controllers\API\V1\Authentication\ForgotPasswordController;
 use App\Http\Controllers\API\V1\Authentication\LoginController;
+use App\Http\Controllers\API\V1\Authentication\ResetPasswordController;
+use App\Http\Controllers\API\V1\Authentication\UserLogoutController;
+use App\Http\Controllers\API\V1\EndUser\AreaController;
+use App\Http\Controllers\API\V1\EndUser\ArticleController;
 use App\Http\Controllers\API\V1\EndUser\AttributeController;
-use App\Http\Controllers\API\V1\EndUser\CityController;
+use App\Http\Controllers\API\V1\EndUser\ChatbotController;
 use App\Http\Controllers\API\V1\EndUser\CompanyInfoController;
 use App\Http\Controllers\API\V1\EndUser\CompoundController;
+use App\Http\Controllers\API\V1\EndUser\ConsultantController;
 use App\Http\Controllers\API\V1\EndUser\ContactController;
 use App\Http\Controllers\API\V1\EndUser\CountryController;
 use App\Http\Controllers\API\V1\EndUser\DeveloperController;
+use App\Http\Controllers\API\V1\EndUser\DropdownController;
 use App\Http\Controllers\API\V1\EndUser\FavoriteController;
 use App\Http\Controllers\API\V1\EndUser\HomeController;
+use App\Http\Controllers\API\V1\EndUser\MortgageController;
+use App\Http\Controllers\API\V1\EndUser\NewsletterController;
+use App\Http\Controllers\API\V1\EndUser\NotificationController;
+use App\Http\Controllers\API\V1\EndUser\PageController;
+use App\Http\Controllers\API\V1\EndUser\PaymentPlanController;
 use App\Http\Controllers\API\V1\EndUser\PropertyController;
 use App\Http\Controllers\API\V1\EndUser\PropertyFavoriteController;
 use App\Http\Controllers\API\V1\EndUser\PropertyTypeController;
 use App\Http\Controllers\API\V1\EndUser\RegisterController;
-use App\Http\Controllers\API\V1\EndUser\StateController;
+use App\Http\Controllers\API\V1\EndUser\SavedSearchController;
+use App\Http\Controllers\API\V1\EndUser\SearchController;
+use App\Http\Controllers\API\V1\EndUser\SellUnitController;
+use App\Http\Controllers\API\V1\EndUser\SubAreaController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
 
+// =========================Password Reset==========================
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendOtp']);
+Route::post('reset-password', [ResetPasswordController::class, 'reset']);
+// =========================Password Reset==========================
+
+Route::middleware('auth:sanctum')->post('logout', [UserLogoutController::class, 'logout']);
+
 // =========================Homepage==========================
 Route::get('offers', [HomeController::class, 'offers']);
 Route::get('banners', [HomeController::class, 'banners']);
 Route::get('latest-projects', [HomeController::class, 'latestProjects']);
-Route::get('popular-areas', [HomeController::class, 'popularAreas']);
+Route::get('popular-sub-areas', [HomeController::class, 'popularSubAreas']);
 Route::get('featured-compounds', [HomeController::class, 'featuredCompounds']);
 Route::get('featured-properties', [HomeController::class, 'featuredProperties']);
 // =========================Homepage==========================
 
 // =========================Location==========================
 Route::get('countries', [CountryController::class, 'index']);
-Route::get('countries/{country}/states', [CountryController::class, 'states']);
-Route::get('states/{state}/cities', [StateController::class, 'cities']);
-Route::get('cities/popular', [CityController::class, 'popular']);
+Route::get('countries/{country}/areas', [CountryController::class, 'areas']);
+Route::get('areas/{area}/sub-areas', [AreaController::class, 'subAreas']);
+Route::get('sub-areas/popular', [SubAreaController::class, 'popular']);
 // =========================Location==========================
 
+// =========================Sub Area detail page==========================
+Route::get('sub-areas/{subArea}', [SubAreaController::class, 'show']);
+Route::get('sub-areas/{subArea}/offers', [SubAreaController::class, 'offers']);
+Route::get('sub-areas/{subArea}/compounds', [SubAreaController::class, 'compounds']);
+Route::get('sub-areas/{subArea}/faqs', [SubAreaController::class, 'faqs']);
+// =========================Sub Area detail page==========================
+
 // =========================Dropdowns==========================
-Route::get('developers/dropdown', [DeveloperController::class, 'dropdown']);
-Route::get('property-types/dropdown', [PropertyTypeController::class, 'dropdown']);
+Route::prefix('dropdowns')->group(function () {
+    Route::get('developers', [DropdownController::class, 'developers']);
+    Route::get('compounds', [DropdownController::class, 'compounds']);
+    Route::get('property-types', [DropdownController::class, 'propertyTypes']);
+    Route::get('sale-types', [DropdownController::class, 'saleTypes']);
+    Route::get('price-range', [DropdownController::class, 'priceRange']);
+    Route::get('area-range', [DropdownController::class, 'areaRange']);
+    Route::get('delivery-dates', [DropdownController::class, 'deliveryDates']);
+    Route::get('payment-plans', [DropdownController::class, 'paymentPlans']);
+    Route::get('attributes', [DropdownController::class, 'attributes']);
+});
 // =========================Dropdowns==========================
 
 // =========================Developers==========================
@@ -54,23 +92,74 @@ Route::get('property-types/{propertyType}/attributes', [PropertyTypeController::
 
 // =========================Properties==========================
 Route::get('properties', [PropertyController::class, 'index']);
+Route::get('properties/map', [PropertyController::class, 'map']);
 Route::get('properties/compare', [PropertyController::class, 'compare']);
 Route::get('properties/{property}', [PropertyController::class, 'show']);
 // =========================Properties==========================
 
 // =========================Compounds==========================
 Route::get('compounds', [CompoundController::class, 'index']);
+Route::get('compounds/map', [CompoundController::class, 'map']);
 Route::get('compounds/compare', [CompoundController::class, 'compare']);
 Route::get('compounds/{compound}', [CompoundController::class, 'show']);
+Route::get('compounds/{compound}/reviews', [CompoundController::class, 'reviews']);
+Route::get('compounds/{compound}/similar', [CompoundController::class, 'similar']);
+Route::get('compounds/{compound}/phases', [\App\Http\Controllers\API\V1\EndUser\PhaseController::class, 'byCompound']);
 // =========================Compounds==========================
+
+// =========================Payment Plans==========================
+Route::get('payment-plans', [PaymentPlanController::class, 'index']);
+// =========================Payment Plans==========================
+
+// =========================Consultants==========================
+Route::get('consultants', [ConsultantController::class, 'index']);
+Route::post('consultants/verify', [ConsultantController::class, 'verify']);
+Route::get('consultants/{consultant}', [ConsultantController::class, 'show']);
+Route::get('consultants/{consultant}/properties', [ConsultantController::class, 'properties']);
+Route::get('consultants/{consultant}/reviews', [ConsultantController::class, 'reviews']);
+// =========================Consultants==========================
 
 // =========================Contact==========================
 Route::post('contact', [ContactController::class, 'store']);
 // =========================Contact==========================
 
+// =========================Global Search==========================
+Route::get('search/suggest', [SearchController::class, 'suggest']);
+Route::get('search', [SearchController::class, 'search']);
+// =========================Global Search==========================
+
+// =========================Articles (Blog / Media / News)==========================
+Route::get('articles/featured', [ArticleController::class, 'featured']);
+Route::get('articles/types', [ArticleController::class, 'types']);
+Route::get('articles', [ArticleController::class, 'index']);
+Route::get('articles/{slug}', [ArticleController::class, 'show']);
+// =========================Articles (Blog / Media / News)==========================
+
+// =========================Newsletter==========================
+Route::post('newsletter/subscribe', [NewsletterController::class, 'subscribe']);
+Route::post('newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe']);
+// =========================Newsletter==========================
+
+// =========================Sell-Unit==========================
+Route::post('sell-units', [SellUnitController::class, 'store']);
+// =========================Sell-Unit==========================
+
 // =========================Company-Info==========================
 Route::get('company-info', [CompanyInfoController::class, 'show']);
 // =========================Company-Info==========================
+
+// =========================Static Pages==========================
+Route::get('pages', [PageController::class, 'index']);
+Route::get('pages/{slug}', [PageController::class, 'show']);
+// =========================Static Pages==========================
+
+// =========================Mortgage Calculator==========================
+Route::post('mortgage/calculate', [MortgageController::class, 'calculate']);
+// =========================Mortgage Calculator==========================
+
+// =========================Chatbot==========================
+Route::post('chatbot/messages', [ChatbotController::class, 'send']);
+// =========================Chatbot==========================
 
 // =========================Favorites==========================
 Route::middleware('auth:sanctum')->group(function () {
@@ -81,5 +170,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('property-favorites', [PropertyFavoriteController::class, 'index']);
     Route::post('property-favorites', [PropertyFavoriteController::class, 'store']);
     Route::delete('property-favorites/{property}', [PropertyFavoriteController::class, 'destroy']);
+
+    Route::post('consultants/{consultant}/reviews', [ConsultantController::class, 'storeReview']);
+    Route::post('compounds/{compound}/reviews', [CompoundController::class, 'storeReview']);
+
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
+    Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::delete('notifications/{id}', [NotificationController::class, 'destroy']);
+
+    Route::post('saved-searches/{savedSearch}/run', [SavedSearchController::class, 'run']);
+    Route::apiResource('saved-searches', SavedSearchController::class)->parameters([
+        'saved-searches' => 'savedSearch',
+    ]);
+
+    Route::get('chatbot/conversations', [ChatbotController::class, 'conversations']);
+    Route::get('chatbot/conversations/{chatbotConversation}', [ChatbotController::class, 'showConversation']);
 });
 // =========================Favorites==========================

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Enums\PropertyStatusEnum;
+use App\Enums\SaleTypeEnum;
 use App\Filters\CreatedAtFilter;
 use App\Models\User\User;
 use App\Observers\PropertyObserver;
+use App\Traits\HasArabicSearch;
+use App\Traits\HasContactMethods;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,18 +22,22 @@ use Spatie\Translatable\HasTranslations;
 class Property extends Model implements HasMedia
 {
     use CreatedAtFilter;
+    use HasArabicSearch;
+    use HasContactMethods;
     use HasTranslations;
     use InteractsWithMedia;
 
     public const MEDIA_COLLECTION_FILE = 'property_media';
 
-    protected $fillable = ['name', 'property_type_id', 'city_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'address', 'price', 'resale_price', 'is_featured'];
+    public const MEDIA_COLLECTION_FLOOR_PLAN = 'property_floor_plan';
+
+    protected $fillable = ['name', 'property_type_id', 'sub_area_id', 'status', 'order_id', 'latitude', 'longitude', 'compound_id', 'consultant_id', 'address', 'price', 'resale_price', 'sale_type', 'is_featured'];
 
     public array $translatable = ['name'];
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 
     public function propertyType(): BelongsTo
@@ -57,6 +64,11 @@ class Property extends Model implements HasMedia
         return $this->belongsTo(Compound::class);
     }
 
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(Consultant::class);
+    }
+
     public function propertyFavorites(): HasMany
     {
         return $this->hasMany(PropertyFavorite::class);
@@ -72,6 +84,7 @@ class Property extends Model implements HasMedia
     {
         return [
             'status' => PropertyStatusEnum::class,
+            'sale_type' => SaleTypeEnum::class,
             'price' => 'integer',
             'resale_price' => 'integer',
             'is_featured' => 'boolean',

@@ -20,7 +20,7 @@ class FavoriteSeeder extends Seeder
             ]);
         }
 
-        $compounds = Compound::whereNotNull('city_id')
+        $compounds = Compound::whereNotNull('sub_area_id')
             ->inRandomOrder()
             ->limit(4)
             ->pluck('id');

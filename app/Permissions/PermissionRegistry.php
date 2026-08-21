@@ -16,7 +16,33 @@ class PermissionRegistry
     const ADMIN_ROLES_UPDATE = 'roles.update';
 
     const ADMIN_ROLES_DESTROY = 'roles.destroy';
+
+    const ADMIN_ROLES_ASSIGN_PERMISSIONS = 'roles.assign_permissions';
     // =========================role Permissions========================
+
+    // =========================user Permissions=========================
+    public const ADMIN_USERS_INDEX = 'admin.users.index';
+
+    public const ADMIN_USERS_SHOW = 'admin.users.show';
+
+    public const ADMIN_USERS_UPDATE = 'admin.users.update';
+
+    public const ADMIN_USERS_DESTROY = 'admin.users.destroy';
+
+    public const ADMIN_USERS_ASSIGN_ROLES = 'admin.users.assign_roles';
+
+    public const ADMIN_USERS_UPDATE_ROLES = 'admin.users.update_roles';
+    // =========================user Permissions=========================
+
+    // =========================social Permissions=========================
+    public const ADMIN_SOCIALS_INDEX = 'admin.socials.index';
+
+    public const ADMIN_SOCIALS_STORE = 'admin.socials.store';
+
+    public const ADMIN_SOCIALS_SHOW = 'admin.socials.show';
+
+    public const ADMIN_SOCIALS_DESTROY = 'admin.socials.destroy';
+    // =========================social Permissions=========================
 
     // =========================permission========================
     const ADMIN_PERMISSIONS_INDEX = 'permissions.index';
@@ -38,17 +64,17 @@ class PermissionRegistry
     public const ADMIN_ATTRIBUTES_DESTROY = 'admin.attributes.destroy';
     // =========================attribute Permissions===========================
 
-    // =========================city Permissions===========================
-    public const ADMIN_CITIES_INDEX = 'admin.cities.index';
+    // =========================sub_area Permissions===========================
+    public const ADMIN_SUB_AREAS_INDEX = 'admin.sub_areas.index';
 
-    public const ADMIN_CITIES_STORE = 'admin.cities.store';
+    public const ADMIN_SUB_AREAS_STORE = 'admin.sub_areas.store';
 
-    public const ADMIN_CITIES_SHOW = 'admin.cities.show';
+    public const ADMIN_SUB_AREAS_SHOW = 'admin.sub_areas.show';
 
-    public const ADMIN_CITIES_UPDATE = 'admin.cities.update';
+    public const ADMIN_SUB_AREAS_UPDATE = 'admin.sub_areas.update';
 
-    public const ADMIN_CITIES_DESTROY = 'admin.cities.destroy';
-    // =========================city Permissions===========================
+    public const ADMIN_SUB_AREAS_DESTROY = 'admin.sub_areas.destroy';
+    // =========================sub_area Permissions===========================
 
     // =========================== Country Permissions ===========================
     const COUNTRY_INDEX = 'country.index';
@@ -86,17 +112,17 @@ class PermissionRegistry
     public const ADMIN_PROPERTY_TYPES_DESTROY = 'admin.property_types.destroy';
     // ===========================property_type Permissions =======================
 
-    // ===========================state Permissions ======================
-    public const ADMIN_STATES_INDEX = 'admin.states.index';
+    // ===========================area Permissions ======================
+    public const ADMIN_AREAS_INDEX = 'admin.areas.index';
 
-    public const ADMIN_STATES_STORE = 'admin.states.store';
+    public const ADMIN_AREAS_STORE = 'admin.areas.store';
 
-    public const ADMIN_STATES_SHOW = 'admin.states.show';
+    public const ADMIN_AREAS_SHOW = 'admin.areas.show';
 
-    public const ADMIN_STATES_UPDATE = 'admin.states.update';
+    public const ADMIN_AREAS_UPDATE = 'admin.areas.update';
 
-    public const ADMIN_STATES_DESTROY = 'admin.states.destroy';
-    // ===========================state Permissions ======================
+    public const ADMIN_AREAS_DESTROY = 'admin.areas.destroy';
+    // ===========================area Permissions ======================
 
     // ================= Units Permissions =================
     public const ADMIN_UNITS_INDEX = 'admin.units.index';
@@ -160,6 +186,178 @@ class PermissionRegistry
 
     public const ADMIN_COMPANY_INFO_UPDATE = 'admin.company_info.update';
     // ==================== CompanyInfo Permissions ====================
+
+    // ==================== Consultant Permissions ======================
+    public const ADMIN_CONSULTANTS_INDEX = 'admin.consultants.index';
+
+    public const ADMIN_CONSULTANTS_STORE = 'admin.consultants.store';
+
+    public const ADMIN_CONSULTANTS_SHOW = 'admin.consultants.show';
+
+    public const ADMIN_CONSULTANTS_UPDATE = 'admin.consultants.update';
+
+    public const ADMIN_CONSULTANTS_DESTROY = 'admin.consultants.destroy';
+    // ==================== Consultant Permissions ======================
+
+    // ==================== PaymentPlan Permissions ======================
+    public const ADMIN_PAYMENT_PLANS_INDEX = 'admin.payment_plans.index';
+
+    public const ADMIN_PAYMENT_PLANS_STORE = 'admin.payment_plans.store';
+
+    public const ADMIN_PAYMENT_PLANS_SHOW = 'admin.payment_plans.show';
+
+    public const ADMIN_PAYMENT_PLANS_UPDATE = 'admin.payment_plans.update';
+
+    public const ADMIN_PAYMENT_PLANS_DESTROY = 'admin.payment_plans.destroy';
+    // ==================== PaymentPlan Permissions ======================
+
+    // ==================== Faq Permissions ======================
+    public const ADMIN_FAQS_INDEX = 'admin.faqs.index';
+
+    public const ADMIN_FAQS_STORE = 'admin.faqs.store';
+
+    public const ADMIN_FAQS_SHOW = 'admin.faqs.show';
+
+    public const ADMIN_FAQS_UPDATE = 'admin.faqs.update';
+
+    public const ADMIN_FAQS_DESTROY = 'admin.faqs.destroy';
+    // ==================== Faq Permissions ======================
+
+    // ==================== Article Permissions ======================
+    public const ADMIN_ARTICLES_INDEX = 'admin.articles.index';
+
+    public const ADMIN_ARTICLES_STORE = 'admin.articles.store';
+
+    public const ADMIN_ARTICLES_SHOW = 'admin.articles.show';
+
+    public const ADMIN_ARTICLES_UPDATE = 'admin.articles.update';
+
+    public const ADMIN_ARTICLES_DESTROY = 'admin.articles.destroy';
+    // ==================== Article Permissions ======================
+
+    // ==================== Newsletter Permissions ======================
+    public const ADMIN_NEWSLETTER_INDEX = 'admin.newsletter.index';
+
+    public const ADMIN_NEWSLETTER_SHOW = 'admin.newsletter.show';
+
+    public const ADMIN_NEWSLETTER_DESTROY = 'admin.newsletter.destroy';
+    // ==================== Newsletter Permissions ======================
+
+    // ==================== Page Permissions ======================
+    public const ADMIN_PAGES_INDEX = 'admin.pages.index';
+
+    public const ADMIN_PAGES_STORE = 'admin.pages.store';
+
+    public const ADMIN_PAGES_SHOW = 'admin.pages.show';
+
+    public const ADMIN_PAGES_UPDATE = 'admin.pages.update';
+
+    public const ADMIN_PAGES_DESTROY = 'admin.pages.destroy';
+    // ==================== Page Permissions ======================
+
+    // ==================== Phase Permissions ======================
+    public const ADMIN_PHASES_INDEX = 'admin.phases.index';
+
+    public const ADMIN_PHASES_STORE = 'admin.phases.store';
+
+    public const ADMIN_PHASES_SHOW = 'admin.phases.show';
+
+    public const ADMIN_PHASES_UPDATE = 'admin.phases.update';
+
+    public const ADMIN_PHASES_DESTROY = 'admin.phases.destroy';
+    // ==================== Phase Permissions ======================
+
+    // ==================== Banner Permissions ======================
+    public const ADMIN_BANNERS_INDEX = 'admin.banners.index';
+
+    public const ADMIN_BANNERS_STORE = 'admin.banners.store';
+
+    public const ADMIN_BANNERS_SHOW = 'admin.banners.show';
+
+    public const ADMIN_BANNERS_UPDATE = 'admin.banners.update';
+
+    public const ADMIN_BANNERS_DESTROY = 'admin.banners.destroy';
+    // ==================== Banner Permissions ======================
+
+    // ==================== Offer Permissions ======================
+    public const ADMIN_OFFERS_INDEX = 'admin.offers.index';
+
+    public const ADMIN_OFFERS_STORE = 'admin.offers.store';
+
+    public const ADMIN_OFFERS_SHOW = 'admin.offers.show';
+
+    public const ADMIN_OFFERS_UPDATE = 'admin.offers.update';
+
+    public const ADMIN_OFFERS_DESTROY = 'admin.offers.destroy';
+    // ==================== Offer Permissions ======================
+
+    // ==================== SellUnit Permissions ======================
+    public const ADMIN_SELL_UNITS_INDEX = 'admin.sell_units.index';
+
+    public const ADMIN_SELL_UNITS_SHOW = 'admin.sell_units.show';
+
+    public const ADMIN_SELL_UNITS_UPDATE = 'admin.sell_units.update';
+
+    public const ADMIN_SELL_UNITS_DESTROY = 'admin.sell_units.destroy';
+    // ==================== SellUnit Permissions ======================
+
+    // ==================== CompoundReview Permissions ======================
+    public const ADMIN_COMPOUND_REVIEWS_INDEX = 'admin.compound_reviews.index';
+
+    public const ADMIN_COMPOUND_REVIEWS_SHOW = 'admin.compound_reviews.show';
+
+    public const ADMIN_COMPOUND_REVIEWS_DESTROY = 'admin.compound_reviews.destroy';
+    // ==================== CompoundReview Permissions ======================
+
+    // ==================== ConsultantReview Permissions ======================
+    public const ADMIN_CONSULTANT_REVIEWS_INDEX = 'admin.consultant_reviews.index';
+
+    public const ADMIN_CONSULTANT_REVIEWS_SHOW = 'admin.consultant_reviews.show';
+
+    public const ADMIN_CONSULTANT_REVIEWS_DESTROY = 'admin.consultant_reviews.destroy';
+    // ==================== ConsultantReview Permissions ======================
+
+    // ==================== Chatbot Permissions ======================
+    public const ADMIN_CHATBOT_INDEX = 'admin.chatbot.index';
+
+    public const ADMIN_CHATBOT_SHOW = 'admin.chatbot.show';
+
+    public const ADMIN_CHATBOT_DESTROY = 'admin.chatbot.destroy';
+    // ==================== Chatbot Permissions ======================
+
+    // ==================== Dashboard Permissions ======================
+    public const ADMIN_DASHBOARD_SHOW = 'admin.dashboard.show';
+    // ==================== Dashboard Permissions ======================
+
+    // ==================== Communication Permissions ======================
+    public const ADMIN_NEWSLETTER_SEND = 'admin.newsletter.send';
+
+    public const ADMIN_NOTIFICATIONS_BROADCAST = 'admin.notifications.broadcast';
+    // ==================== Communication Permissions ======================
+
+    // ==================== Discount Permissions ======================
+    public const ADMIN_DISCOUNTS_INDEX = 'admin.discounts.index';
+
+    public const ADMIN_DISCOUNTS_STORE = 'admin.discounts.store';
+
+    public const ADMIN_DISCOUNTS_SHOW = 'admin.discounts.show';
+
+    public const ADMIN_DISCOUNTS_UPDATE = 'admin.discounts.update';
+
+    public const ADMIN_DISCOUNTS_DESTROY = 'admin.discounts.destroy';
+    // ==================== Discount Permissions ======================
+
+    // ==================== Sub Area Media Permissions ======================
+    public const ADMIN_SUB_AREAS_MEDIA_UPDATE = 'admin.sub_areas.media.update';
+
+    public const ADMIN_SUB_AREAS_MEDIA_DESTROY = 'admin.sub_areas.media.destroy';
+    // ==================== Sub Area Media Permissions ======================
+
+    // ==================== Area Media Permissions ======================
+    public const ADMIN_AREAS_MEDIA_UPDATE = 'admin.areas.media.update';
+
+    public const ADMIN_AREAS_MEDIA_DESTROY = 'admin.areas.media.destroy';
+    // ==================== Area Media Permissions ======================
 
     public static function all(): array
     {

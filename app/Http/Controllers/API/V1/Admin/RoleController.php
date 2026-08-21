@@ -29,11 +29,12 @@ class RoleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_SHOW]), only: ['show']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_UPDATE]), only: ['update']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_ASSIGN_PERMISSIONS]), only: ['assignPermissions']),
         ];
     }
 

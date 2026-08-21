@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\User\User;
+use App\Actions\Authentication\FindUserByCredentialsAction;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Hash;
@@ -26,10 +26,7 @@ class PasswordRule implements ValidationRule
             return;
         }
 
-        $user = User::query()
-            ->when($this->email, fn ($query) => $query->where('email', $this->email))
-            ->when(! $this->email && $this->phone, fn ($query) => $query->where('phone', $this->phone)->where('country_code', $this->countryCode))
-            ->first();
+        $user = app(FindUserByCredentialsAction::class)->execute($this->email, $this->phone, $this->countryCode);
 
         if (! $user || ! Hash::check($value, $user->password)) {
             $fail(__('auth.failed'));

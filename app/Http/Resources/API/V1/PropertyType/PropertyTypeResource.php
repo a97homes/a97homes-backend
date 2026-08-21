@@ -24,6 +24,8 @@ class PropertyTypeResource extends JsonResource
         return [
             'id' => $this->whenHas('id', fn () => $propertyType->id),
             'name' => $this->whenHas('name', fn () => $this->getTranslatableField($propertyType, 'name')),
+            'slug' => $this->whenHas('slug', fn () => $propertyType->slug),
+            'properties_count' => $this->whenHas('properties_count', fn () => $propertyType->properties_count),
             'attributes' => AttributeResource::collection($this->whenLoaded('attributes')),
             'created_at' => $this->whenHas('created_at', fn () => $propertyType->created_at),
         ];

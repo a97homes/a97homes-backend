@@ -27,7 +27,7 @@ class AttributeController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ATTRIBUTES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ATTRIBUTES_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ATTRIBUTES_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ATTRIBUTES_SHOW]), only: ['show']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ATTRIBUTES_UPDATE]), only: ['update']),

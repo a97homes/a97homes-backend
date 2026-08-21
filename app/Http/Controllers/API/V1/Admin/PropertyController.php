@@ -11,6 +11,7 @@ use App\Actions\Property\UpdatePropertyStatusAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Property\AddPropertyMediaRequest;
+use App\Http\Requests\API\V1\Admin\Property\StorePropertyRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyRequest;
 use App\Http\Requests\API\V1\Admin\Property\UpdatePropertyStatusRequest;
 use App\Http\Resources\API\V1\Media\MediaResource;
@@ -18,6 +19,7 @@ use App\Http\Resources\API\V1\Property\PropertyCollection;
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Models\Property;
 use App\Permissions\PermissionRegistry;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -32,10 +34,10 @@ class PropertyController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_INDEX]), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_INDEX]), only: ['index', 'dropdown']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_STORE]), only: ['store']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_UPDATE]), only: ['update', 'toggleFeature', 'updateStatus', 'addMedia', 'deleteMediaAction']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_PROPERTIES_DESTROY]), only: ['destroy']),
         ];
     }
@@ -43,13 +45,15 @@ class PropertyController extends Controller implements HasMiddleware
     public function index(): JsonResponse
     {
         $properties = QueryBuilder::for(Property::class)
-            ->with(['city:id,name,state_id',
-                'city.state:id,name,country_id',
-                'city.state.country:id,name',
+            ->with(['subArea:id,name,area_id',
+                'subArea.area:id,name,country_id',
+                'subArea.area.country:id,name',
                 'compound:id,name,developer_id',
                 'compound.developer:id,name',
                 'compound.developer.media',
-                'attributes:name,id'])
+                'attributes:name,id',
+                'phones',
+                'whatsappNumbers'])
 
             ->allowedFilters([
                 AllowedFilter::partial('name'),
@@ -64,30 +68,34 @@ class PropertyController extends Controller implements HasMiddleware
             ->allowedSorts([
                 AllowedSort::field('id'),
                 AllowedSort::field('name'),
+                AllowedSort::callback('created_at', function (Builder $query, bool $descending): void {
+                    $direction = $descending ? 'desc' : 'asc';
+                    $query->orderBy('created_at', $direction)->orderBy('id', $direction);
+                }),
             ])
             ->macroPaginate();
 
         return $this->ok(data: new PropertyCollection($properties));
     }
 
-    public function store(StorePropertyAction $action): JsonResponse
+    public function store(StorePropertyRequest $request, StorePropertyAction $action): JsonResponse
     {
-        $property = $action->execute();
+        $property = $action->execute($request->validated());
 
         return $this->ok(message: __('messages.property_created_successfully'), data: PropertyResource::make($property));
     }
 
     public function update(UpdatePropertyRequest $request, Property $property, UpdatePropertyAction $action): JsonResponse
     {
-        $property->load('attributes:name,id');
         $action->execute($property, $request->validated());
+        $property->load(['attributes:name,id', 'phones', 'whatsappNumbers']);
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
     }
 
     public function show(Property $property): JsonResponse
     {
-        $property->load(['city:id,name,state_id', 'city.state:id,name,country_id', 'city.state.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id']);
+        $property->load(['subArea:id,name,area_id', 'subArea.area:id,name,country_id', 'subArea.area.country:id,name', 'attributes:name,id', 'compound:id,name,developer_id', 'compound.developer:id,name', 'compound.developer.media', 'compound.phases:id,name,compound_id', 'phones', 'whatsappNumbers']);
 
         return $this->ok(data: PropertyResource::make($property));
     }
@@ -101,7 +109,7 @@ class PropertyController extends Controller implements HasMiddleware
 
     public function dropdown(): JsonResponse
     {
-        $properties = Property::select('id', 'name')->get();
+        $properties = Property::select('id', 'name')->with(['phones', 'whatsappNumbers'])->get();
 
         return $this->ok(data: PropertyResource::collection($properties));
     }
@@ -121,10 +129,20 @@ class PropertyController extends Controller implements HasMiddleware
         return $this->ok(message: __('messages.media_property_deleted_successfully'));
     }
 
-    public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action)
+    public function updateStatus(UpdatePropertyStatusRequest $request, Property $property, UpdatePropertyStatusAction $action): JsonResponse
     {
         $property = $action->execute($property, $request->validated('status'));
 
         return $this->ok(message: __('messages.property_updated_successfully'), data: PropertyResource::make($property));
+    }
+
+    public function toggleFeature(Property $property): JsonResponse
+    {
+        $property->update(['is_featured' => ! $property->is_featured]);
+
+        return $this->ok(
+            message: __($property->is_featured ? 'messages.property_featured' : 'messages.property_unfeatured'),
+            data: PropertyResource::make($property->refresh()),
+        );
     }
 }

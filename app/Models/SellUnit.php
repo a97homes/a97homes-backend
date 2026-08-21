@@ -16,9 +16,9 @@ class SellUnit extends Model
     protected $fillable = [
         'name',
         'phone',
-        'city_id',
+        'sub_area_id',
         'property_type_id',
-        'bedrooms',
+        'compound_id',
         'notes',
         'status',
     ];
@@ -28,13 +28,18 @@ class SellUnit extends Model
         'phone' => E164PhoneNumberCast::class,
     ];
 
-    public function city(): BelongsTo
+    public function subArea(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(SubArea::class);
     }
 
     public function propertyType(): BelongsTo
     {
         return $this->belongsTo(PropertyType::class);
+    }
+
+    public function compound(): BelongsTo
+    {
+        return $this->belongsTo(Compound::class);
     }
 }

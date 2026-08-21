@@ -4,7 +4,7 @@ namespace App\Http\Resources\API\V1\Order;
 
 use App\Http\Resources\API\V1\Property\PropertyResource;
 use App\Http\Resources\API\V1\User\UserResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,7 +29,7 @@ class OrderResource extends JsonResource
             'name' => $this->whenHas('id', fn () => $order->name),
             'phone' => $this->whenHas('phone', fn () => $order->phone),
             'description' => $this->whenHas('message', fn () => $order->message),
-            'city' => CityResource::make($this->whenLoaded('city')),
+            'sub_area' => SubAreaResource::make($this->whenLoaded('subArea')),
             'propertyType' => PropertyResource::make($this->whenLoaded('propertyType')),
             'created_at' => $this->whenHas('created_at', fn () => $order->created_at),
         ];

@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\API\V1\SellUnit;
 
+use App\Http\Resources\API\V1\Compound\AdminCompoundResource;
 use App\Http\Resources\API\V1\PropertyType\PropertyTypeResource;
-use App\Http\Resources\City\CityResource;
+use App\Http\Resources\SubArea\SubAreaResource;
 use App\Models\SellUnit;
 use App\Traits\HasTranslatableFields;
 use Illuminate\Http\Request;
@@ -28,10 +29,10 @@ class SellUnitResource extends JsonResource
             'name' => $this->whenHas('name', fn () => $sellUnit->name),
             'phone' => $this->whenHas('phone', fn () => $sellUnit->phone),
             'status' => $this->whenHas('status', fn () => $sellUnit->status),
-            'bedrooms' => $this->whenHas('bedrooms', fn () => $sellUnit->bedrooms),
             'notes' => $this->whenHas('notes', fn () => $sellUnit->notes),
-            'city' => CityResource::make($this->whenLoaded('city')),
+            'sub_area' => SubAreaResource::make($this->whenLoaded('subArea')),
             'propertyType' => PropertyTypeResource::make($this->whenLoaded('propertyType')),
+            'compound' => AdminCompoundResource::make($this->whenLoaded('compound')),
             'created_at' => $this->whenHas('created_at', fn () => $sellUnit->created_at),
         ];
     }
