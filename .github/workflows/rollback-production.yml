@@ -30,7 +30,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 8m
-          script_stop: true
           script: sudo -n /var/www/deploy/rollback-production.sh ${{ inputs.release }}
 
       - name: Public health check

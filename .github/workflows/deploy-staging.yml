@@ -28,7 +28,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 15m
-          script_stop: true
           script: sudo -n /var/www/deploy/deploy-staging.sh origin/staging
 
       - name: Public health check
