@@ -1,34 +1,36 @@
-name: Deploy to Production
+name: Rollback Production
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      release:
+        description: 'Release timestamp to roll back to (blank = previous release)'
+        required: false
+        default: ''
 
 concurrency:
   group: deploy-production
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    name: Deploy to Production Server
+  rollback:
+    name: Rollback Production Release
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     environment:
       name: production
       url: https://api.a97homes.com
 
     steps:
-      - name: Deploy via SSH
+      - name: Rollback via SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          command_timeout: 20m
-          script: sudo -n /var/www/deploy/deploy-production.sh origin/main
+          command_timeout: 8m
+          script: sudo -n /var/www/deploy/rollback-production.sh ${{ inputs.release }}
 
       - name: Public health check
         run: |
