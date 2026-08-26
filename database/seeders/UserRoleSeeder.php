@@ -24,10 +24,10 @@ class UserRoleSeeder extends Seeder
 
             $user = User::updateOrCreate(
                 [
-                    'email' => $roleEnum->value.'@'.$roleEnum->value.'.com',
+                    'email' => 'mostafa@a97.com',
                 ],
                 [
-                    'name' => $roleEnum->value,
+                    'name' => 'Mostafa',
                     'password' => 'password',
                 ]
             );

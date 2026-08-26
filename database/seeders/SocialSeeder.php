@@ -12,31 +12,27 @@ class SocialSeeder extends Seeder
         $socials = [
             [
                 'type' => 'facebook',
-                'link' => 'https://www.facebook.com/A97Infinity',
+                'link' => 'https://www.facebook.com/share/198y2oUpbw/?mibextid=wwXIfr',
             ],
             [
                 'type' => 'instagram',
-                'link' => 'https://www.instagram.com/a97infinity',
-            ],
-            [
-                'type' => 'twitter',
-                'link' => 'https://www.x.com/A97Infinity',
-            ],
-            [
-                'type' => 'linkedin',
-                'link' => 'https://www.linkedin.com/company/a97infinity',
+                'link' => 'https://www.instagram.com/a97homes?igsi=ZzFyYXdrbHRxMHdl',
             ],
             [
                 'type' => 'youtube',
-                'link' => 'https://www.youtube.com/@A97Infinity',
+                'link' => 'https://www.youtube.com/@a97homes',
             ],
             [
                 'type' => 'tiktok',
-                'link' => 'https://www.tiktok.com/@a97infinity',
+                'link' => 'https://www.tiktok.com/@a97homes?_r=1&_t=ZS-99DMU9fM3a3',
             ],
             [
                 'type' => 'whatsapp',
-                'link' => 'https://wa.me/201012345678',
+                'link' => 'https://wa.me/+201097809259',
+            ],
+            [
+                'type' => 'mail',
+                'link' => 'a97homes@gmail.com',
             ],
         ];
 

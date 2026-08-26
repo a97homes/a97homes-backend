@@ -10,10 +10,10 @@ class CompanyInfoSeeder extends Seeder
     public function run(): void
     {
         CompanyInfo::firstOrCreate([], [
-            'phone' => '+1012 3456 789',
-            'email' => 'info@a97infinity.com',
-            'working_hours' => 'من 9 صباحا حتي 10 مساءا',
-            'address' => 'القاهرة الجديدة، مصر أفنيو 22، الحي الثاني الشيخ زايد، مصر',
+            'phone' => '+201097809259',
+            'email' => 'a97homes@gmail.com',
+            'working_hours' => 'من 9 صباحا حتي 6 مساءا',
+            'address' => '١٦٩، سكن مصر، ارض المعارض، محور الجامعة الامريكية، التجمع الخامس، القاهرة الجديدة',
         ]);
     }
 }
