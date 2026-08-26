@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call([UserRoleSeeder::class]);
         $this->call([PermissionSeeder::class]);
+        $this->call([DataEntryRoleSeeder::class]);
         $this->call(UnitSeeder::class);
         $this->call([AttributesSeeder::class]);
         $this->call([AttributeOptionSeeder::class]);
