@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\Role\UserRoleEnum;
 use App\Models\Role;
-use App\Models\User;
+use App\Models\User\User;
 use App\Permissions\PermissionRegistry;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
@@ -54,8 +54,6 @@ class DataEntryRoleSeeder extends Seeder
                 'password' => 'password',
             ]
         );
-        if (! $user->hasRole(UserRoleEnum::DATA_ENTRY->value)) {
-            $user->assignRole(UserRoleEnum::DATA_ENTRY->value);
-        }
+        $user->syncRoles([UserRoleEnum::DATA_ENTRY->value]);
     }
 }

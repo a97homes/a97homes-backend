@@ -10,12 +10,22 @@ use Illuminate\Support\Facades\Config;
 
 class UserRoleSeeder extends Seeder
 {
+    /**
+     * Seeds one account per role.
+     *
+     * The data entry role is skipped here - DataEntryRoleSeeder owns both its
+     * permissions and its single account (mostafa@a97.com).
+     */
     // php artisan db:seed --class=UserRoleSeeder
     public function run(): void
     {
         $roles = UserRoleEnum::cases();
 
         foreach ($roles as $roleEnum) {
+
+            if ($roleEnum === UserRoleEnum::DATA_ENTRY) {
+                continue;
+            }
 
             $role = Role::firstOrCreate([
                 'name' => $roleEnum->value,
