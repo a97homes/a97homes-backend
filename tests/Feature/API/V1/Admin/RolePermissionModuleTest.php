@@ -8,7 +8,6 @@ use App\Enums\Role\UserRoleEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User\User;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Spatie\Permission\Guard;
@@ -137,28 +136,28 @@ class RolePermissionModuleTest extends TestCase
     {
         $this->actingAsAdmin();
         $role = $this->role('editor');
-        $permission = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $permission = $this->permission('admin.articles.update');
 
         $this->postJson("/api/admin/V1/roles/{$role->id}/assign-permissions", [
             'permissions' => [$permission->id],
         ])->assertOk();
 
-        $this->assertTrue($role->fresh()->hasPermissionTo(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $this->assertTrue($role->fresh()->hasPermissionTo('admin.articles.update'));
     }
 
     public function test_assigning_permissions_keeps_the_ones_the_role_already_has(): void
     {
         $this->actingAsAdmin();
         $role = $this->role('editor');
-        $role->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_INDEX));
-        $update = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $role->givePermissionTo($this->permission('admin.articles.index'));
+        $update = $this->permission('admin.articles.update');
 
         $this->postJson("/api/admin/V1/roles/{$role->id}/assign-permissions", [
             'permissions' => [$update->id],
         ])->assertOk();
 
         $this->assertEqualsCanonicalizing(
-            [PermissionRegistry::ADMIN_ARTICLES_INDEX, PermissionRegistry::ADMIN_ARTICLES_UPDATE],
+            ['admin.articles.index', 'admin.articles.update'],
             $role->fresh()->permissions->pluck('name')->all()
         );
     }
@@ -167,15 +166,15 @@ class RolePermissionModuleTest extends TestCase
     {
         $this->actingAsAdmin();
         $role = $this->role('editor');
-        $role->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_INDEX));
-        $update = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $role->givePermissionTo($this->permission('admin.articles.index'));
+        $update = $this->permission('admin.articles.update');
 
         $this->putJson("/api/admin/V1/roles/{$role->id}/update-permissions", [
             'permissions' => [$update->id],
         ])->assertOk();
 
         $this->assertSame(
-            [PermissionRegistry::ADMIN_ARTICLES_UPDATE],
+            ['admin.articles.update'],
             $role->fresh()->permissions->pluck('name')->all()
         );
     }
@@ -184,7 +183,7 @@ class RolePermissionModuleTest extends TestCase
     {
         $this->actingAsAdmin();
         $role = $this->role('editor');
-        $role->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_INDEX));
+        $role->givePermissionTo($this->permission('admin.articles.index'));
 
         $this->putJson("/api/admin/V1/roles/{$role->id}/update-permissions", [
             'permissions' => [],
@@ -197,12 +196,12 @@ class RolePermissionModuleTest extends TestCase
     {
         $this->actingAsAdmin();
         $role = $this->role('editor');
-        $role->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $role->givePermissionTo($this->permission('admin.articles.update'));
 
         $response = $this->getJson("/api/admin/V1/roles/{$role->id}")->assertOk();
 
         $this->assertSame(
-            [PermissionRegistry::ADMIN_ARTICLES_UPDATE],
+            ['admin.articles.update'],
             collect($response->json('data.permissions'))->pluck('name')->all()
         );
     }
@@ -210,12 +209,12 @@ class RolePermissionModuleTest extends TestCase
     public function test_admin_can_list_permissions(): void
     {
         $this->actingAsAdmin();
-        $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $this->permission('admin.articles.update');
 
         $response = $this->getJson('/api/admin/V1/permissions')->assertOk();
 
         $this->assertContains(
-            PermissionRegistry::ADMIN_ARTICLES_UPDATE,
+            'admin.articles.update',
             collect($response->json('data.data'))->pluck('name')->all()
         );
     }
@@ -223,7 +222,7 @@ class RolePermissionModuleTest extends TestCase
     public function test_a_permission_still_granted_to_a_role_cannot_be_deleted(): void
     {
         $this->actingAsAdmin();
-        $permission = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $permission = $this->permission('admin.articles.update');
         $this->role('editor')->givePermissionTo($permission);
 
         $this->deleteJson("/api/admin/V1/permissions/{$permission->id}")->assertUnprocessable();
@@ -234,7 +233,7 @@ class RolePermissionModuleTest extends TestCase
     public function test_a_permission_still_held_by_a_user_cannot_be_deleted(): void
     {
         $this->actingAsAdmin();
-        $permission = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $permission = $this->permission('admin.articles.update');
         User::factory()->create()->givePermissionTo($permission);
 
         $this->deleteJson("/api/admin/V1/permissions/{$permission->id}")->assertUnprocessable();
@@ -245,7 +244,7 @@ class RolePermissionModuleTest extends TestCase
     public function test_an_unused_permission_can_be_deleted(): void
     {
         $this->actingAsAdmin();
-        $permission = $this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE);
+        $permission = $this->permission('admin.articles.update');
 
         $this->deleteJson("/api/admin/V1/permissions/{$permission->id}")->assertOk();
 
@@ -266,7 +265,7 @@ class RolePermissionModuleTest extends TestCase
     public function test_a_user_holding_only_the_roles_index_permission_can_list_roles(): void
     {
         $manager = User::factory()->create();
-        $manager->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ROLES_INDEX));
+        $manager->givePermissionTo($this->permission('roles.index'));
         Sanctum::actingAs($manager);
 
         $this->getJson('/api/admin/V1/roles')->assertOk();

@@ -8,7 +8,6 @@ use App\Enums\Role\UserRoleEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User\User;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Spatie\Permission\Guard;
@@ -114,28 +113,28 @@ class UserRolesAndPermissionsTest extends TestCase
     {
         $this->actingAsAdmin();
         $user = User::factory()->create();
-        $permission = $this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX);
+        $permission = $this->permission('admin.developers.index');
 
         $this->postJson("/api/admin/V1/users/{$user->id}/assign-permissions", [
             'permissions' => [$permission->id],
         ])->assertOk();
 
-        $this->assertTrue($user->fresh()->hasDirectPermission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
+        $this->assertTrue($user->fresh()->hasDirectPermission('admin.developers.index'));
     }
 
     public function test_assign_permissions_keeps_the_permissions_the_user_already_has(): void
     {
         $this->actingAsAdmin();
         $user = User::factory()->create();
-        $user->givePermissionTo($this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
-        $store = $this->permission(PermissionRegistry::ADMIN_DEVELOPERS_STORE);
+        $user->givePermissionTo($this->permission('admin.developers.index'));
+        $store = $this->permission('admin.developers.store');
 
         $this->postJson("/api/admin/V1/users/{$user->id}/assign-permissions", [
             'permissions' => [$store->id],
         ])->assertOk();
 
         $this->assertEqualsCanonicalizing(
-            [PermissionRegistry::ADMIN_DEVELOPERS_INDEX, PermissionRegistry::ADMIN_DEVELOPERS_STORE],
+            ['admin.developers.index', 'admin.developers.store'],
             $user->fresh()->getDirectPermissions()->pluck('name')->all()
         );
     }
@@ -144,15 +143,15 @@ class UserRolesAndPermissionsTest extends TestCase
     {
         $this->actingAsAdmin();
         $user = User::factory()->create();
-        $user->givePermissionTo($this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
-        $store = $this->permission(PermissionRegistry::ADMIN_DEVELOPERS_STORE);
+        $user->givePermissionTo($this->permission('admin.developers.index'));
+        $store = $this->permission('admin.developers.store');
 
         $this->putJson("/api/admin/V1/users/{$user->id}/update-permissions", [
             'permissions' => [$store->id],
         ])->assertOk();
 
         $this->assertSame(
-            [PermissionRegistry::ADMIN_DEVELOPERS_STORE],
+            ['admin.developers.store'],
             $user->fresh()->getDirectPermissions()->pluck('name')->all()
         );
     }
@@ -161,7 +160,7 @@ class UserRolesAndPermissionsTest extends TestCase
     {
         $this->actingAsAdmin();
         $user = User::factory()->create();
-        $user->givePermissionTo($this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
+        $user->givePermissionTo($this->permission('admin.developers.index'));
 
         $this->putJson("/api/admin/V1/users/{$user->id}/update-permissions", [
             'permissions' => [],
@@ -174,11 +173,11 @@ class UserRolesAndPermissionsTest extends TestCase
     {
         $this->actingAsAdmin();
         $editor = $this->role('editor');
-        $editor->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $editor->givePermissionTo($this->permission('admin.articles.update'));
 
         $user = User::factory()->create();
         $user->assignRole($editor);
-        $user->givePermissionTo($this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
+        $user->givePermissionTo($this->permission('admin.developers.index'));
 
         $this->putJson("/api/admin/V1/users/{$user->id}/update-permissions", [
             'permissions' => [],
@@ -187,7 +186,7 @@ class UserRolesAndPermissionsTest extends TestCase
         $user = $user->fresh();
 
         $this->assertCount(0, $user->getDirectPermissions());
-        $this->assertTrue($user->can(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $this->assertTrue($user->can('admin.articles.update'));
     }
 
     public function test_assigning_an_unknown_permission_is_rejected(): void
@@ -205,18 +204,18 @@ class UserRolesAndPermissionsTest extends TestCase
     {
         $this->actingAsAdmin();
         $editor = $this->role('editor');
-        $editor->givePermissionTo($this->permission(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $editor->givePermissionTo($this->permission('admin.articles.update'));
 
         $user = User::factory()->create();
         $user->assignRole($editor);
-        $user->givePermissionTo($this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX));
+        $user->givePermissionTo($this->permission('admin.developers.index'));
 
         $response = $this->getJson("/api/admin/V1/users/{$user->id}")->assertOk();
 
         $this->assertSame(['editor'], $response->json('data.roles'));
-        $this->assertSame([PermissionRegistry::ADMIN_DEVELOPERS_INDEX], $response->json('data.direct_permissions'));
+        $this->assertSame(['admin.developers.index'], $response->json('data.direct_permissions'));
         $this->assertEqualsCanonicalizing(
-            [PermissionRegistry::ADMIN_ARTICLES_UPDATE, PermissionRegistry::ADMIN_DEVELOPERS_INDEX],
+            ['admin.articles.update', 'admin.developers.index'],
             $response->json('data.permissions')
         );
     }
@@ -224,11 +223,11 @@ class UserRolesAndPermissionsTest extends TestCase
     public function test_a_user_holding_only_the_assign_permission_can_manage_permissions(): void
     {
         $manager = User::factory()->create();
-        $manager->givePermissionTo($this->permission(PermissionRegistry::ADMIN_USERS_ASSIGN_PERMISSIONS));
+        $manager->givePermissionTo($this->permission('admin.users.assign_permissions'));
         Sanctum::actingAs($manager);
 
         $target = User::factory()->create();
-        $permission = $this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX);
+        $permission = $this->permission('admin.developers.index');
 
         $this->postJson("/api/admin/V1/users/{$target->id}/assign-permissions", [
             'permissions' => [$permission->id],
@@ -242,7 +241,7 @@ class UserRolesAndPermissionsTest extends TestCase
         Sanctum::actingAs($outsider);
 
         $target = User::factory()->create();
-        $permission = $this->permission(PermissionRegistry::ADMIN_DEVELOPERS_INDEX);
+        $permission = $this->permission('admin.developers.index');
 
         $this->postJson("/api/admin/V1/users/{$target->id}/assign-permissions", [
             'permissions' => [$permission->id],

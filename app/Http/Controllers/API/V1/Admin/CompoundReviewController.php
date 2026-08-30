@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\Admin\CompoundReview\AdminCompoundReviewCollection;
 use App\Http\Resources\API\V1\Admin\CompoundReview\AdminCompoundReviewResource;
 use App\Models\CompoundReview;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -23,9 +22,9 @@ class CompoundReviewController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUND_REVIEWS_INDEX]), only: ['index']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUND_REVIEWS_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPOUND_REVIEWS_DESTROY]), only: ['destroy']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.compound_reviews.index']), only: ['index']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.compound_reviews.show']), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.compound_reviews.destroy']), only: ['destroy']),
         ];
     }
 

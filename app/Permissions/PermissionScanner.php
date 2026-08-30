@@ -108,16 +108,6 @@ class PermissionScanner
     }
 
     /**
-     * Permission names discovered in the code but missing from PermissionRegistry.
-     *
-     * @return array<int, string>
-     */
-    public static function missingFromRegistry(): array
-    {
-        return array_values(array_diff(self::all(), PermissionRegistry::all()));
-    }
-
-    /**
      * Pull the permission names out of a single middleware definition.
      *
      * @return array<int, string>
@@ -150,7 +140,7 @@ class PermissionScanner
      *
      * @return array<int, class-string>
      */
-    private static function controllerClasses(): array
+    public static function controllerClasses(): array
     {
         $directory = app_path(self::CONTROLLERS_PATH);
 

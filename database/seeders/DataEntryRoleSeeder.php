@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Enums\Role\UserRoleEnum;
 use App\Models\Role;
 use App\Models\User\User;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Spatie\Permission\Models\Permission;
@@ -18,11 +17,11 @@ class DataEntryRoleSeeder extends Seeder
      * @var array<int, string>
      */
     private const DEVELOPER_MODULE_PERMISSIONS = [
-        PermissionRegistry::ADMIN_DEVELOPERS_INDEX,
-        PermissionRegistry::ADMIN_DEVELOPERS_STORE,
-        PermissionRegistry::ADMIN_DEVELOPERS_SHOW,
-        PermissionRegistry::ADMIN_DEVELOPERS_UPDATE,
-        PermissionRegistry::ADMIN_DEVELOPERS_DESTROY,
+        'admin.developers.index',
+        'admin.developers.store',
+        'admin.developers.show',
+        'admin.developers.update',
+        'admin.developers.destroy',
     ];
 
     // php artisan db:seed --class=DataEntryRoleSeeder

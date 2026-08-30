@@ -7,7 +7,6 @@ namespace Tests\Feature\API\V1\Authentication;
 use App\Enums\Role\UserRoleEnum;
 use App\Models\Role;
 use App\Models\User\User;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
@@ -92,7 +91,7 @@ class LoginTest extends TestCase
     public function test_admin_login_returns_roles_and_permissions_for_the_frontend(): void
     {
         $permission = Permission::firstOrCreate([
-            'name' => PermissionRegistry::ADMIN_USERS_INDEX,
+            'name' => 'admin.users.index',
             'guard_name' => 'web',
         ]);
 
@@ -105,17 +104,17 @@ class LoginTest extends TestCase
             'password' => 'password',
         ])->assertOk()
             ->assertJsonPath('data.roles.0.name', UserRoleEnum::ADMIN->value)
-            ->assertJsonPath('data.permissions', [PermissionRegistry::ADMIN_USERS_INDEX]);
+            ->assertJsonPath('data.permissions', ['admin.users.index']);
     }
 
     public function test_login_merges_direct_permissions_with_role_permissions(): void
     {
         $viaRole = Permission::firstOrCreate([
-            'name' => PermissionRegistry::ADMIN_USERS_INDEX,
+            'name' => 'admin.users.index',
             'guard_name' => 'web',
         ]);
         $direct = Permission::firstOrCreate([
-            'name' => PermissionRegistry::ADMIN_USERS_SHOW,
+            'name' => 'admin.users.show',
             'guard_name' => 'web',
         ]);
 
@@ -131,8 +130,8 @@ class LoginTest extends TestCase
             'password' => 'password',
         ])->assertOk()
             ->assertJsonPath('data.permissions', [
-                PermissionRegistry::ADMIN_USERS_INDEX,
-                PermissionRegistry::ADMIN_USERS_SHOW,
+                'admin.users.index',
+                'admin.users.show',
             ]);
     }
 

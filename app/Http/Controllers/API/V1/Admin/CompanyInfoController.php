@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\CompanyInfo\UpdateCompanyInfoRequest;
 use App\Http\Resources\API\V1\CompanyInfo\CompanyInfoResource;
 use App\Models\CompanyInfo;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -18,8 +17,8 @@ class CompanyInfoController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPANY_INFO_SHOW]), only: ['show']),
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_COMPANY_INFO_UPDATE]), only: ['update']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.company_info.show']), only: ['show']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.company_info.update']), only: ['update']),
         ];
     }
 

@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Notification\BroadcastNotificationRequest;
 use App\Models\User\User;
 use App\Notifications\AdminBroadcastNotification;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -21,7 +20,7 @@ class NotificationBroadcastController extends Controller implements HasMiddlewar
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_NOTIFICATIONS_BROADCAST]), only: ['broadcast']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.notifications.broadcast']), only: ['broadcast']),
         ];
     }
 

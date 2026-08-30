@@ -257,6 +257,18 @@ cd /var/www/A97Infinity-production/current
 sudo -u www-data php artisan db:seed --class=CountrySeeder --force
 ```
 
+`PermissionSeeder` is safe to re-run on every deploy: it discovers the
+permissions from the route middleware and the controllers, inserts the ones that
+are missing, and drops only the permissions the code no longer guards with **and**
+nobody holds - a permission assigned to a user or granted to a non admin role is
+always kept. Existing rows are never re-created, so role and user assignments
+survive:
+
+```bash
+cd /var/www/A97Infinity-production/current
+sudo -u www-data php artisan db:seed --class=PermissionSeeder --force
+```
+
 Staging may be reseeded on demand — it is no longer wiped automatically on every
 deploy:
 

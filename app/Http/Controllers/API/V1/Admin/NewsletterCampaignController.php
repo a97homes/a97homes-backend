@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Newsletter\SendCampaignRequest;
 use App\Models\NewsletterSubscriber;
 use App\Notifications\NewsletterCampaignNotification;
-use App\Permissions\PermissionRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -21,7 +20,7 @@ class NewsletterCampaignController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_NEWSLETTER_SEND]), only: ['send']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, 'admin.newsletter.send']), only: ['send']),
         ];
     }
 

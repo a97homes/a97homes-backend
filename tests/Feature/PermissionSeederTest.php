@@ -8,7 +8,6 @@ use App\Enums\Role\UserRoleEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User\User;
-use App\Permissions\PermissionRegistry;
 use App\Permissions\PermissionScanner;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,11 +35,6 @@ class PermissionSeederTest extends TestCase
         $stored = Permission::query()->pluck('name')->all();
 
         $this->assertEqualsCanonicalizing(PermissionScanner::all(), $stored);
-    }
-
-    public function test_every_guarded_permission_is_declared_in_the_registry(): void
-    {
-        $this->assertSame([], PermissionScanner::missingFromRegistry());
     }
 
     public function test_it_grants_every_permission_to_the_admin_role(): void
@@ -114,7 +108,7 @@ class PermissionSeederTest extends TestCase
     {
         $role = Role::create(['name' => 'editor', 'guard_name' => $this->guard()]);
         $granted = Permission::create([
-            'name' => PermissionRegistry::ADMIN_ARTICLES_UPDATE,
+            'name' => 'admin.articles.update',
             'guard_name' => $this->guard(),
         ]);
         $role->givePermissionTo($granted);
@@ -128,8 +122,8 @@ class PermissionSeederTest extends TestCase
         $user = $user->fresh();
 
         $this->assertSame(['editor'], $user->getRoleNames()->all());
-        $this->assertTrue($user->hasDirectPermission(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
-        $this->assertTrue($role->fresh()->hasPermissionTo(PermissionRegistry::ADMIN_ARTICLES_UPDATE));
+        $this->assertTrue($user->hasDirectPermission('admin.articles.update'));
+        $this->assertTrue($role->fresh()->hasPermissionTo('admin.articles.update'));
     }
 
     public function test_it_adds_a_newly_guarded_permission_without_touching_the_others(): void
@@ -137,14 +131,14 @@ class PermissionSeederTest extends TestCase
         $this->seed(PermissionSeeder::class);
 
         $dropped = Permission::query()
-            ->where('name', PermissionRegistry::ADMIN_ARTICLES_UPDATE)
+            ->where('name', 'admin.articles.update')
             ->firstOrFail();
         $dropped->delete();
 
         $this->seed(PermissionSeeder::class);
 
         $this->assertDatabaseHas('permissions', [
-            'name' => PermissionRegistry::ADMIN_ARTICLES_UPDATE,
+            'name' => 'admin.articles.update',
             'guard_name' => $this->guard(),
         ]);
         $this->assertSame(count(PermissionScanner::all()), Permission::query()->count());

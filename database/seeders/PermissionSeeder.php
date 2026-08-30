@@ -12,20 +12,7 @@ use Illuminate\Support\Collection;
 use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
 
-/**
- * Syncs the permissions table with the permissions the code actually guards with.
- *
- * The permission list is discovered automatically from the route middleware, the
- * controllers' `middleware()` methods and PermissionRegistry, so a new guarded
- * endpoint can never be forgotten.
- *
- * Assignments are always preserved: existing rows are never re-created, and a
- * permission that disappeared from the code is only deleted when nobody depends
- * on it - it stays when it is assigned directly to a user or granted to any role
- * other than admin.
- *
- * php artisan db:seed --class=PermissionSeeder
- */
+// php artisan db:seed --class=PermissionSeeder
 class PermissionSeeder extends Seeder
 {
     public function run(): void
