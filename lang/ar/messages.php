@@ -51,6 +51,7 @@ return [
     'user_updated_successfully' => 'تم تحديث المستخدم بنجاح.',
     'admin_cannot_be_deleted' => 'لا يمكن حذف المسؤول.',
     'permissions_assigned_successfully' => 'تم تعيين الأذونات بنجاح.',
+    'permissions_updated_successfully' => 'تم تحديث الأذونات بنجاح.',
     'roles_updated_successfully' => 'تم تحديث الأدوار بنجاح.',
     'developer_id_required' => 'حقل المطور مطلوب.',
     'developer_id_exists' => 'المطور المحدد غير موجود.',

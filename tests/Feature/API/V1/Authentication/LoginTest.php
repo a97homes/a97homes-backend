@@ -7,7 +7,9 @@ namespace Tests\Feature\API\V1\Authentication;
 use App\Enums\Role\UserRoleEnum;
 use App\Models\Role;
 use App\Models\User\User;
+use App\Permissions\PermissionRegistry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -85,6 +87,66 @@ class LoginTest extends TestCase
             'email' => $staff->email,
             'password' => 'password',
         ])->assertOk();
+    }
+
+    public function test_admin_login_returns_roles_and_permissions_for_the_frontend(): void
+    {
+        $permission = Permission::firstOrCreate([
+            'name' => PermissionRegistry::ADMIN_USERS_INDEX,
+            'guard_name' => 'web',
+        ]);
+
+        $admin = User::factory()->create(['password' => 'password']);
+        $admin->assignRole(UserRoleEnum::ADMIN->value);
+        $admin->roles()->first()->givePermissionTo($permission);
+
+        $this->postJson(self::ADMIN_LOGIN_URL, [
+            'email' => $admin->email,
+            'password' => 'password',
+        ])->assertOk()
+            ->assertJsonPath('data.roles.0.name', UserRoleEnum::ADMIN->value)
+            ->assertJsonPath('data.permissions', [PermissionRegistry::ADMIN_USERS_INDEX]);
+    }
+
+    public function test_login_merges_direct_permissions_with_role_permissions(): void
+    {
+        $viaRole = Permission::firstOrCreate([
+            'name' => PermissionRegistry::ADMIN_USERS_INDEX,
+            'guard_name' => 'web',
+        ]);
+        $direct = Permission::firstOrCreate([
+            'name' => PermissionRegistry::ADMIN_USERS_SHOW,
+            'guard_name' => 'web',
+        ]);
+
+        $role = Role::firstOrCreate(['name' => 'moderator', 'guard_name' => 'web']);
+        $role->givePermissionTo($viaRole);
+
+        $staff = User::factory()->create(['password' => 'password']);
+        $staff->assignRole('moderator');
+        $staff->givePermissionTo($direct);
+
+        $this->postJson(self::ADMIN_LOGIN_URL, [
+            'email' => $staff->email,
+            'password' => 'password',
+        ])->assertOk()
+            ->assertJsonPath('data.permissions', [
+                PermissionRegistry::ADMIN_USERS_INDEX,
+                PermissionRegistry::ADMIN_USERS_SHOW,
+            ]);
+    }
+
+    public function test_end_user_login_returns_an_empty_permissions_list(): void
+    {
+        $user = User::factory()->create(['password' => 'password']);
+        $user->assignRole(UserRoleEnum::USER->value);
+
+        $this->postJson(self::USER_LOGIN_URL, [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertOk()
+            ->assertJsonPath('data.roles.0.name', UserRoleEnum::USER->value)
+            ->assertJsonPath('data.permissions', []);
     }
 
     public function test_end_user_cannot_login_from_the_admin_endpoint(): void

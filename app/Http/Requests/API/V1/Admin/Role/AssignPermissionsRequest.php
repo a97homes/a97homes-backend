@@ -23,7 +23,7 @@ class AssignPermissionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'permissions' => ['required', 'array'],
+            'permissions' => ['present', 'array'],
             'permissions.*' => ['integer', Rule::exists('permissions', 'id')],
         ];
     }

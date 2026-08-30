@@ -14,6 +14,8 @@ class RegisterController extends Controller
     {
         $user = $registerAction->execute($request->validated());
 
+        $user->load('roles:id,name', 'roles.permissions:id,name', 'permissions:id,name');
+
         return $this->ok(__('messages.register_successfully'), data: new AuthenticationResource($user));
     }
 }

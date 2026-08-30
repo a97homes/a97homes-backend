@@ -44,6 +44,7 @@ Route::post('logout', [AdminLogoutController::class, 'logout']);
 
 // ==========================Role==========================
 Route::post('roles/{role}/assign-permissions', [RoleController::class, 'assignPermissions']);
+Route::put('roles/{role}/update-permissions', [RoleController::class, 'updatePermissions']);
 Route::get('roles/dropdown', [RoleController::class, 'dropdown']);
 Route::apiResource('roles', RoleController::class);
 // ==========================Role==========================
@@ -110,6 +111,8 @@ Route::patch('orders/{order}/reject', [OrderController::class, 'reject']);
 // ================User====================
 Route::put('users/{user}/update-roles', [UserController::class, 'updateRoles']);
 Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles']);
+Route::put('users/{user}/update-permissions', [UserController::class, 'updatePermissions']);
+Route::post('users/{user}/assign-permissions', [UserController::class, 'assignPermissions']);
 Route::apiResource('users', UserController::class)->except(['store']);
 // ================User====================
 

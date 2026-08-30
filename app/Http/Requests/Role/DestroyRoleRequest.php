@@ -36,7 +36,7 @@ class DestroyRoleRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator) {
-            $role = $this->route('role');
+            $role = $this->route('role')->loadCount('users');
 
             if ($role->users_count > 0) {
                 $validator->errors()->add('role', __('messages.role_has_associated_users'));

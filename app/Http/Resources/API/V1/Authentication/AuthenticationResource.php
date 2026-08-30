@@ -22,6 +22,7 @@ class AuthenticationResource extends JsonResource
             'phone' => $user->phone,
             'locale' => $user->getUserLocale(),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'permissions' => $this->resolvePermissionNames($user),
             'fcm_token' => $user->fcm_token,
             'token' => $user->tokenWithBearer(),
             'refresh_token' => $user->refreshTokenWithBearer(),
@@ -29,5 +30,20 @@ class AuthenticationResource extends JsonResource
             'email_verified_at' => $user->email_verified_at,
 
         ];
+    }
+
+    /**
+     * Every permission the user holds, directly or through one of their roles.
+     *
+     * @return array<int, string>
+     */
+    private function resolvePermissionNames(User $user): array
+    {
+        return $user->getAllPermissions()
+            ->pluck('name')
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
     }
 }

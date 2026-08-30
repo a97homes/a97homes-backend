@@ -42,6 +42,12 @@ class Area extends Model implements HasMedia
 
     protected $fillable = ['name', 'about', 'country_id'];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::MEDIA_COLLECTION_COVER)->singleFile();
+        $this->addMediaCollection(self::MEDIA_COLLECTION_LOGO)->singleFile();
+    }
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

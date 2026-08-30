@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Actions\Role\UpdateUserRolesAction;
+use App\Actions\User\AssignPermissionsToUserAction;
 use App\Actions\User\AssignRolesToUserAction;
 use App\Actions\User\DeleteUserAction;
 use App\Actions\User\UpdateUserAction;
+use App\Actions\User\UpdateUserPermissionsAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Filters\RoleFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\User\DeleteUserRequest;
+use App\Http\Requests\API\V1\Admin\User\PermissionRequest;
 use App\Http\Requests\API\V1\Admin\User\RoleRequest;
 use App\Http\Requests\API\V1\Admin\User\UpdateUserRequest;
 use App\Http\Resources\API\V1\User\UserCollection;
@@ -35,12 +38,15 @@ class UserController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_USERS_DESTROY]), only: ['destroy']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_USERS_ASSIGN_ROLES]), only: ['assignRoles']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_USERS_UPDATE_ROLES]), only: ['updateRoles']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_USERS_ASSIGN_PERMISSIONS]), only: ['assignPermissions']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_USERS_UPDATE_PERMISSIONS]), only: ['updatePermissions']),
         ];
     }
 
     public function index(): JsonResponse
     {
         $users = QueryBuilder::for(User::class)
+            ->with('roles:id,name')
             ->allowedFilters([
                 AllowedFilter::partial('name'),
                 AllowedFilter::exact('email'),
@@ -60,6 +66,8 @@ class UserController extends Controller implements HasMiddleware
 
     public function show(User $user): JsonResponse
     {
+        $user->load('roles:id,name', 'roles.permissions:id,name', 'permissions:id,name');
+
         return $this->ok(data: UserResource::make($user));
     }
 
@@ -91,5 +99,19 @@ class UserController extends Controller implements HasMiddleware
         $action->execute($user, $request->validated('roles'));
 
         return $this->ok(message: __('messages.roles_updated_successfully'));
+    }
+
+    public function assignPermissions(PermissionRequest $request, User $user, AssignPermissionsToUserAction $action): JsonResponse
+    {
+        $action->execute($user, $request->validated('permissions'));
+
+        return $this->ok(message: __('messages.permissions_assigned_successfully'));
+    }
+
+    public function updatePermissions(PermissionRequest $request, User $user, UpdateUserPermissionsAction $action): JsonResponse
+    {
+        $action->execute($user, $request->validated('permissions'));
+
+        return $this->ok(message: __('messages.permissions_updated_successfully'));
     }
 }

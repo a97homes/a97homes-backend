@@ -51,6 +51,7 @@ return [
     'user_updated_successfully' => 'user updated successfully',
     'admin_cannot_be_deleted' => 'admin cannot be deleted',
     'permissions_assigned_successfully' => 'permissions assigned successfully',
+    'permissions_updated_successfully' => 'permissions updated successfully',
     'roles_updated_successfully' => 'roles_updated_successfully',
     'developer_id_required' => 'The developer field is required.',
     'developer_id_exists' => 'The selected developer does not exist.',

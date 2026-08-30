@@ -6,6 +6,7 @@ use App\Actions\Role\AssignPermissionsToRoleAction;
 use App\Actions\Role\DeleteRoleAction;
 use App\Actions\Role\StoreRoleAction;
 use App\Actions\Role\UpdateRoleAction;
+use App\Actions\Role\UpdateRolePermissionsAction;
 use App\Enums\Role\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\Admin\Role\AssignPermissionsRequest;
@@ -35,6 +36,7 @@ class RoleController extends Controller implements HasMiddleware
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_UPDATE]), only: ['update']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_DESTROY]), only: ['destroy']),
             new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_ASSIGN_PERMISSIONS]), only: ['assignPermissions']),
+            new Middleware(RoleOrPermissionMiddleware::using([UserRoleEnum::ADMIN->value, PermissionRegistry::ADMIN_ROLES_UPDATE_PERMISSIONS]), only: ['updatePermissions']),
         ];
     }
 
@@ -65,6 +67,8 @@ class RoleController extends Controller implements HasMiddleware
 
     public function show(Role $role): JsonResponse
     {
+        $role->load('permissions:id,name')->loadCount('users');
+
         return $this->ok(data: RoleResource::make($role));
     }
 
@@ -91,9 +95,15 @@ class RoleController extends Controller implements HasMiddleware
 
     public function assignPermissions(AssignPermissionsRequest $request, Role $role, AssignPermissionsToRoleAction $action): JsonResponse
     {
-
         $action->execute($role, $request->validated('permissions'));
 
         return $this->ok(message: __('messages.permissions_assigned_successfully'));
+    }
+
+    public function updatePermissions(AssignPermissionsRequest $request, Role $role, UpdateRolePermissionsAction $action): JsonResponse
+    {
+        $action->execute($role, $request->validated('permissions'));
+
+        return $this->ok(message: __('messages.permissions_updated_successfully'));
     }
 }

@@ -13,7 +13,7 @@ class LoginController extends Controller
     {
         $user = $request->resolveUser();
 
-        $user->load('roles:id,name', 'permissions:id,name');
+        $user->load('roles:id,name', 'roles.permissions:id,name', 'permissions:id,name');
 
         return $this->ok(__('auth.signed'), AuthenticationResource::make($user));
     }
