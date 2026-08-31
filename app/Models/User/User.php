@@ -81,14 +81,18 @@ class User extends Authenticatable implements HasMedia
 
     }
 
-    public function createToken(string $name, array $abilities = ['*'], $expiresAt = null)
+    /**
+     * @param  array<int, string|TokenAbilityEnum>  $abilities
+     * @param  int|null  $expiresAt  Lifetime in minutes. Falls back to the configured sanctum expiration.
+     */
+    public function createToken(string $name, array $abilities = ['*'], $expiresAt = null): NewAccessToken
     {
-        $expiration = (int) config('sanctum.expiration');
+        $expiration = (int) ($expiresAt ?? config('sanctum.expiration'));
         $token = $this->tokens()->create([
             'name' => $name,
             'token' => hash('sha256', $plainTextToken = Str::random(240)),
             'abilities' => $abilities,
-            'expires_at' => Carbon::now()->addMinutes((int) $expiresAt ?? $expiration),
+            'expires_at' => Carbon::now()->addMinutes($expiration),
         ]);
 
         return new NewAccessToken($token, $token->id.'|'.$plainTextToken);
